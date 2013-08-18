@@ -1,0 +1,46 @@
+UNITS:
+0-31	Infantry:
+			0. Soldier
+			1. Rocketeer
+			3. Heavy Assault Walker
+		
+32-63	Robots:
+			32. Strider - running cannon tower
+		
+64-95	Tanks:
+			64. Leopard 5
+		
+96-127	Recons:
+			96. Spy - reveals area of 15 fields
+		
+128-159	Ships:
+			-
+
+160-191 Builders:
+			160. ResourceCollectorBuilder
+			161. StorageBuilder
+			163. ProducingBuilder
+			164. TurretBuilder
+			165. HighRangeTurretBuilder
+
+BUILDINGS:
+256-287	RescourceCollectors:
+			256. Solar cells - produces energy
+			257. Hamster Wheel - produces minimal energy
+		
+288-319	Storage:
+			288. Small Storage - creates space for little resources
+			289. Medium Storage - creates space for some resources
+			290. Big Storage - creates space for a lot of resources
+		
+320-351	Producing:
+			320. Barracks - used to train infantry
+			321. Factory - used to produce robots
+			322. Spy Center - used to produce recons
+		
+352-383	Turrets:
+			352. Gatling Gun - defence against units
+			353. Laser Cannon - defence against robots
+
+			
+512. Base
