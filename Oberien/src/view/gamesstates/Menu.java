@@ -4,6 +4,7 @@
  */
 package view.gamesstates;
 
+import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -25,6 +26,7 @@ public class Menu extends BasicGameState {
     private StartData sd;
     private MainMenu mm;
     private static boolean switchMode, exit;
+	private Font f;
     
     public Menu(StartData sd) {
         this.sd = sd;
@@ -32,14 +34,15 @@ public class Menu extends BasicGameState {
 
     @Override
     public int getID() {
-        return 0;
+        return 1;
     }
     
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         mm = new MainMenu();
+		f = sd.getFont();
         try {
-            mm.init(gc.getInput(), gc);
+            mm.init(gc.getInput(), gc, f);
         } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
