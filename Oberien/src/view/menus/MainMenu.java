@@ -24,10 +24,13 @@ import view.menus.elements.Button;
  */
 public class MainMenu {
     private Button start, exit, settings;
+    private Font f;
     private UnicodeFont uf;
     
-    public void init(Input in, GameContainer gc, Font f) throws FontFormatException, IOException, SlickException {
+    public void init(Input in, GameContainer gc) throws FontFormatException, IOException, SlickException {
         Button.init(in);
+        f = Font.createFont(Font.TRUETYPE_FONT, new File("./res/fonts/digital_tech.ttf"));
+        f = f.deriveFont(Font.BOLD, 20);
         uf = new UnicodeFont(f);
         uf.getEffects().add(new ColorEffect(java.awt.Color.white));
         uf.addAsciiGlyphs();
