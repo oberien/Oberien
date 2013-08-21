@@ -204,11 +204,14 @@ public class GameLoading extends BasicGameState {
     		loading[7] = "Loading finished.";
     		currentPart++;
     	} else if (currentPart == 7) {
-	        sbg.getState(this.getID()+1).init(gc, sbg);
+    		int states = sbg.getStateCount();
+    		for (int i = 1; i < states; i++) {
+    			sbg.getState(i).init(gc, sbg);
+    		}
 	        try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {e.printStackTrace();}
-	        sbg.enterState(this.getID()+1);
+	        sbg.enterState(getID() + 1);
     	}
     }
     
