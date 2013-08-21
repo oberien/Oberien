@@ -32,14 +32,14 @@ public class Menu extends BasicGameState {
 
     @Override
     public int getID() {
-        return 0;
+        return 1;
     }
     
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         mm = new MainMenu();
         try {
-            mm.init(gc.getInput(), gc);
+            mm.init(gc.getInput(), gc, sd.getFont());
         } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }

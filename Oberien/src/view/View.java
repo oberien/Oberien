@@ -27,8 +27,8 @@ public class View extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
         StartData sd = new StartData();
+		this.addState(new GameLoading(sd));
         this.addState(new Menu(sd));
-        this.addState(new GameLoading(sd));
         this.addState(new GameRunning(sd));
     }
 }
