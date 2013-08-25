@@ -15,7 +15,7 @@ public class MapList {
 		for (int i = 0; i < files.length; i++) {
 			Map map = MapIO.read(files[i]);
 			if (map.getStartPosX1().length == 0) {
-				JOptionPane.showMessageDialog(null, "No start area for the teams defined. Please define them in the MapEditor.", "", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "[" + map.getName() + "] No start area for the teams defined. Please define them in the MapEditor.", "", JOptionPane.ERROR_MESSAGE);
 			}
 			maps.put(map.getName(), map);
 		}

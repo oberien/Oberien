@@ -2,11 +2,12 @@
 package view;
 
 
-import model.Options;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+
+import controller.Options;
 
 /**
  *

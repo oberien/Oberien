@@ -21,8 +21,8 @@ public class HUDRenderer {
     
     private MainHUD mhud;
     
-    public HUDRenderer(Font font) throws SlickException {
-    	mhud = new MainHUD(font);
+    public HUDRenderer(Font font, int width) throws SlickException {
+    	mhud = new MainHUD(font, width);
     }
     
     public void draw(Graphics g, StateMap sm, StateBasedGame sbg) { 

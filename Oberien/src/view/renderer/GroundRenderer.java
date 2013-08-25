@@ -80,7 +80,7 @@ public class GroundRenderer {
 	            } else {
 	            	sight = sm.getRange(mouse, StateMap.DIRECT_ATTACKRANGE);
 	            }
-	            enmop = sm.getEnemyModelPositionsInArea(sm.getSight());
+	            enmop = sm.getEnemyModelPositionsInArea(sight);
 	            for (Coordinate c : sight) {
 	                for (Coordinate p : enmop) {
 	                    if (c.equals(p)) {

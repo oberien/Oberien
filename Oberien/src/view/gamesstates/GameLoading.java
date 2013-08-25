@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import model.Options;
 import model.map.Map;
 import model.map.MapList;
 
@@ -23,6 +22,8 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import controller.Options;
 
 import view.data.StartData;
 import view.renderer.BufferedMapRenderer;
@@ -94,12 +95,12 @@ public class GameLoading extends BasicGameState {
 			mapd = sd.getMap();
 			data = mapd.getMap();
     		boolean nextPart = false;
-    		int j = counter + (int)Math.ceil(tiles.length/Options.loadingSpeed);
+    		int j = counter + (int)Math.ceil(tiles.length*Options.loadingSpeed);
     		for (int i = counter; i < j; i++) {
 		        if (counter < tiles.length) {
 		        	loading[0] = "Loading map tiles [" + counter + "/" + tiles.length + "]";
 		            try {
-		                tiles[counter] = new Image("res/tiles/" + counter + ".png");
+		                tiles[counter] = new Image("res/imgs/tiles/" + counter + ".png");
 		                counter++;
 		            } catch (Exception ex) {
 		            	nextPart = true;
@@ -117,14 +118,14 @@ public class GameLoading extends BasicGameState {
     		}
     	} else if (currentPart == 1) {
     		boolean nextPart = false;
-    		int j = counter + (int)Math.ceil(units.length*units[0].length/Options.loadingSpeed);
+    		int j = counter + (int)Math.ceil(units.length*units[0].length*Options.loadingSpeed);
     		for (int x = counter; x < j; x++) {
 	    		int i = counter/4;
 	    		int d = counter%4;
 	    		if (counter < units.length*units[0].length) {
 	            	loading[1] = "Loading unit tiles [" + i + "/" + units.length*units[0].length + "]";
 	                try {
-	                    units[i][d] = new Image("res/units/" + i + "." + d + ".png");
+	                    units[i][d] = new Image("res/imgs/units/" + i + "." + d + ".png");
 	                    counter++;
 	                } catch (Exception ex) {
 	                	counter += 4;
@@ -155,7 +156,7 @@ public class GameLoading extends BasicGameState {
 			    		currentPart++;
 		        	}
 	        	} else {
-	        		int j = counter + (int)Math.ceil(units.length*units[0].length/Options.loadingSpeed);
+	        		int j = counter + (int)Math.ceil(units.length*units[0].length*Options.loadingSpeed);
 	        		for (int i = 0; i < j; i++) {
 		        		int x = counter/data[0].length;
 			            int y = counter%data[0].length;
@@ -189,7 +190,7 @@ public class GameLoading extends BasicGameState {
     		loading[3] = "Created GroundRenderer.";
     		currentPart++;
     	} else if (currentPart == 4) {
-    		HUDRenderer hudr = new HUDRenderer(sd.getFont());
+    		HUDRenderer hudr = new HUDRenderer(sd.getFont(), gc.getWidth());
     		sd.setHudr(hudr);
     		loading[4] = "Created HUDRenderer.";
     		currentPart++;

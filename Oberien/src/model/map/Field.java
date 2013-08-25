@@ -29,7 +29,7 @@ public class Field {
 		this.attackplus = attackplus;
 		
 		try {
-			image = ImageIO.read(new File("res/tiles/" + i + ".png"));
+			image = ImageIO.read(new File("res/imgs/tiles/" + i + ".png"));
 		} catch (IOException e) {e.printStackTrace();}
 	}
 	

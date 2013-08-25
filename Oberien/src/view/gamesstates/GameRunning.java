@@ -4,15 +4,17 @@
  */
 package view.gamesstates;
 
+import controller.Options;
 import controller.StateMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Layer;
 import model.Model;
-import model.Options;
 import model.Player;
 import model.map.Coordinate;
 import model.map.Map;
+import model.map.MapList;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -80,28 +82,30 @@ public class GameRunning extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.map = sd.getMap();
-		mr = sd.getMr();
-
-		hudr = sd.getHudr();
-		ur = sd.getUr();
-		gr = sd.getGr();
-		dr = sd.getDr();
-		me = new MouseEvents();
-		try {
-			Mouse.create();
-		} catch (LWJGLException ex) {
-			Logger.getLogger(GameRunning.class.getName()).log(Level.SEVERE, null, ex);
+		if (MapList.getInstance().getCurrentMap() != null) {
+			this.map = sd.getMap();
+			mr = sd.getMr();
+	
+			hudr = sd.getHudr();
+			ur = sd.getUr();
+			gr = sd.getGr();
+			dr = sd.getDr();
+			me = new MouseEvents();
+			try {
+				Mouse.create();
+			} catch (LWJGLException ex) {
+				Logger.getLogger(GameRunning.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			screenWidth = gc.getScreenWidth();
+			screenHeight = gc.getScreenHeight();
+			statemap = new StateMap(new Player[]{new Player("BH16", Color.red, 0), new Player("Enemy", Color.green, 1)});
+			statemap.addModel(10, 10, 0);
+			statemap.endTurn();
+			statemap.addModel(12, 10, 1);
+			
+			sight = statemap.getSight();
+			me.init();
 		}
-		screenWidth = gc.getScreenWidth();
-		screenHeight = gc.getScreenHeight();
-		statemap = new StateMap(new Player[]{new Player("BH16", Color.red, 0), new Player("Enemy", Color.green, 1)});
-		statemap.addModel(10, 10, 0);
-		statemap.endTurn();
-		statemap.addModel(12, 10, 1);
-		
-		sight = statemap.getSight();
-		me.init();
 	}
 
 	@Override
@@ -170,7 +174,6 @@ public class GameRunning extends BasicGameState {
 		Model m = statemap.getModel(c);
 		//Mouse button down -> Unit gets selected/moves/attacks
 		if (me.isMousePressed(0)) {
-			sight = statemap.getSight();
 			//if a model is selected and not the same field is clicked
 			if (mapcoord != null) {
 				//if no model is on the field to move
@@ -234,6 +237,7 @@ public class GameRunning extends BasicGameState {
 				mapcoord = null;
 				unitMoving = null;
 			}
+			sight = statemap.getSight();
 			//Mousebutton not down
 		} else {
 			//is a unit selected and has to be drawn at mouseposition?
@@ -263,6 +267,7 @@ public class GameRunning extends BasicGameState {
 			dmgCoord2 = null;
 			statemap.endTurn();
 			endTurn = false;
+			sight = statemap.getSight();
 		}
 	}
 
