@@ -50,6 +50,8 @@ public class GameLoading extends BasicGameState {
     
     private int currentPart;
     private int counter;
+	
+	private Map mapd;
     
 	
 	public GameLoading(StartData sd) {
@@ -57,26 +59,23 @@ public class GameLoading extends BasicGameState {
 	}
     
     @SuppressWarnings("unchecked")
+	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
     	loading = new String[17];
-    	try {
-			f = Font.createFont(Font.TRUETYPE_FONT, new File("./res/fonts/digital_tech.ttf"));
-			sd.setFont(f);
-		} catch (FontFormatException | IOException e) {e.printStackTrace();}
+		f = sd.getFont();
         f = f.deriveFont(Font.PLAIN, container.getScreenHeight()/loading.length-5);
         uf = new UnicodeFont(f);
         uf.getEffects().add(new ColorEffect(java.awt.Color.white));
         uf.addAsciiGlyphs();
         uf.loadGlyphs();
-        String[] mapNames = MapList.getInstance().getMapNames();
+        /*String[] mapNames = MapList.getInstance().getMapNames();
         int sel = JOptionPane.showOptionDialog(null, "Choose your map", "Map", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, mapNames, 0);
-        Map map = MapList.getInstance().getMap(mapNames[sel]);
-        sd.setMap(map);
+                JOptionPane.QUESTION_MESSAGE, null, mapNames, 0);*/
+        mapd = sd.getMap();
+        //sd.setMap(map);
         
         tiles = new Image[256];
 		units = new Image[512][4];
-        data = map.getMap();
     }
 
     @Override
@@ -92,6 +91,8 @@ public class GameLoading extends BasicGameState {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
     	if (currentPart == 0) {
+			mapd = sd.getMap();
+			data = mapd.getMap();
     		boolean nextPart = false;
     		int j = counter + (int)Math.ceil(tiles.length/Options.loadingSpeed);
     		for (int i = counter; i < j; i++) {
@@ -183,7 +184,7 @@ public class GameLoading extends BasicGameState {
 	    		currentPart++;
 	    	}
     	} else if (currentPart == 3) {
-    		GroundRenderer gr = new GroundRenderer(sd.getMap().getWidth(), sd.getMap().getWidth());
+    		GroundRenderer gr = new GroundRenderer(sd.getMap().getWidth(), sd.getMap().getHeight());
     		sd.setGr(gr);
     		loading[3] = "Created GroundRenderer.";
     		currentPart++;
@@ -205,9 +206,10 @@ public class GameLoading extends BasicGameState {
     		currentPart++;
     	} else if (currentPart == 7) {
     		int states = sbg.getStateCount();
-    		for (int i = 1; i < states; i++) {
+    		/*for (int i = 1; i < states; i++) {
     			sbg.getState(i).init(gc, sbg);
-    		}
+    		}*/
+			sbg.getState(3).init(gc, sbg);
 	        try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {e.printStackTrace();}
@@ -217,6 +219,6 @@ public class GameLoading extends BasicGameState {
     
     @Override
     public int getID() {
-        return 0;
+        return 2;
     }
 }

@@ -12,6 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
 import view.gamesstates.GameRunning;
 import view.gamesstates.GameLoading;
+import view.gamesstates.GameStarting;
 import view.gamesstates.Menu;
 
 /**
@@ -27,6 +28,7 @@ public class View extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
         StartData sd = new StartData();
+		this.addState(new GameStarting(sd));
 		this.addState(new GameLoading(sd));
         this.addState(new Menu(sd));
         this.addState(new GameRunning(sd));

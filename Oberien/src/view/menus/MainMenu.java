@@ -48,7 +48,7 @@ public class MainMenu {
     
     public void update() {
         if (start.isClicked()) {
-            Menu.setModeSwitch(true);
+            Menu.changeMenu("MapChooser");
         }
         
         if (exit.isClicked()) {

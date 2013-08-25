@@ -16,6 +16,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
 import view.menus.MainMenu;
+import view.menus.MapChooser;
 
 /**
  *
@@ -24,7 +25,9 @@ import view.menus.MainMenu;
 public class Menu extends BasicGameState {
     private StartData sd;
     private MainMenu mm;
+	private MapChooser mc;
     private static boolean switchMode, exit;
+	private static int state = 0;
     
     public Menu(StartData sd) {
         this.sd = sd;
@@ -38,8 +41,10 @@ public class Menu extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         mm = new MainMenu();
+		mc = new MapChooser();
         try {
             mm.init(gc.getInput(), gc, sd.getFont());
+			mc.init(sd.getFont(), gc);
         } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -47,14 +52,20 @@ public class Menu extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-        if (!switchMode) {
+        if (state == 0) {
             mm.draw(g);   
-        }
+        } else if (state == 1) {
+			mc.draw(g);
+		}
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
-        mm.update();
+		if (state == 0) {
+			mm.update();			
+		} else if (state == 1) {
+			mc.update(sd);
+		}
         if (gc.getInput().isKeyDown(Input.KEY_ESCAPE) || exit) {
             gc.exit();
         }
@@ -73,8 +84,13 @@ public class Menu extends BasicGameState {
     }
     
     public static void changeMenu(String name) {
-        if (name.equals("Settings")) {
-            
-        }
+		switch (name) {
+			case "Settings":
+				state = 2;
+				break;
+			case "MapChooser":
+				state = 1;
+				break;
+		}
     }
 }
