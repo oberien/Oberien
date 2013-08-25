@@ -434,14 +434,15 @@ public class StateMap {
 				return null;
 			}
 			int attackrange = model.getAttackrange();
-                        int tempatkr = attackrange;
-                        attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
-                        if (attackrange < 1) {
-                            attackrange = 1;
-                        }
-			if (tempatkr == 0) {
-				return null;
-			}
+            if (attackrange == 0) {
+            	return null;
+            }
+            if (attackrange > 1) {
+            	attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
+            }
+            if (attackrange < 1) {
+                attackrange = 1;
+            }
 			ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
 			Coordinate[] mr = getRange(c, MOVERANGE);
 			
@@ -461,14 +462,15 @@ public class StateMap {
 				return null;
 			}
 			int attackrange = model.getAttackrange();
-                        int tempatkr = attackrange;
-                        attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
-                        if (attackrange < 1) {
-                            attackrange = 1;
-                        }
-			if (tempatkr == 0) {
-				return null;
-			}
+            if (attackrange == 0) {
+            	return null;
+            }
+            if (attackrange > 1) {
+            	attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
+            }
+            if (attackrange < 1) {
+                attackrange = 1;
+            }
 			return getAttackRange(c, attackrange);
 		} else {
 			if (model.isActionDone()) {

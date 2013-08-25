@@ -65,6 +65,7 @@ public class GameRunning extends BasicGameState {
 	private Coordinate dmgCoord2;
 	private String dmg2;
 	private long attackMillis;
+	private Coordinate[] sight;
 
 	public GameRunning(StartData sd) {
 		this.sd = sd;
@@ -98,6 +99,8 @@ public class GameRunning extends BasicGameState {
 		statemap.addModel(10, 10, 0);
 		statemap.endTurn();
 		statemap.addModel(12, 10, 1);
+		
+		sight = statemap.getSight();
 		me.init();
 	}
 
@@ -109,7 +112,7 @@ public class GameRunning extends BasicGameState {
 		g.translate(-camX * scale, -camY * scale);
 		g.scale(scale, scale);
 		mr.draw(g);
-		gr.draw(g, statemap, mapcoord);
+		gr.draw(g, statemap, sight, mapcoord);
 		ur.draw(g, statemap, unitMoving, statemap.getModel(mapcoord), statemap.getDirectionOf(mapcoord, unitMoving));
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
@@ -167,6 +170,7 @@ public class GameRunning extends BasicGameState {
 		Model m = statemap.getModel(c);
 		//Mouse button down -> Unit gets selected/moves/attacks
 		if (me.isMousePressed(0)) {
+			sight = statemap.getSight();
 			//if a model is selected and not the same field is clicked
 			if (mapcoord != null) {
 				//if no model is on the field to move

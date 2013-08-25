@@ -2,7 +2,7 @@ UNITS:
 0-31	Infantry:
 			0. Soldier
 			1. Rocketeer
-			3. Heavy Assault Walker
+			2. Heavy Assault Walker
 		
 32-63	Robots:
 			32. Strider - running cannon tower
