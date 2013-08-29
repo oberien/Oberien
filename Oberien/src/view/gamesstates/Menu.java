@@ -17,6 +17,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
 import view.menus.MainMenu;
 import view.menus.MapChooser;
+import view.menus.MenuTempl;
 
 /**
  *
@@ -26,6 +27,7 @@ public class Menu extends BasicGameState {
     private StartData sd;
     private MainMenu mm;
 	private MapChooser mc;
+	private MenuTempl currentMenu;
     private static boolean switchMode, exit;
 	private static int state = 0;
     
@@ -48,6 +50,7 @@ public class Menu extends BasicGameState {
         } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
+		currentMenu = mm;
     }    
 
     @Override
@@ -64,33 +67,26 @@ public class Menu extends BasicGameState {
 		if (state == 0) {
 			mm.update();			
 		} else if (state == 1) {
-			mc.update(sd);
+			mc.update(sd, gc);
 		}
-        if (gc.getInput().isKeyDown(Input.KEY_ESCAPE) || exit) {
+        if (gc.getInput().isKeyDown(Input.KEY_ESCAPE) || currentMenu.shouldExit()) {
             gc.exit();
         }
         
-        if (switchMode) {
+        if (currentMenu.getModeSwitch()) {
             sbg.enterState(getID() + 1);
         }
-    }
-    
-    public static void setModeSwitch(boolean change) {
-        switchMode = change;
-    }
-    
-    public static void exit() {
-        exit = true;
-    }
-    
-    public static void changeMenu(String name) {
-		switch (name) {
-			case "Settings":
-				state = 2;
-				break;
-			case "MapChooser":
-				state = 1;
-				break;
+		if (currentMenu.switchMenu()) {
+			String name = currentMenu.getSwitchMenu();
+			switch (name) {
+				case "Settings":
+					state = 2;
+					break;
+				case "MapChooser":
+					state = 1;
+					currentMenu = mc;
+					break;
+			}
 		}
-    }
+    }    
 }

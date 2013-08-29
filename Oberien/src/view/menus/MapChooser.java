@@ -6,9 +6,11 @@ package view.menus;
 
 import java.awt.Font;
 import model.map.MapList;
+import net.java.games.input.Component;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -20,10 +22,11 @@ import view.menus.elements.Button;
  *
  * @author Bobthepeanut
  */
-public class MapChooser {
+public class MapChooser extends MenuTempl {
 	private UnicodeFont uf;
 	private String[] mapnames;
 	private Button[] btns;
+	private boolean switchState = false, exit = false;
 	
 	public void init(Font f, GameContainer gc) throws SlickException {
 		f = f.deriveFont(Font.BOLD, 20);
@@ -48,12 +51,35 @@ public class MapChooser {
 		}
 	}
 	
-	public void update(StartData sd) {
+	public void update(StartData sd, GameContainer gc) {
 		for (int i = 0; i < btns.length; i++) {
 			if (btns[i].isClicked()) {
 				sd.setMap(MapList.getInstance().getMap(mapnames[i]));
-				Menu.setModeSwitch(true);
+				switchState = true;
 			}
 		}
+		if (gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
+			exit = true;
+		}
+	}
+
+	@Override
+	public boolean getModeSwitch() {
+		return switchState;
+	}
+
+	@Override
+	public boolean switchMenu() {
+		return false;
+	}
+
+	@Override
+	public String getSwitchMenu() {
+		return null;
+	}
+
+	@Override
+	public boolean shouldExit() {
+		return exit;
 	}
 }

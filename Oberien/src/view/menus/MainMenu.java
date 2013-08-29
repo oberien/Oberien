@@ -6,7 +6,6 @@ package view.menus;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.io.File;
 import java.io.IOException;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -22,7 +21,9 @@ import view.menus.elements.Button;
  *
  * @author Bobthepeanut
  */
-public class MainMenu {
+public class MainMenu extends MenuTempl {
+	private boolean modeSwitch = false, switchMenu = false, shouldExit = false;
+	private String menuName = null;
     private Button start, exit, settings;
     private Font f;
     private UnicodeFont uf;
@@ -48,15 +49,36 @@ public class MainMenu {
     
     public void update() {
         if (start.isClicked()) {
-            Menu.changeMenu("MapChooser");
+			switchMenu = true;
+            menuName = "MapChooser";
         }
         
         if (exit.isClicked()) {
-            Menu.exit();
+            shouldExit = true;
         }
         
         if (settings.isClicked()) {
             
         }
     }
+
+	@Override
+	public boolean getModeSwitch() {
+		return modeSwitch;
+	}
+
+	@Override
+	public boolean switchMenu() {
+		return switchMenu;
+	}
+
+	@Override
+	public String getSwitchMenu() {
+		return menuName;
+	}
+
+	@Override
+	public boolean shouldExit() {
+		return shouldExit;
+	}
 }
