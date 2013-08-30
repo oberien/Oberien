@@ -4,10 +4,13 @@ import java.awt.Font;
 
 import org.newdawn.slick.Image;
 
+import controller.StateMap;
+
 import model.map.Map;
 import view.renderer.*;
 
 public class StartData {
+	private StateMap sm;
 	private Map map;
 	private Image[] tiles;
     private Image[][] units;
@@ -88,5 +91,13 @@ public class StartData {
 
 	public void setFont(Font font) {
 		this.font = font;
+	}
+
+	public StateMap getSm() {
+		return sm;
+	}
+
+	public void setSm(StateMap sm) {
+		this.sm = sm;
 	}
 }

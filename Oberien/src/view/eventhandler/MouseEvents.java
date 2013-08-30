@@ -18,6 +18,11 @@ public class MouseEvents {
     private Input in;
     
     public void init() {
+//    	try {
+//			Mouse.create();
+//		} catch (LWJGLException e) {
+//			e.printStackTrace();
+//		}
         in = ViewStarter.getInput();
     }
     

@@ -8,12 +8,18 @@ import java.awt.FontFormatException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import model.Player;
+
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import controller.StateMap;
 import view.data.StartData;
 import view.menus.MainMenu;
 import view.menus.MapChooser;
@@ -74,6 +80,8 @@ public class Menu extends BasicGameState {
         }
         
         if (currentMenu.getModeSwitch()) {
+        	//TODO create StateMap in teamselection
+    		sd.setSm(new StateMap(new Player[]{new Player("BH16", Color.red, 0), new Player("Enemy", Color.green, 1)}));
             sbg.enterState(getID() + 1);
         }
 		if (currentMenu.switchMenu()) {

@@ -1,5 +1,10 @@
 package model.map;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import model.Layer;
+
 public class Map {
 	private String name;
 	private int width;
@@ -40,6 +45,18 @@ public class Map {
 
 	public int[] getStartPosY2() {
 		return startPosY2;
+	}
+	
+	public Coordinate[] getStartAreaOfTeam(int i) {
+		ArrayList<Coordinate> c = new ArrayList<Coordinate>();
+		for (int x = startPosX1[i]; x < startPosX2[i]; x++) {
+			for (int y = startPosY1[i]; y < startPosY2[i]; y++) {
+				c.add(new Coordinate(x, y, Layer.Ground));
+			}
+		}
+		Coordinate[] ret = new Coordinate[c.size()];
+		ret = c.toArray(ret);
+		return ret;
 	}
 
 	public boolean add(byte b) {

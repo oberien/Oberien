@@ -29,7 +29,7 @@ public class StateMap {
 	public StateMap(Player[] players) {
 		models = new MyHashMap<Coordinate, Model>();
 		this.players = players;
-		round = 1;
+		round = 0;
 		map = MapList.getInstance().getCurrentMap();
 	}
 	
@@ -315,6 +315,10 @@ public class StateMap {
 		return false;
 	}
 	
+	public void removeModel(Coordinate c) {
+		models.remove(c);
+	}
+	
 	/**
 	 * Adds an Model to the map - Only use for testing/debugging reasons
 	 * To build an Model use buildModel()
@@ -386,6 +390,11 @@ public class StateMap {
 	 * @return Coordinate-array of all fields in viewrange
 	 */
 	public Coordinate[] getSight() {
+		
+		if (round == 0) {
+			return map.getStartAreaOfTeam(getCurrentPlayer().getTeam());
+		}
+		
 		ArrayList<Coordinate> c = new ArrayList<Coordinate>();
 		
 		Coordinate[] keys = getAllyModelPositions();
@@ -707,6 +716,10 @@ public class StateMap {
 			retur[i] = (Coordinate) o[i];
 		}
 		return retur;
+	}
+	
+	public int getRound() {
+		return round;
 	}
 	
 	public void endTurn() {		

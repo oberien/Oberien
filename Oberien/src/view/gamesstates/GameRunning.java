@@ -36,7 +36,6 @@ import view.renderer.*;
  * @author Bobthepeanut
  */
 public class GameRunning extends BasicGameState {
-
 	private StartData sd;
 	private Map map;
 	private StateMap statemap;
@@ -46,6 +45,7 @@ public class GameRunning extends BasicGameState {
 	private UnitRenderer ur;
 	private GroundRenderer gr;
 	private DamageRenderer dr;
+	
 	private int screenWidth;
 	private int screenHeight;
 	private boolean scaleUp;
@@ -77,34 +77,31 @@ public class GameRunning extends BasicGameState {
 
 	@Override
 	public int getID() {
-		return 3;
+		return 4;
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		if (MapList.getInstance().getCurrentMap() != null) {
-			this.map = sd.getMap();
+			map = sd.getMap();
 			mr = sd.getMr();
-	
+			
 			hudr = sd.getHudr();
 			ur = sd.getUr();
 			gr = sd.getGr();
 			dr = sd.getDr();
 			me = new MouseEvents();
-			try {
-				Mouse.create();
-			} catch (LWJGLException ex) {
-				Logger.getLogger(GameRunning.class.getName()).log(Level.SEVERE, null, ex);
-			}
+			me.init();
 			screenWidth = gc.getScreenWidth();
 			screenHeight = gc.getScreenHeight();
-			statemap = new StateMap(new Player[]{new Player("BH16", Color.red, 0), new Player("Enemy", Color.green, 1)});
-			statemap.addModel(10, 10, 0);
-			statemap.endTurn();
-			statemap.addModel(12, 10, 1);
+			statemap = sd.getSm();
+			//TODO delete when StartPosChooser is finished
+//			statemap.addModel(10, 10, 0);
+//			statemap.endTurn();
+//			statemap.addModel(12, 10, 1);
 			
 			sight = statemap.getSight();
-			me.init();
+			
 		}
 	}
 
@@ -112,7 +109,6 @@ public class GameRunning extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.setAntiAlias(Options.antiAliasing);
 		g.resetTransform();
-		//hudr.draw(g, statemap);
 		g.translate(-camX * scale, -camY * scale);
 		g.scale(scale, scale);
 		mr.draw(g);
@@ -142,7 +138,7 @@ public class GameRunning extends BasicGameState {
 			camY -= gc.getScreenHeight() / 2 / scale - gc.getScreenHeight() / 2;
 		}
 
-		//moving
+		//camera
 		float moveSpeed = delta / scale;
 		float minX = -500 / scale * ((float) gc.getScreenWidth() / gc.getScreenHeight());
 		float minY = -500 / scale * ((float) gc.getScreenHeight() / gc.getScreenWidth());
@@ -174,7 +170,7 @@ public class GameRunning extends BasicGameState {
 		Model m = statemap.getModel(c);
 		//Mouse button down -> Unit gets selected/moves/attacks
 		if (me.isMousePressed(0)) {
-			//if a model is selected and not the same field is clicked
+			//if a model is already selected
 			if (mapcoord != null) {
 				//if no model is on the field to move
 				if (m == null) {
@@ -191,7 +187,7 @@ public class GameRunning extends BasicGameState {
 						mapcoord = null;
 						unitMoving = null;
 					}
-					//if there is am EMEMY model on the field to move
+				//if there is am EMEMY model on the field to move
 				} else if (m.getPlayer().getTeam() != statemap.getCurrentPlayer().getTeam()) {
 					int life1 = statemap.getModel(mapcoord).getLife();
 					int life2 = m.getLife();
@@ -229,16 +225,16 @@ public class GameRunning extends BasicGameState {
 					mapcoord = null;
 					unitMoving = null;
 				}
-				//if no model is selected, it will be selected
+			//if no model is selected, it will be selected if unit belongs to current player
 			} else if (m != null && !m.isActionDone() && m.getPlayer() == statemap.getCurrentPlayer()) {
 				mapcoord = c;
-				//if model can't move there
+			//if model can't move there
 			} else {
 				mapcoord = null;
 				unitMoving = null;
 			}
 			sight = statemap.getSight();
-			//Mousebutton not down
+		//Mousebutton not down
 		} else {
 			//is a unit selected and has to be drawn at mouseposition?
 			if (mapcoord != null && !statemap.getModel(mapcoord).isMoved()) {

@@ -43,14 +43,25 @@ public class MainHUD implements HUD {
         g.fillRoundRect(hudPosX, -10, hudWidth, 100, 20);  
         g.drawRoundRect(hudPosX - 3, -10, hudWidth + 6, 103, 20);
         
-        g.setColor(Color.white);
         Player player = sm.getCurrentPlayer();
-        String s = player.getMoney() + " M";
-        uf.drawString(hudPosX + 10, 15 - uf.getHeight(s), s, Color.yellow);
-        s = player.getEnergy() + " E";
-        uf.drawString(hudPosX + 10, 50 - uf.getHeight(s), s, Color.yellow);
-        s = player.getPopulation() + " P";
-        uf.drawString(hudPosX + 10, 75 - uf.getHeight(s), s, Color.yellow);
+        int spaceWidth = hudWidth / 10;
+        int widthOfBar = hudWidth / 2 - spaceWidth * 2;
+        int money = player.getMoney();
+        int energy = player.getEnergy();
+        int population = player.getPopulation();
+        int storage = player.getStorage();
+        g.setColor(Color.cyan);
+        g.fillRoundRect(hudPosX+spaceWidth, 3, widthOfBar, 25, 5);
+        g.setColor(Color.yellow);
+        g.fillRoundRect(hudPosX+spaceWidth, 33, widthOfBar, 25, 5);
+        
+        String s = money + " M / " + storage + " M";
+        int textPos = hudPosX + spaceWidth + widthOfBar/2;
+        uf.drawString(textPos - uf.getWidth(s)/2, 25 - uf.getHeight(s), s, Color.gray);
+        s = energy + " E / " + storage + " M";
+        uf.drawString(textPos - uf.getWidth(s)/2, 55 - uf.getHeight(s), s, Color.gray);
+        s = population + " P";
+        uf.drawString(textPos - uf.getWidth(s)/2, 85 - uf.getHeight(s), s, Color.gray);
     }
 
     @Override

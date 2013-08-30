@@ -11,7 +11,7 @@ public class Options {
 	/**
 	 * indicates wheather the map is buffered (faster, high RAM) or not (slower, low RAM)
 	 */
-	public static boolean bufferMap = false;
+	public static boolean bufferMap = true;
 	/**
 	 * indicates wheather vertical synchronisation is activated
 	 */

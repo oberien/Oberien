@@ -76,7 +76,7 @@ public class GameLoading extends BasicGameState {
         //sd.setMap(map);
         
         tiles = new Image[256];
-		units = new Image[512][4];
+		units = new Image[513][4];
     }
 
     @Override

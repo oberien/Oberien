@@ -14,6 +14,7 @@ import view.gamesstates.GameRunning;
 import view.gamesstates.GameLoading;
 import view.gamesstates.GameStarting;
 import view.gamesstates.Menu;
+import view.gamesstates.StartPositionChooser;
 
 /**
  *
@@ -28,9 +29,11 @@ public class View extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
         StartData sd = new StartData();
+		
 		this.addState(new GameStarting(sd));
-		this.addState(new GameLoading(sd));
         this.addState(new Menu(sd));
+        this.addState(new GameLoading(sd));
+        this.addState(new StartPositionChooser(sd));
         this.addState(new GameRunning(sd));
     }
 }
