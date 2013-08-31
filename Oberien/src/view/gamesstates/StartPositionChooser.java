@@ -1,5 +1,7 @@
 package view.gamesstates;
 
+import java.util.Arrays;
+
 import model.Layer;
 import model.map.Coordinate;
 import model.map.Map;
@@ -132,15 +134,23 @@ public class StartPositionChooser extends BasicGameState {
 			}
 			basex = mapx/32;
 			basey = mapy/32;
+			if (!Arrays.asList(map.getStartAreaOfTeam(sm.getCurrentPlayer().getTeam())).contains(new Coordinate(basex, basey, Layer.Ground))) {
+				basex = -1;
+				basey = -1;
+			}
 			sm.addModel(basex, basey, 512);
 		}
 		
 		if (endTurn) {
-			sm.endTurn();
 			endTurn = false;
-			if (sm.getRound() == 1) {
-				sbg.getState(4).init(gc, sbg);
-		        sbg.enterState(getID() + 1);
+			if (basex != -1 && basey != -1) {
+				sm.endTurn();
+				basex = -1;
+				basey = -1;
+				if (sm.getRound() == 1) {
+					sbg.getState(4).init(gc, sbg);
+			        sbg.enterState(getID() + 1);
+				}
 			}
 		}
 	}

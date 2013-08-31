@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 
 public class MapIO {
 	
-	@SuppressWarnings("deprecation")
 	public static Map read(File f) {
 		Map newMap = null;
 		try {

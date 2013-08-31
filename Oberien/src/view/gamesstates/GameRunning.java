@@ -6,6 +6,8 @@ package view.gamesstates;
 
 import controller.Options;
 import controller.StateMap;
+
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Layer;
@@ -95,10 +97,6 @@ public class GameRunning extends BasicGameState {
 			screenWidth = gc.getScreenWidth();
 			screenHeight = gc.getScreenHeight();
 			statemap = sd.getSm();
-			//TODO delete when StartPosChooser is finished
-//			statemap.addModel(10, 10, 0);
-//			statemap.endTurn();
-//			statemap.addModel(12, 10, 1);
 			
 			sight = statemap.getSight();
 			

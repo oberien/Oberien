@@ -22,7 +22,6 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class MainHUD implements HUD {
     
-    private int width;
     private int hudWidth;
     private int hudPosX;
     private UnicodeFont uf;
@@ -55,13 +54,23 @@ public class MainHUD implements HUD {
         g.setColor(Color.yellow);
         g.fillRoundRect(hudPosX+spaceWidth, 33, widthOfBar, 25, 5);
         
+        //rescources
         String s = money + " M / " + storage + " M";
         int textPos = hudPosX + spaceWidth + widthOfBar/2;
         uf.drawString(textPos - uf.getWidth(s)/2, 25 - uf.getHeight(s), s, Color.gray);
-        s = energy + " E / " + storage + " M";
+        s = energy + " E / " + storage + " E";
         uf.drawString(textPos - uf.getWidth(s)/2, 55 - uf.getHeight(s), s, Color.gray);
         s = population + " P";
         uf.drawString(textPos - uf.getWidth(s)/2, 85 - uf.getHeight(s), s, Color.gray);
+        
+        textPos = hudPosX + hudWidth - hudWidth/4;
+        //round
+        s = "Round: " + sm.getRound();
+        uf.drawString(textPos - uf.getWidth(s)/2, 25 - uf.getHeight(s), s, Color.gray);
+        
+        //player
+        s = "Player: " + sm.getCurrentPlayer().getName();
+        uf.drawString(textPos - uf.getWidth(s)/2, 55 - uf.getHeight(s), s, Color.gray);
     }
 
     @Override

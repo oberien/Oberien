@@ -744,19 +744,17 @@ public class StateMap {
 		} else {
 			currentPlayer++;
 		}
-		if (round != 1) {
-			models = getPlayerModels();
-			int storage = 0;
-			for (Model m : models) {
-				if (m.getTimeToBuild() == 0) {
-					getCurrentPlayer().addMoney(m.getProducingMoney());
-					getCurrentPlayer().addEnergy(m.getProducingEnergy());
-					getCurrentPlayer().addPopulation(m.getProducingPopulation());
-					storage += m.getStoragePlus();
-				}
+		models = getPlayerModels();
+		int storage = 0;
+		for (Model m : models) {
+			if (m.getTimeToBuild() == 0) {
+				getCurrentPlayer().addMoney(m.getProducingMoney());
+				getCurrentPlayer().addEnergy(m.getProducingEnergy());
+				getCurrentPlayer().addPopulation(m.getProducingPopulation());
+				storage += m.getStoragePlus();
 			}
-			getCurrentPlayer().setStorage(storage);
 		}
+		getCurrentPlayer().setStorage(storage);
 	}
 	
 	private void removeDuplicates(ArrayList<Coordinate> list) {
@@ -801,5 +799,9 @@ public class StateMap {
 		dx = Math.abs(dx);
 		dy = Math.abs(dy);
 		return dx+dy;
+	}
+	
+	public void printModels() {
+		System.out.println(models);
 	}
 }

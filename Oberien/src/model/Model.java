@@ -307,21 +307,25 @@ public class Model {
 	@Override
 	public String toString() {
 		return "Model [name=" + name + ", type=" + type + ", id=" + id
-				+ ", costMoney=" + costMoney + ", costEnergy=" + costEnergy
-				+ ", costPopulation=" + costPopulation + ", level=" + level
-				+ ", life=" + life + ", defense=" + defense + ", viewrange="
-				+ viewrange + ", timeToBuild=" + timeToBuild + ", strike="
-				+ strike + ", evade=" + evade + ", damage=" + damage
-				+ ", attackrange=" + attackrange + ", movespeed=" + movespeed
-				+ ", canPass=" + Arrays.toString(canPass) + ", moveGround="
-				+ moveGround + ", moveWater=" + moveWater + ", moveAir="
-				+ moveAir + ", moveUnderground=" + moveUnderground
-				+ ", moveUnderwater=" + moveUnderwater + ", defaultLayer="
-				+ defaultLayer + ", producingMoney=" + producingMoney
-				+ ", producingEnergy=" + producingEnergy
-				+ ", producingPopulation=" + producingPopulation
-				+ ", storagePlus=" + storagePlus + ", builds=" + builds
-				+ ", buildSpeed=" + buildSpeed + ", buildRange=" + buildRange
-				+ ", canStore=" + canStore + ", stored=" + stored + ", direction=" + direction + "]";
+				+ ", player=" + player + ", costMoney=" + costMoney
+				+ ", costEnergy=" + costEnergy + ", costPopulation="
+				+ costPopulation + ", level=" + level + ", life=" + life
+				+ ", maxLife=" + maxLife + ", defense=" + defense
+				+ ", viewrange=" + viewrange + ", timeToBuild=" + timeToBuild
+				+ ", strike=" + strike + ", evade=" + evade + ", damage="
+				+ damage + ", attackrange=" + attackrange + ", strongAgainst="
+				+ strongAgainst + ", movespeed=" + movespeed + ", canPass="
+				+ Arrays.toString(canPass) + ", moveGround=" + moveGround
+				+ ", moveWater=" + moveWater + ", moveAir=" + moveAir
+				+ ", moveUnderground=" + moveUnderground + ", moveUnderwater="
+				+ moveUnderwater + ", defaultLayer=" + defaultLayer
+				+ ", producingMoney=" + producingMoney + ", producingEnergy="
+				+ producingEnergy + ", producingPopulation="
+				+ producingPopulation + ", storagePlus=" + storagePlus
+				+ ", builds=" + builds + ", buildSpeed=" + buildSpeed
+				+ ", buildRange=" + buildRange + ", currentBuilding="
+				+ currentBuilding + ", canStore=" + canStore + ", stored="
+				+ stored + ", direction=" + direction + ", moved=" + moved
+				+ ", actionDone=" + actionDone + "]";
 	}
 }
