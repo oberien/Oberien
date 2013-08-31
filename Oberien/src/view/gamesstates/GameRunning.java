@@ -99,7 +99,6 @@ public class GameRunning extends BasicGameState {
 			statemap = sd.getSm();
 			
 			sight = statemap.getSight();
-			
 		}
 	}
 
@@ -114,7 +113,7 @@ public class GameRunning extends BasicGameState {
 		ur.draw(g, statemap, unitMoving, statemap.getModel(mapcoord), statemap.getDirectionOf(mapcoord, unitMoving));
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
-		hudr.draw(g, statemap, sbg);
+		hudr.draw(g, statemap, sbg, statemap.getModel(mapcoord));
 	}
 
 	@Override

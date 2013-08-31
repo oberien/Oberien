@@ -4,16 +4,11 @@
  */
 package view.huds;
 
-import controller.StateMap;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.state.StateBasedGame;
-
 /**
  *
  * @author Bobthepeanut
  */
 public interface HUD {
-    public void draw(Graphics g, StateMap sm, StateBasedGame sbg);
     /**
      * Used to determine the rendering order in HUDRenderer.
      * 

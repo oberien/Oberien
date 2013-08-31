@@ -36,8 +36,7 @@ public class MainHUD implements HUD {
         hudPosX = (int) (width/2 - width*0.2f);
     }
 
-    @Override
-    public void draw(Graphics g, StateMap sm, StateBasedGame sbg) {
+        public void draw(Graphics g, StateMap sm, StateBasedGame sbg) {
         g.setColor(new Color(0.1f, 0.1f, 0.1f, 1.0f));
         g.fillRoundRect(hudPosX, -10, hudWidth, 100, 20);  
         g.drawRoundRect(hudPosX - 3, -10, hudWidth + 6, 103, 20);

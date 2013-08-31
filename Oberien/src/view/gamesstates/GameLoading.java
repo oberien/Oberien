@@ -190,7 +190,7 @@ public class GameLoading extends BasicGameState {
     		loading[3] = "Created GroundRenderer.";
     		currentPart++;
     	} else if (currentPart == 4) {
-    		HUDRenderer hudr = new HUDRenderer(sd.getFont(), gc.getWidth());
+    		HUDRenderer hudr = new HUDRenderer(sd.getFont(), gc.getWidth(), sd.getUnits(), gc);
     		sd.setHudr(hudr);
     		loading[4] = "Created HUDRenderer.";
     		currentPart++;

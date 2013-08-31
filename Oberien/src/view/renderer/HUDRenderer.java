@@ -7,10 +7,15 @@ package view.renderer;
 import controller.StateMap;
 
 import java.awt.Font;
+import model.Model;
+import model.ModelList;
+import org.newdawn.slick.GameContainer;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import view.huds.BuildHUD;
 import view.huds.MainHUD;
 
 /**
@@ -20,19 +25,16 @@ import view.huds.MainHUD;
 public class HUDRenderer {
     
     private MainHUD mhud;
+	private BuildHUD bhud;
     
-    public HUDRenderer(Font font, int width) throws SlickException {
+    public HUDRenderer(Font font, int width, Image[][] units, GameContainer gc) throws SlickException {
     	mhud = new MainHUD(font, width);
+		bhud = new BuildHUD();
+		bhud.init(gc, units);
     }
     
-    public void draw(Graphics g, StateMap sm, StateBasedGame sbg) { 
+    public void draw(Graphics g, StateMap sm, StateBasedGame sbg, Model selected) { 
         mhud.draw(g, sm, sbg);
-        /*
-         *g.setColor(new Color(0.5f, 0.5f, 0.5f,0.8f));
-         *g.fillRoundRect(0, 0, sbg.getContainer().getWidth()/4f, sbg.getContainer().getHeight()/5f, 20);
-         *g.setColor(Color.white);
-         *g.drawString(10 + "E", (sbg.getContainer().getWidth()/4f)/1.5f, (sbg.getContainer().getHeight()/5f)/2.5f);
-         */
-        
+		bhud.draw(g, sm, sbg, selected);
     }
 }
