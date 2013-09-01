@@ -14,6 +14,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.StateBasedGame;
 import view.huds.BuildHUD;
 import view.huds.MainHUD;
@@ -37,4 +38,12 @@ public class HUDRenderer {
         mhud.draw(g, sm, sbg);
 		bhud.draw(g, sm, sbg, selected);
     }
+	
+	public void update(boolean mousePressed, Point mcoord) {
+		bhud.update(mousePressed, mcoord);
+	}
+	
+	public boolean isMouseEventAvailable() {
+		return bhud.isMouseEventAvailable();
+	}
 }

@@ -161,12 +161,15 @@ public class GameRunning extends BasicGameState {
 		//Events
 		//MouseEvents
 		Point mpoint = me.getMousePos();
+		
+		hudr.update(me.isMousePressed(0), mpoint);
+		
 		int mapx = (int) (camX + mpoint.getX() / scale);
 		int mapy = (int) (camY + mpoint.getY() / scale);
 		Coordinate c = new Coordinate(mapx / 32, mapy / 32, Layer.Ground);
 		Model m = statemap.getModel(c);
 		//Mouse button down -> Unit gets selected/moves/attacks
-		if (me.isMousePressed(0)) {
+		if (hudr.isMouseEventAvailable()) {
 			//if a model is already selected
 			if (mapcoord != null) {
 				//if no model is on the field to move

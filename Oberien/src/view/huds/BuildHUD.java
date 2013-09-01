@@ -11,6 +11,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
@@ -23,6 +24,8 @@ public class BuildHUD implements HUD {
 	private ModelList modelList;
 	private Model[] modelArray;
 	private Image[][] units;
+	private Model currentModel;
+	private boolean available;
 
 	public void init(GameContainer gc, Image[][] units) {
 		sWidth = gc.getWidth();
@@ -51,9 +54,31 @@ public class BuildHUD implements HUD {
 			}
 		}
 	}
+	
+	public void update(boolean mousePressed, Point mcoord) {
+		if (mousePressed) {
+			if (mcoord.getX() > 0 && mcoord.getX() <= width && mcoord.getY() < sHeight && mcoord.getY() >= sHeight - height) {
+				int x = (int) (mcoord.getX()/units[0][0].getWidth());
+				int y = (int) (mcoord.getY()/units[0][0].getHeight());
+				int i = x*y;
+				currentModel = modelArray[i];
+				available = false;
+			} else {
+				available = true;
+			}
+		}
+	}
 
 	@Override
 	public int getPriority() {
 		return 1;
+	}
+	
+	public Model getSelectedModel() {
+		return currentModel;
+	}
+	
+	public boolean isMouseEventAvailable() {
+		return available;
 	}
 }
