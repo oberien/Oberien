@@ -26,6 +26,7 @@ public class BuildHUD implements HUD {
 	private Image[][] units;
 	private Model currentModel;
 	private boolean available;
+	private int index = -1;
 
 	public void init(GameContainer gc, Image[][] units) {
 		sWidth = gc.getWidth();
@@ -43,6 +44,9 @@ public class BuildHUD implements HUD {
 		g.setColor(new Color(0.8f, 0.8f, 0.7f, 0.7f));
 		g.fillRoundRect(posx, posy, width, height, 20);
 		if (unit != null) {
+			if (index > -1) { 
+				g.fillRect((index + posx) *32, posy, 32, 32);
+			}
 			modelArray = modelList.getModelsOfType(unit.getBuilds());
 			int currentRow = 0;
 			int currentImage = 0;
@@ -61,11 +65,14 @@ public class BuildHUD implements HUD {
 		available = mousePressed;
 		if (mousePressed) {
 			if (mcoord.getX() > 0 && mcoord.getX() <= width && mcoord.getY() < sHeight && mcoord.getY() >= sHeight - height) {
-				int x = (int) (mcoord.getX()/(units[0][0].getWidth() * posx));
-				int y = (int) (mcoord.getY()/(units[0][0].getHeight() * posy));
-				int i = x*y;
-				currentModel = modelArray[i];
+				int x = (int) ((mcoord.getX() - posx)/units[0][0].getWidth());
+				System.out.println(x);
+				int y = (int) ((mcoord.getY() - posy)/units[0][0].getHeight());
+				System.out.println(y);
+				index = x / (y * imagesPerRow + 1);
+				currentModel = modelArray[index];
 				available = false;
+				System.out.println(index);
 			}
 		}
 	}
@@ -81,5 +88,10 @@ public class BuildHUD implements HUD {
 	
 	public boolean isMouseEventAvailable() {
 		return available;
+	}
+	
+	public void resetSelection() {
+		index = 0;
+		currentModel = null;
 	}
 }

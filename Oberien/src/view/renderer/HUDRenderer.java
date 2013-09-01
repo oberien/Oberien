@@ -46,4 +46,8 @@ public class HUDRenderer {
 	public boolean isMouseEventAvailable() {
 		return bhud.isMouseEventAvailable();
 	}
+	
+	public Model getSelectedModel() {
+		return bhud.getSelectedModel();
+	}
 }
