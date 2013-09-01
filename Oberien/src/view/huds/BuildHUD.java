@@ -20,7 +20,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class BuildHUD implements HUD {
 
-	private int width = 400, height = 200, sWidth, sHeight, textureHeight, textureWidth, imagesPerRow;
+	private int width = 400, height = 200, sWidth, sHeight, textureHeight, textureWidth, imagesPerRow, posx, posy;
 	private ModelList modelList;
 	private Model[] modelArray;
 	private Image[][] units;
@@ -35,11 +35,13 @@ public class BuildHUD implements HUD {
 		textureHeight = units[0][0].getHeight();
 		textureWidth = units[0][0].getWidth();
 		imagesPerRow = width / textureWidth;
+		posx = 0;
+		posy = sHeight - height;
 	}
 
 	public void draw(Graphics g, StateMap sm, StateBasedGame sbg, Model unit) {
 		g.setColor(new Color(0.8f, 0.8f, 0.7f, 0.7f));
-		g.fillRoundRect(0, sHeight - height, width, height, 20);
+		g.fillRoundRect(posx, posy, width, height, 20);
 		if (unit != null) {
 			modelArray = modelList.getModelsOfType(unit.getBuilds());
 			int currentRow = 0;
@@ -59,8 +61,8 @@ public class BuildHUD implements HUD {
 		available = mousePressed;
 		if (mousePressed) {
 			if (mcoord.getX() > 0 && mcoord.getX() <= width && mcoord.getY() < sHeight && mcoord.getY() >= sHeight - height) {
-				int x = (int) (mcoord.getX()/units[0][0].getWidth());
-				int y = (int) (mcoord.getY()/units[0][0].getHeight());
+				int x = (int) (mcoord.getX()/(units[0][0].getWidth() * posx));
+				int y = (int) (mcoord.getY()/(units[0][0].getHeight() * posy));
 				int i = x*y;
 				currentModel = modelArray[i];
 				available = false;
