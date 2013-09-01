@@ -56,6 +56,7 @@ public class BuildHUD implements HUD {
 	}
 	
 	public void update(boolean mousePressed, Point mcoord) {
+		available = mousePressed;
 		if (mousePressed) {
 			if (mcoord.getX() > 0 && mcoord.getX() <= width && mcoord.getY() < sHeight && mcoord.getY() >= sHeight - height) {
 				int x = (int) (mcoord.getX()/units[0][0].getWidth());
@@ -63,8 +64,6 @@ public class BuildHUD implements HUD {
 				int i = x*y;
 				currentModel = modelArray[i];
 				available = false;
-			} else {
-				available = true;
 			}
 		}
 	}

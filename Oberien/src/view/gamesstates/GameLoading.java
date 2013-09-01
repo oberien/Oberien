@@ -128,8 +128,8 @@ public class GameLoading extends BasicGameState {
 	                    units[i][d] = new Image("res/imgs/units/" + i + "." + d + ".png");
 	                    counter++;
 	                } catch (Exception ex) {
-	                	counter += 4;
-	                	counter -= counter%4;
+	                	units[i][d] = new Image("res/imgs/units/missing.png");
+	                    counter++;
 	                }
 		        } else {
 		        	nextPart = true;
