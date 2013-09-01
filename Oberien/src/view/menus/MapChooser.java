@@ -51,15 +51,12 @@ public class MapChooser extends MenuTempl {
 		}
 	}
 	
-	public void update(StartData sd, GameContainer gc) {
+	public void update(StartData sd, boolean mousePressed) {
 		for (int i = 0; i < btns.length; i++) {
-			if (btns[i].isClicked()) {
+			if (btns[i].isClicked(mousePressed)) {
 				sd.setMap(MapList.getInstance().getMap(mapnames[i]));
 				switchState = true;
 			}
-		}
-		if (gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-			exit = true;
 		}
 	}
 

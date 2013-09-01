@@ -15,19 +15,12 @@ public class StartData {
 	private Image[] tiles;
     private Image[][] units;
     private MapRenderer mr;
-    private GroundRenderer gr;
+    private FoWRenderer fowr;
+	private ActionGroundRenderer agr;
     private HUDRenderer hudr;
     private UnitRenderer ur;
     private DamageRenderer dr;
     private Font font;
-
-	public GroundRenderer getGr() {
-		return gr;
-	}
-
-	public void setGr(GroundRenderer gr) {
-		this.gr = gr;
-	}
 
 	public HUDRenderer getHudr() {
 		return hudr;
@@ -99,5 +92,21 @@ public class StartData {
 
 	public void setSm(StateMap sm) {
 		this.sm = sm;
+	}
+
+	public FoWRenderer getFowr() {
+		return fowr;
+	}
+
+	public void setFowr(FoWRenderer fowr) {
+		this.fowr = fowr;
+	}
+
+	public ActionGroundRenderer getAgr() {
+		return agr;
+	}
+
+	public void setAgr(ActionGroundRenderer agr) {
+		this.agr = agr;
 	}
 }

@@ -50,4 +50,8 @@ public class HUDRenderer {
 	public Model getSelectedModel() {
 		return bhud.getSelectedModel();
 	}
+	
+	public void resetSelection() {
+		bhud.resetSelection();
+	}
 }

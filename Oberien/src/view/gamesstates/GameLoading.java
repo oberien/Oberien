@@ -26,9 +26,10 @@ import org.newdawn.slick.state.StateBasedGame;
 import controller.Options;
 
 import view.data.StartData;
+import view.renderer.ActionGroundRenderer;
 import view.renderer.BufferedMapRenderer;
 import view.renderer.DamageRenderer;
-import view.renderer.GroundRenderer;
+import view.renderer.FoWRenderer;
 import view.renderer.HUDRenderer;
 import view.renderer.SimpleMapRenderer;
 import view.renderer.UnitRenderer;
@@ -185,27 +186,32 @@ public class GameLoading extends BasicGameState {
 	    		currentPart++;
 	    	}
     	} else if (currentPart == 3) {
-    		GroundRenderer gr = new GroundRenderer(sd.getMap().getWidth(), sd.getMap().getHeight());
-    		sd.setGr(gr);
-    		loading[3] = "Created GroundRenderer.";
+    		FoWRenderer fowr = new FoWRenderer(sd.getMap().getWidth(), sd.getMap().getHeight());
+    		sd.setFowr(fowr);
+    		loading[3] = "Created FogOfWarRenderer.";
     		currentPart++;
     	} else if (currentPart == 4) {
+    		ActionGroundRenderer agr = new ActionGroundRenderer();
+    		sd.setAgr(agr);
+    		loading[3] = "Created ActionGroundRenderer.";
+    		currentPart++;
+    	} else if (currentPart == 5) {
     		HUDRenderer hudr = new HUDRenderer(sd.getFont(), gc.getWidth(), sd.getUnits(), gc);
     		sd.setHudr(hudr);
     		loading[4] = "Created HUDRenderer.";
     		currentPart++;
-    	} else if (currentPart == 5) {
+    	} else if (currentPart == 6) {
     		UnitRenderer ur = new UnitRenderer(sd.getUnits(), sd.getFont());
     		sd.setUr(ur);
     		loading[5] = "Created UnitRenderer.";
     		currentPart++;
-    	} else if (currentPart == 6) {
+    	} else if (currentPart == 7) {
     		DamageRenderer dr = new DamageRenderer(sd.getFont());
     		sd.setDr(dr);
     		loading[6] = "Created DamageRenderer.";
     		loading[7] = "Loading finished.";
     		currentPart++;
-    	} else if (currentPart == 7) {
+    	} else if (currentPart == 8) {
     		int states = sbg.getStateCount();
     		/*for (int i = 1; i < states; i++) {
     			sbg.getState(i).init(gc, sbg);

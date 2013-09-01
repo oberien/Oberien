@@ -47,17 +47,17 @@ public class MainMenu extends MenuTempl {
         settings.draw(g);
     }
     
-    public void update() {
-        if (start.isClicked()) {
+    public void update(boolean mousePressed) {
+        if (start.isClicked(mousePressed)) {
 			switchMenu = true;
             menuName = "MapChooser";
         }
         
-        if (exit.isClicked()) {
+        if (exit.isClicked(mousePressed)) {
             shouldExit = true;
         }
         
-        if (settings.isClicked()) {
+        if (settings.isClicked(mousePressed)) {
             
         }
     }

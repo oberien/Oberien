@@ -22,7 +22,7 @@ import controller.StateMap;
 
 import view.data.StartData;
 import view.eventhandler.MouseEvents;
-import view.renderer.GroundRenderer;
+import view.renderer.FoWRenderer;
 import view.renderer.MapRenderer;
 import view.renderer.UnitRenderer;
 
@@ -33,7 +33,7 @@ public class StartPositionChooser extends BasicGameState {
 	private Map map;
 	private MouseEvents me;
 	private UnitRenderer ur;
-	private GroundRenderer gr;
+	private FoWRenderer fowr;
 	
 	private int basex=-1, basey=-1;
 	
@@ -65,7 +65,7 @@ public class StartPositionChooser extends BasicGameState {
 			me = new MouseEvents();
 			me.init();
 			ur = sd.getUr();
-			gr = sd.getGr();
+			fowr = sd.getFowr();
 			
 			screenWidth = gc.getScreenWidth();
 			screenHeight = gc.getScreenHeight();
@@ -79,8 +79,8 @@ public class StartPositionChooser extends BasicGameState {
 		g.translate(-camX * scale, -camY * scale);
 		g.scale(scale, scale);
 		mr.draw(g);
-		gr.draw(g, sm, sm.getSight(), null);
-		ur.draw(g, sm, null, null, 0);
+		fowr.draw(g, sm, sm.getSight());
+		ur.draw(g, sm, null, null, 0, sm.getCurrentPlayer().getColor());
 	}
 
 	@Override

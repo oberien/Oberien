@@ -8,6 +8,7 @@ import java.awt.Font;
 
 import controller.StateMap;
 import model.Model;
+import model.Player;
 import model.map.Coordinate;
 
 import org.newdawn.slick.Color;
@@ -35,17 +36,24 @@ public class UnitRenderer {
         uf.loadGlyphs();
     }
     
-    public void draw(Graphics g, StateMap sm, Coordinate unitMoving, Model model, int direction) throws SlickException {
+    public void draw(Graphics g, StateMap sm, Coordinate unitMoving, Model model, int direction, Color col) throws SlickException {
         pos = sm.getModelPositionsInArea(sm.getSight());
         Model m;
-        Color col;
         Image img;
+        Color color;
+        
         for (int i = 0; i < pos.length; i++) {
         	m = sm.getModel(pos[i]);
-        	col = m.getPlayer().getColor();
+        	float alpha = (float) (0.75 * ((m.getCostMoney()-m.getTimeToBuild())/m.getCostMoney()));
+        	Player player = m.getPlayer();
+        	if (player == null) {
+        		color = col;
+        	} else {
+        		color = player.getColor();
+        	}
         	img = units[m.getId()][m.getDirection()].copy();
         	if (!m.isActionDone()) {
-        		img.setImageColor(col.r, col.g, col.b);
+        		img.setImageColor(color.r, color.g, color.b, 0.25f+alpha);
         	} else {
         			img.setImageColor(0.75f, 0.75f, 0.75f);
         	}
@@ -63,9 +71,14 @@ public class UnitRenderer {
         }
         
         if (unitMoving != null) {
-        	col = model.getPlayer().getColor();
+        	Player player = model.getPlayer();
+        	if (player == null) {
+        		color = col;
+        	} else {
+        		color = player.getColor();
+        	}
         	img = units[model.getId()][direction].copy();
-            img.setImageColor(col.r, col.g, col.b, 0.5f);
+            img.setImageColor(color.r, color.g, color.b, 0.5f);
             g.drawImage(img, unitMoving.getX() * 32, unitMoving.getY() * 32);
         }
     }

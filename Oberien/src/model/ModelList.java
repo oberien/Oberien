@@ -130,7 +130,7 @@ public class ModelList {
 			
 		//Builders
 		case 160:
-			return new Model("Resource Collctor Builder", Type.Builder, 160, player,
+			return new Model("Resource Collector Builder", Type.Builder, 160, player,
 					25, 25, 1,
 					10, 0, 3,
 					0, 0, 0, 0, null,
@@ -297,7 +297,7 @@ public class ModelList {
 					0, true, false, false, false, false, Layer.Ground,
 					10, 10, 1,
 					100,
-					Type.Builder, 10, 1,
+					Type.Builder, 25, 1,
 					5);
 		default:
 			return null;

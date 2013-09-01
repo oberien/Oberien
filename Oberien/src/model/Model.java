@@ -274,7 +274,7 @@ public class Model {
 			i = timeToBuild;
 		}
 		timeToBuild -= i;
-		life += maxLife/costMoney*i;
+		life += (float)maxLife/(float)costMoney*i;
 	}
 	
 	public void setDirection(int direction) {

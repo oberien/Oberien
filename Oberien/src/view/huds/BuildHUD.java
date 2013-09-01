@@ -66,13 +66,10 @@ public class BuildHUD implements HUD {
 		if (mousePressed) {
 			if (mcoord.getX() > 0 && mcoord.getX() <= width && mcoord.getY() < sHeight && mcoord.getY() >= sHeight - height) {
 				int x = (int) ((mcoord.getX() - posx)/units[0][0].getWidth());
-				System.out.println(x);
 				int y = (int) ((mcoord.getY() - posy)/units[0][0].getHeight());
-				System.out.println(y);
 				index = x / (y * imagesPerRow + 1);
 				currentModel = modelArray[index];
 				available = false;
-				System.out.println(index);
 			}
 		}
 	}

@@ -246,6 +246,9 @@ public class StateMap {
 					attackerMissed = true;
 				}
 				c = getRange(defender, DIRECT_ATTACKRANGE);
+				if (c == null) {
+					return 2;
+				}
 				for (int j = 0; j < c.length; j++) {
 					//if attacker in range
 					if (c[j].equals(attacker)) {
@@ -267,7 +270,6 @@ public class StateMap {
 						if (def.getStrongAgainst() == atk.getType()) {
 							damage *= 2;
 						}
-						System.out.println(damage);
 						def.setDirection(getDirectionOf(defender, attacker));
 						survived = atk.damage(damage);
 						if (!survived) {
@@ -320,8 +322,7 @@ public class StateMap {
 	}
 	
 	/**
-	 * Adds an Model to the map - Only use for testing/debugging reasons
-	 * To build an Model use buildModel()
+	 * Starts building an Model
 	 * @param model Model which is building
 	 * @param x x-Coordinate where to build
 	 * @param y y-Coordinate where to build
@@ -347,18 +348,18 @@ public class StateMap {
 			Coordinate[] range = getRange(model, BUILDRANGE);
 			for (int j = 0; j < range.length; j++) {
 				if (range[j].equals(build)) {
-					if (getCurrentPlayer().getMoney() < m.getCostMoney()) {
+					if (getCurrentPlayer().getMoney() < b.getCostMoney()) {
 						return -1;
 					}
-					if (getCurrentPlayer().getEnergy() < m.getCostEnergy()) {
+					if (getCurrentPlayer().getEnergy() < b.getCostEnergy()) {
 						return -2;
 					}
-					if (getCurrentPlayer().getPopulation() < m.getCostPopulation()) {
+					if (getCurrentPlayer().getPopulation() < b.getCostPopulation()) {
 						return -3;
 					}
-					getCurrentPlayer().useMoney(m.getCostMoney());
-					getCurrentPlayer().useEnergy(m.getCostEnergy());
-					getCurrentPlayer().usePopulation(m.getCostPopulation());
+					getCurrentPlayer().useMoney(b.getCostMoney());
+					getCurrentPlayer().useEnergy(b.getCostEnergy());
+					getCurrentPlayer().usePopulation(b.getCostPopulation());
 					models.put(build, b);
 					m.setCurrentBuilding(b);
 					return 1;
@@ -399,7 +400,8 @@ public class StateMap {
 		
 		Coordinate[] keys = getAllyModelPositions();
 		for (int i = 0; i < keys.length; i++) {
-			if (getModel(keys[i]).getPlayer().getTeam() == getCurrentPlayer().getTeam()) {
+			Model m = getModel(keys[i]);
+			if (m.getPlayer().getTeam() == getCurrentPlayer().getTeam() && m.getTimeToBuild() == 0) {
 				Coordinate[] viewRange = getRange(keys[i], VIEWRANGE);
 				for (int j = 0; j < viewRange.length; j++) {
 					c.add(viewRange[j]);
@@ -744,17 +746,19 @@ public class StateMap {
 		} else {
 			currentPlayer++;
 		}
-		models = getPlayerModels();
-		int storage = 0;
-		for (Model m : models) {
-			if (m.getTimeToBuild() == 0) {
-				getCurrentPlayer().addMoney(m.getProducingMoney());
-				getCurrentPlayer().addEnergy(m.getProducingEnergy());
-				getCurrentPlayer().addPopulation(m.getProducingPopulation());
-				storage += m.getStoragePlus();
+		if (round != 0) {
+			models = getPlayerModels();
+			int storage = 0;
+			for (Model m : models) {
+				if (m.getTimeToBuild() == 0) {
+					getCurrentPlayer().addMoney(m.getProducingMoney());
+					getCurrentPlayer().addEnergy(m.getProducingEnergy());
+					getCurrentPlayer().addPopulation(m.getProducingPopulation());
+					storage += m.getStoragePlus();
+				}
 			}
+			getCurrentPlayer().setStorage(storage);
 		}
-		getCurrentPlayer().setStorage(storage);
 	}
 	
 	private void removeDuplicates(ArrayList<Coordinate> list) {

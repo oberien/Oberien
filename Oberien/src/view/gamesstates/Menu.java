@@ -70,12 +70,14 @@ public class Menu extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
-		if (state == 0) {
-			mm.update();			
+		Input input = gc.getInput();
+		boolean mousePressed = input.isMousePressed(0);
+    	if (state == 0) {
+			mm.update(mousePressed);			
 		} else if (state == 1) {
-			mc.update(sd, gc);
+			mc.update(sd, mousePressed);
 		}
-        if (gc.getInput().isKeyDown(Input.KEY_ESCAPE) || currentMenu.shouldExit()) {
+        if (input.isKeyDown(Input.KEY_ESCAPE) || currentMenu.shouldExit()) {
             gc.exit();
         }
         

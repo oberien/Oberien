@@ -124,13 +124,9 @@ public class Button {
         }
     }
     
-    public boolean isClicked() {
+    public boolean isClicked(boolean mousePressed) {
         int mx = input.getMouseX();
         int my = input.getMouseY();
-        if (input.isMouseButtonDown(0) && mx >= x && mx <= x + width && my >= y && my < y + height) {
-            return true;            
-        } else {
-            return false;
-        }
+        return (mousePressed && mx >= x && mx <= x + width && my >= y && my < y + height);
     }
 }

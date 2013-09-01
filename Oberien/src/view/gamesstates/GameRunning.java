@@ -8,19 +8,14 @@ import controller.Options;
 import controller.StateMap;
 
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Layer;
 import model.Model;
-import model.Player;
 import model.map.Coordinate;
 import model.map.Map;
 import model.map.MapList;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -45,7 +40,8 @@ public class GameRunning extends BasicGameState {
 	private MapRenderer mr;
 	private HUDRenderer hudr;
 	private UnitRenderer ur;
-	private GroundRenderer gr;
+	private FoWRenderer fowr;
+	private ActionGroundRenderer agr;
 	private DamageRenderer dr;
 	
 	private int screenWidth;
@@ -70,6 +66,7 @@ public class GameRunning extends BasicGameState {
 	private String dmg2;
 	private long attackMillis;
 	private Coordinate[] sight;
+	private boolean buildModel;
 
 	public GameRunning(StartData sd) {
 		this.sd = sd;
@@ -90,7 +87,8 @@ public class GameRunning extends BasicGameState {
 			
 			hudr = sd.getHudr();
 			ur = sd.getUr();
-			gr = sd.getGr();
+			fowr = sd.getFowr();
+			agr = sd.getAgr();
 			dr = sd.getDr();
 			me = new MouseEvents();
 			me.init();
@@ -109,8 +107,21 @@ public class GameRunning extends BasicGameState {
 		g.translate(-camX * scale, -camY * scale);
 		g.scale(scale, scale);
 		mr.draw(g);
-		gr.draw(g, statemap, sight, mapcoord);
-		ur.draw(g, statemap, unitMoving, statemap.getModel(mapcoord), statemap.getDirectionOf(mapcoord, unitMoving));
+		fowr.draw(g, statemap, sight);
+		boolean build;
+		if (buildModel == true) {
+			build = true;
+		} else {
+			build = hudr.getSelectedModel()!=null;
+		}
+		agr.draw(g, statemap, mapcoord, build);
+		Model model;
+		if (hudr.getSelectedModel() != null) {
+			model = hudr.getSelectedModel();
+		} else {
+			model = statemap.getModel(mapcoord);
+		}
+		ur.draw(g, statemap, unitMoving, model, statemap.getDirectionOf(mapcoord, unitMoving), statemap.getCurrentPlayer().getColor());
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
 		hudr.draw(g, statemap, sbg, statemap.getModel(mapcoord));
@@ -167,21 +178,56 @@ public class GameRunning extends BasicGameState {
 		int mapx = (int) (camX + mpoint.getX() / scale);
 		int mapy = (int) (camY + mpoint.getY() / scale);
 		Coordinate c = new Coordinate(mapx / 32, mapy / 32, Layer.Ground);
+		/**
+		 * model of current field
+		 */
 		Model m = statemap.getModel(c);
+		/**
+		 * selected model
+		 */
+		Model model = statemap.getModel(mapcoord);
+		
+		Model modelToBuild = hudr.getSelectedModel();
 		//Mouse button down -> Unit gets selected/moves/attacks
 		if (hudr.isMouseEventAvailable()) {
 			//if a model is already selected
 			if (mapcoord != null) {
 				//if no model is on the field to move
 				if (m == null) {
-					//if model moved successfully
-					if (statemap.move(mapcoord, c) == 1) {
-						if (statemap.getEnemyModelPositionsInArea(statemap.getRange(c, StateMap.DIRECT_ATTACKRANGE)).length == 0) {
-							mapcoord = null;
-							statemap.actionDone(c);
+					//if a model is selected to build
+					if (modelToBuild != null) {
+						int id = statemap.buildModel(mapcoord, c.getX(), c.getY(), modelToBuild.getId());
+						if (id == 1) {
+							model.setActionDone(true);
 						} else {
-							mapcoord = c;
+							System.out.println("BuildError: " + id);
 						}
+						//TODO add messages when building didnt start
+						hudr.resetSelection();
+						mapcoord = null;
+						unitMoving = null;
+						buildModel = false;
+						
+					//if model moved successfully
+					} else if (statemap.move(mapcoord, c) == 1) {
+						//if model can attack
+						Coordinate[] range = statemap.getRange(c, StateMap.DIRECT_ATTACKRANGE);
+						if (range != null) {
+							if (statemap.getEnemyModelPositionsInArea(range).length == 0) {
+								mapcoord = null;
+								statemap.actionDone(c);
+							} else {
+								mapcoord = c;
+							}
+						} else {
+							//if model can build
+							range = statemap.getRange(c, StateMap.BUILDRANGE);
+							if (range != null) {
+								buildModel = true;
+								mapcoord = c;
+							}
+						}
+						
 						unitMoving = null;
 					} else {
 						mapcoord = null;
@@ -189,14 +235,14 @@ public class GameRunning extends BasicGameState {
 					}
 				//if there is am EMEMY model on the field to move
 				} else if (m.getPlayer().getTeam() != statemap.getCurrentPlayer().getTeam()) {
-					int life1 = statemap.getModel(mapcoord).getLife();
+					int life1 = model.getLife();
 					int life2 = m.getLife();
 					int result = statemap.attack(mapcoord, c);
 					if (result > 0) {
-						if (statemap.getModel(mapcoord) != null) {
+						if (model != null) {
 							dmgCoord1 = mapcoord;
 							if (result == 1 || result == 4) {
-								dmg1 = (life1 - statemap.getModel(mapcoord).getLife()) + "";
+								dmg1 = (life1 - model.getLife()) + "";
 							} else if (result == 3 || result == 5) {
 								dmg1 = "missed";
 							} else if (result == 4) {
@@ -206,7 +252,7 @@ public class GameRunning extends BasicGameState {
 							dmgCoord1 = null;
 						}
 
-						if (statemap.getModel(c) != null) {
+						if (m != null) {
 							dmgCoord2 = c;
 							if (result == 1 || result == 2 || result == 3) {
 								dmg2 = (life2 - m.getLife()) + "";
@@ -220,13 +266,19 @@ public class GameRunning extends BasicGameState {
 					attackMillis = System.currentTimeMillis();
 					mapcoord = null;
 					unitMoving = null;
+					
+				//if model belongs to current player AND model isn't finished to build yet AND selected model can build
+				} else if (m.getPlayer() == statemap.getCurrentPlayer() && m.getTimeToBuild() != 0 && model.getBuildSpeed() != 0) {
+					statemap.addModelToBuild(mapcoord, c);
+					buildModel = false;
+				//if clicked onto itself
 				} else if (mapcoord.equals(c)) {
 					statemap.actionDone(c);
 					mapcoord = null;
 					unitMoving = null;
 				}
-			//if no model is selected, it will be selected if unit belongs to current player
-			} else if (m != null && !m.isActionDone() && m.getPlayer() == statemap.getCurrentPlayer()) {
+			//if no model is selected, it will be selected if unit belongs to current player AND is finished building
+			} else if (m != null && !m.isActionDone() && m.getPlayer() == statemap.getCurrentPlayer() && m.getTimeToBuild() == 0) {
 				mapcoord = c;
 			//if model can't move there
 			} else {
@@ -237,12 +289,10 @@ public class GameRunning extends BasicGameState {
 		//Mousebutton not down
 		} else {
 			//is a unit selected and has to be drawn at mouseposition?
-			if (mapcoord != null && !statemap.getModel(mapcoord).isMoved()) {
+			if (mapcoord != null && !model.isMoved()) {
 				Coordinate[] mr = statemap.getRange(mapcoord, StateMap.MOVERANGE);
-				for (Coordinate c1 : mr) {
-					if (c1.equals(c)) {
-						unitMoving = c;
-					}
+				if (Arrays.asList(mr).contains(c)) {
+					unitMoving = c;
 				}
 			} else {
 				unitMoving = null;
