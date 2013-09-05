@@ -56,7 +56,7 @@ public class ModelList {
 					90, 0, 10, 1, Type.Infantry,
 					5, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 		case 1:
@@ -66,7 +66,7 @@ public class ModelList {
 					75, 0, 10, 2, Type.Tank,
 					6, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 		case 2:
@@ -76,7 +76,7 @@ public class ModelList {
 					70, 10, 10, 1, null,
 					3, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 		//Robots
@@ -87,7 +87,7 @@ public class ModelList {
 					95, 10, 7, 1, null,
 					10, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 		
@@ -97,9 +97,9 @@ public class ModelList {
 					50, 20, 5,
 					250, 5, 7,
 					85, 0, 50, 3, Type.Tank,
-                                        7, true, false, false, false, false, Layer.Ground,
+                    7, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
                 case 65:
@@ -109,7 +109,7 @@ public class ModelList {
 					95, 0, 20, 2, Type.Robot,
 					7, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 		
@@ -121,7 +121,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					15, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 		
@@ -136,7 +136,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					8, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					Type.RescourceCollector, 5, 1,
 					0);
 		case 161:
@@ -146,7 +146,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					8, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					Type.Storage, 5, 1,
 					0);
 		case 162:
@@ -156,7 +156,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					8, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					Type.Producing, 75, 1,
 					0);
 		case 163:
@@ -166,7 +166,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					8, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					Type.Turret, 5, 1,
 					0);
 		case 164:
@@ -176,10 +176,10 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					8, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					Type.Turret, 2, 10,
 					0);
-		//RescourceColectors
+		//RescourceCollectors
 		case 256:
 			return new Model("Solar Cell", Type.RescourceCollector, 256, player,
 					5, 0, 0,
@@ -187,7 +187,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 2, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 		case 257:
@@ -197,9 +197,29 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 1, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
+		case 258:	
+			return new Model("House", Type.RescourceCollector, 258, player,
+					   10, 0, 0,
+					   35, 0, 5,
+					   0, 0, 0, 0, null,
+					   0, true, false, false, false, false, Layer.Ground,
+					   0, 0, 1,
+					   0, 10,
+					   null, 0, 0,
+					   10);
+		case 259:
+			return new Model("Nuclear Rector", Type.RescourceCollector, 259, player,
+					   500, 250, 25,
+					   100, 0, 3,
+					   0, 0, 0, 0, null,
+					   0, true, false, false, false, false, Layer.Ground,
+					   0, 50, 0,
+					   0, 0,
+					   null, 0, 0,
+					   0);
 			
 		//Storage
 		case 288:
@@ -209,7 +229,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					100,
+					100, 0,
 					null, 0, 0,
 					0);
 		case 289:
@@ -219,7 +239,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					250,
+					250, 0,
 					null, 0, 0,
 					0);
 		case 290:
@@ -229,7 +249,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					500,
+					500, 0,
 					null, 0, 0,
 					0);
 			
@@ -241,7 +261,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					Type.Infantry, 10, 1,
 					0);
 		case 321:
@@ -251,7 +271,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					Type.Tank, 10, 1,
 					0);
 		case 322:
@@ -261,7 +281,7 @@ public class ModelList {
 					0, 0, 0, 0, null,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					Type.Recon, 10, 1,
 					0);
 		
@@ -273,7 +293,7 @@ public class ModelList {
 					100, 0, 10, 3, Type.Infantry,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 		case 353:
@@ -283,7 +303,7 @@ public class ModelList {
 					95, 0, 15, 3, Type.Robot,
 					0, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
-					0,
+					0, 0,
 					null, 0, 0,
 					0);
 			
@@ -296,7 +316,7 @@ public class ModelList {
 					100, 0, 25, 3, null,
 					0, true, false, false, false, false, Layer.Ground,
 					10, 10, 1,
-					100,
+					100, 10,
 					Type.Builder, 25, 1,
 					5);
 		default:

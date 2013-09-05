@@ -10,6 +10,7 @@ public class Player {
 	private int energy;
 	private int population;
 	private int storage;
+	private int populationStorage;
 	
 	public Player(String name, Color color, int team) {
 		super();
@@ -71,6 +72,7 @@ public class Player {
 	}
 
 	public void setStorage(int storage) {
+		this.storage = storage;
 		if (money > storage) {
 			money = storage;
 		}
@@ -79,10 +81,20 @@ public class Player {
 		}
 	}
 	
+	public void setPopulationStorage(int populationStorage) {
+		this.populationStorage = populationStorage;
+		if (population > populationStorage) {
+			population = populationStorage;
+		}
+	}
+	
 	public int getStorage() {
 		return storage;
 	}
-
+	
+	public int getPopulationStorage() {
+		return populationStorage;
+	}
 	@Override
 	public String toString() {
 		return "Player [name=" + name + ", color=" + color + ", team=" + team
@@ -93,5 +105,4 @@ public class Player {
 	public boolean equals(Object o) {
 		return name.equals(((Player)o).getName());
 	}
-	
 }

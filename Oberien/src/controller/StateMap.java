@@ -749,15 +749,18 @@ public class StateMap {
 		if (round != 0) {
 			models = getPlayerModels();
 			int storage = 0;
+			int populationStorage = 0;
 			for (Model m : models) {
 				if (m.getTimeToBuild() == 0) {
 					getCurrentPlayer().addMoney(m.getProducingMoney());
 					getCurrentPlayer().addEnergy(m.getProducingEnergy());
 					getCurrentPlayer().addPopulation(m.getProducingPopulation());
 					storage += m.getStoragePlus();
+					populationStorage += m.getPopulationStoragePlus();
 				}
 			}
 			getCurrentPlayer().setStorage(storage);
+			getCurrentPlayer().setPopulationStorage(populationStorage);
 		}
 	}
 	

@@ -178,13 +178,9 @@ public class GameRunning extends BasicGameState {
 		int mapx = (int) (camX + mpoint.getX() / scale);
 		int mapy = (int) (camY + mpoint.getY() / scale);
 		Coordinate c = new Coordinate(mapx / 32, mapy / 32, Layer.Ground);
-		/**
-		 * model of current field
-		 */
+		//model of current field
 		Model m = statemap.getModel(c);
-		/**
-		 * selected model
-		 */
+		//selected model
 		Model model = statemap.getModel(mapcoord);
 		
 		Model modelToBuild = hudr.getSelectedModel();
@@ -202,7 +198,7 @@ public class GameRunning extends BasicGameState {
 						} else {
 							System.out.println("BuildError: " + id);
 						}
-						//TODO add messages when building didnt start
+						//TODO add messages when builderror occurs
 						hudr.resetSelection();
 						mapcoord = null;
 						unitMoving = null;
@@ -233,13 +229,13 @@ public class GameRunning extends BasicGameState {
 						mapcoord = null;
 						unitMoving = null;
 					}
-				//if there is am EMEMY model on the field to move
+				//if there is an EMEMY model on the field to move
 				} else if (m.getPlayer().getTeam() != statemap.getCurrentPlayer().getTeam()) {
 					int life1 = model.getLife();
 					int life2 = m.getLife();
 					int result = statemap.attack(mapcoord, c);
 					if (result > 0) {
-						if (model != null) {
+						if (statemap.getModel(mapcoord) != null) {
 							dmgCoord1 = mapcoord;
 							if (result == 1 || result == 4) {
 								dmg1 = (life1 - model.getLife()) + "";
@@ -252,7 +248,7 @@ public class GameRunning extends BasicGameState {
 							dmgCoord1 = null;
 						}
 
-						if (m != null) {
+						if (statemap.getModel(c) != null) {
 							dmgCoord2 = c;
 							if (result == 1 || result == 2 || result == 3) {
 								dmg2 = (life2 - m.getLife()) + "";
@@ -288,10 +284,20 @@ public class GameRunning extends BasicGameState {
 			sight = statemap.getSight();
 		//Mousebutton not down
 		} else {
+			//modelToBuild is selected
+			if (modelToBuild != null && !buildModel) {
+				buildModel = true;
+			}
 			//is a unit selected and has to be drawn at mouseposition?
 			if (mapcoord != null && !model.isMoved()) {
-				Coordinate[] mr = statemap.getRange(mapcoord, StateMap.MOVERANGE);
-				if (Arrays.asList(mr).contains(c)) {
+				Coordinate[] range;
+				//if selected unit is building
+				if (buildModel) {
+					range = statemap.getRange(mapcoord, StateMap.BUILDRANGE);
+				} else {
+					range = statemap.getRange(mapcoord, StateMap.MOVERANGE);
+				}
+				if (Arrays.asList(range).contains(c)) {
 					unitMoving = c;
 				}
 			} else {

@@ -34,7 +34,7 @@ public class Options {
 	 * sets the loading speed (0-1)<br>
 	 * higher values result in less notifications but in a higher load speed
 	 */
-	public static double loadingSpeed = 0.001;
+	public static double loadingSpeed = 0.01;
 	
 	public static void save() {
 		try {

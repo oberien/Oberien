@@ -48,10 +48,18 @@ public class MainHUD implements HUD {
         int energy = player.getEnergy();
         int population = player.getPopulation();
         int storage = player.getStorage();
-        g.setColor(Color.cyan);
+        int populationStorage = player.getPopulationStorage();
+        g.setColor(Color.black);
         g.fillRoundRect(hudPosX+spaceWidth, 3, widthOfBar, 25, 5);
-        g.setColor(Color.yellow);
         g.fillRoundRect(hudPosX+spaceWidth, 33, widthOfBar, 25, 5);
+        g.fillRoundRect(hudPosX+spaceWidth, 63, widthOfBar, 25, 5);
+        
+        g.setColor(Color.green);
+        g.fillRoundRect(hudPosX+spaceWidth, 3, widthOfBar*(float)money/(float)storage, 25, 5);
+        g.setColor(Color.yellow);
+        g.fillRoundRect(hudPosX+spaceWidth, 33, widthOfBar*(float)energy/(float)storage, 25, 5);
+        g.setColor(Color.cyan);
+        g.fillRoundRect(hudPosX+spaceWidth, 63, widthOfBar*(float)population/(float)populationStorage, 25, 5);
         
         //rescources
         String s = money + " M / " + storage + " M";
@@ -59,7 +67,7 @@ public class MainHUD implements HUD {
         uf.drawString(textPos - uf.getWidth(s)/2, 25 - uf.getHeight(s), s, Color.gray);
         s = energy + " E / " + storage + " E";
         uf.drawString(textPos - uf.getWidth(s)/2, 55 - uf.getHeight(s), s, Color.gray);
-        s = population + " P";
+        s = population + " P /" + populationStorage + " P";
         uf.drawString(textPos - uf.getWidth(s)/2, 85 - uf.getHeight(s), s, Color.gray);
         
         textPos = hudPosX + hudWidth - hudWidth/4;

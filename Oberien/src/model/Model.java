@@ -44,6 +44,7 @@ public class Model {
 	private int producingPopulation;
 	
 	private int storagePlus;
+	private int populationStoragePlus;
 	
 	private Type builds;
 	private int buildSpeed;
@@ -64,7 +65,7 @@ public class Model {
 			int strike, int evade, int damage, int attackrange, Type strongAgainst,
 			int movespeed, boolean moveGround, boolean moveWater, boolean moveAir, boolean moveUnderground, boolean moveUnderwater, Layer defaultLayer,
 			int producingMoney, int producingEnergy, int producingPopulation,
-			int storagePlus,
+			int storagePlus, int populationStoragePlus,
 			Type builds, int buildSpeed, int buildRange,
 			int canStore) {
 		this.name = name;
@@ -96,6 +97,7 @@ public class Model {
 		this.producingEnergy = producingEnergy;
 		this.producingPopulation = producingPopulation;
 		this.storagePlus = storagePlus;
+		this.populationStoragePlus = populationStoragePlus;
 		this.builds = builds;
 		this.buildSpeed = buildSpeed;
 		this.buildRange = buildRange;
@@ -229,6 +231,10 @@ public class Model {
 
 	public int getStoragePlus() {
 		return storagePlus;
+	}
+	
+	public int getPopulationStoragePlus() {
+		return populationStoragePlus;
 	}
 
 	public Type getBuilds() {

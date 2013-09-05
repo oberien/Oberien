@@ -68,7 +68,11 @@ public class BuildHUD implements HUD {
 				int x = (int) ((mcoord.getX() - posx)/units[0][0].getWidth());
 				int y = (int) ((mcoord.getY() - posy)/units[0][0].getHeight());
 				index = x / (y * imagesPerRow + 1);
-				currentModel = modelArray[index];
+				try {
+					currentModel = modelArray[index];
+				} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+					//TODO errormessage?
+				}
 				available = false;
 			}
 		}
