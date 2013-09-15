@@ -63,8 +63,9 @@ public class GameLoading extends BasicGameState {
     @SuppressWarnings("unchecked")
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
-    	loading = new String[17];
+		loading = new String[17];
 		f = sd.getFont();
+		System.out.println();
         f = f.deriveFont(Font.PLAIN, container.getScreenHeight()/loading.length-5);
         uf = new UnicodeFont(f);
         uf.getEffects().add(new ColorEffect(java.awt.Color.white));
