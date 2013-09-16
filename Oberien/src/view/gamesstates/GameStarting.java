@@ -53,9 +53,9 @@ public class GameStarting extends BasicGameState {
 		uf.addAsciiGlyphs();
 		uf.loadGlyphs();
 		
-		ui = new Image[1];
+		/*ui = new Image[1];
 		ui[0] = new Image("/res/imgs/ui/Button.png");
-		sd.setUI(ui);
+		sd.setUI(ui);*/
 	}
 
 	@Override
