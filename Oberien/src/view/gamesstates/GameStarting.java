@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -27,6 +28,7 @@ public class GameStarting extends BasicGameState {
 	private Font f;
 	private UnicodeFont uf;
 	private StartData sd;
+	private Image[] ui;
 	
 	public GameStarting(StartData sd) {
 		this.sd = sd;
@@ -50,6 +52,10 @@ public class GameStarting extends BasicGameState {
 		uf.getEffects().add(new ColorEffect(java.awt.Color.white));
 		uf.addAsciiGlyphs();
 		uf.loadGlyphs();
+		
+		ui = new Image[1];
+		ui[0] = new Image("/res/imgs/ui/Button.png");
+		sd.setUI(ui);
 	}
 
 	@Override

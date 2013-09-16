@@ -52,7 +52,7 @@ public class Menu extends BasicGameState {
 		mc = new MapChooser();
         try {
             mm.init(gc.getInput(), gc, sd.getFont());
-			mc.init(sd.getFont(), gc);
+			mc.init(sd.getFont(), gc, sd);
         } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
