@@ -134,14 +134,21 @@ public class GameRunning extends BasicGameState {
 		if ((scaleUp || mw > 0) && scale < 2) {
 			float mouseMapX = mouseX / scale + camX;
 			float mouseMapY = mouseY / scale + camY;
-			scale += 0.05;
+			if (scaleUp) {
+				scale += 0.003*delta;
+			} else if (mw > 0) {
+				scale += 0.1;
+			}
 			camX = mouseMapX - mouseX / scale;
 			camY = mouseMapY - mouseY / scale;
-		}
-		if ((scaleDown || mw < 0) && scale >= 0.3) {
+		} else if ((scaleDown || mw < 0) && scale >= 0.3) {
 			camX += gc.getScreenWidth() / 2 / scale - gc.getScreenWidth() / 2;
 			camY += gc.getScreenHeight() / 2 / scale - gc.getScreenHeight() / 2;
-			scale -= 0.05;
+			if (scaleDown) {
+				scale -= 0.003*delta;
+			} else if (mw < 0) {
+				scale -= 0.1;
+			}
 			camX -= gc.getScreenWidth() / 2 / scale - gc.getScreenWidth() / 2;
 			camY -= gc.getScreenHeight() / 2 / scale - gc.getScreenHeight() / 2;
 		}

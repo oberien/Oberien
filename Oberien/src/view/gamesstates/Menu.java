@@ -54,8 +54,10 @@ public class Menu extends BasicGameState {
             mm.init(gc.getInput(), gc, sd.getFont());
 			//mc.init(sd.getFont(), gc, sd);
 			mc.init(sd.getFont(), gc);
-        } catch (FontFormatException | IOException ex) {
+        } catch (FontFormatException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+        	e.printStackTrace();
         }
 		currentMenu = mm;
     }    
@@ -87,16 +89,13 @@ public class Menu extends BasicGameState {
     		sd.setSm(new StateMap(new Player[]{new Player("BH16", Color.red, 0), new Player("Enemy", Color.green, 1)}));
             sbg.enterState(getID() + 1);
         }
-		if (currentMenu.switchMenu()) {
+        if (currentMenu.switchMenu()) {
 			String name = currentMenu.getSwitchMenu();
-			switch (name) {
-				case "Settings":
-					state = 2;
-					break;
-				case "MapChooser":
-					state = 1;
-					currentMenu = mc;
-					break;
+			if (name.equals("Settings")) {
+				state = 2;
+			} else if (name.equals("MapChooser")) {
+				state = 1;
+				currentMenu = mc;
 			}
 		}
     }    

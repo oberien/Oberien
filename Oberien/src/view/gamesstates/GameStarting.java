@@ -45,8 +45,10 @@ public class GameStarting extends BasicGameState {
 			f = Font.createFont(Font.TRUETYPE_FONT, new File("./res/fonts/digital_tech.ttf"));
 			sd.setFont(f);
 			f.deriveFont(Font.BOLD, 20);
-		} catch (FontFormatException | IOException ex) {
+		} catch (FontFormatException ex) {
 			Logger.getLogger(GameStarting.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		uf = new UnicodeFont(f);
 		uf.getEffects().add(new ColorEffect(java.awt.Color.white));

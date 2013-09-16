@@ -70,7 +70,9 @@ public class BuildHUD implements HUD {
 				index = x / (y * imagesPerRow + 1);
 				try {
 					currentModel = modelArray[index];
-				} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+				} catch (NullPointerException e) {
+					//TODO errormessage?
+				} catch (ArrayIndexOutOfBoundsException e) {
 					//TODO errormessage?
 				}
 				available = false;
