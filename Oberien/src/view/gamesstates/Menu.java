@@ -4,10 +4,6 @@
  */
 package view.gamesstates;
 
-import java.awt.FontFormatException;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import model.Player;
 
@@ -20,6 +16,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import controller.StateMap;
+import java.util.Random;
 import org.newdawn.slick.Image;
 import view.data.StartData;
 import view.menus.MainMenu;
@@ -55,8 +52,13 @@ public class Menu extends BasicGameState {
         try {
             mm.init(gc.getInput(), gc, sd);
 			mc.init(sd.getFont(), gc, sd);
-			currentMenu = mm;		
-			bg = sd.getUI().getBg();
+			currentMenu = mm;
+			int r = new Random().nextInt(2);
+			if (r == 0) {
+				bg = sd.getUI().getBg();				
+			} else {
+				bg = sd.getUI().getBg1();
+			}
         } catch (Exception e) {		
 		}
     }    

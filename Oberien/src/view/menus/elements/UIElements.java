@@ -18,7 +18,7 @@ public class UIElements {
 	private Image settings_p;
 	private Image startGame;
 	private Image startGame_p;
-	private Image bg;
+	private Image bg, bg1;
 	private Image logo;
 	private Image button;
 	private Image button_p;
@@ -48,7 +48,8 @@ public class UIElements {
 	}
 	
 	public void loadBackground() throws SlickException {
-		bg = new Image("/res/imgs/ui/bg01.png");
+		bg = new Image("/res/imgs/ui/bg02.png");
+		bg1 = new Image("/res/imgs/ui/bg03.png");
 	}
 	
 	public void loadAll() throws SlickException {
@@ -70,6 +71,10 @@ public class UIElements {
 
 	public Image getSettings() {
 		return settings;
+	}
+
+	public Image getBg1() {
+		return bg1;
 	}
 
 	public Image getSettingsPressed() {
