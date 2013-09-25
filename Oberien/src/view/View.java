@@ -31,7 +31,7 @@ public class View extends StateBasedGame {
         StartData sd = new StartData();
 		
 		this.addState(new GameStarting(sd));
-        this.addState(new Menu(sd));
+		this.addState(new Menu(sd));
         this.addState(new GameLoading(sd));
         this.addState(new StartPositionChooser(sd));
         this.addState(new GameRunning(sd));

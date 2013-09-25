@@ -5,14 +5,8 @@
 package view.gamesstates;
 
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
 
 import model.map.Map;
-import model.map.MapList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

@@ -26,6 +26,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import view.data.StartData;
 import view.eventhandler.MouseEvents;
+import view.music.MusicManager;
 import view.renderer.*;
 
 /**
@@ -67,6 +68,8 @@ public class GameRunning extends BasicGameState {
 	private long attackMillis;
 	private Coordinate[] sight;
 	private boolean buildModel;
+	
+	private MusicManager mm;
 
 	public GameRunning(StartData sd) {
 		this.sd = sd;
@@ -97,6 +100,9 @@ public class GameRunning extends BasicGameState {
 			statemap = sd.getSm();
 			
 			sight = statemap.getSight();
+			
+			mm = new MusicManager();
+			mm.init();
 		}
 	}
 
@@ -129,6 +135,11 @@ public class GameRunning extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		if (gc.getInput().isKeyDown(Keyboard.KEY_P)) {
+			mm.playMusic();
+		} else if(gc.getInput().isKeyDown(Keyboard.KEY_O)) {
+			mm.stopMusic();
+		}
 		//zooming/scaling
 		int mw = Mouse.getDWheel();
 		if ((scaleUp || mw > 0) && scale < 2) {

@@ -23,11 +23,15 @@ public class MapChooser extends MenuTempl {
 	private UnicodeFont uf, hf;
 	private String[] mapnames;
 	private Button[] btns;
+	private Button[] btnsp;
+	private boolean[] btnsPressed;
 	private boolean switchState = false, exit = false;
 	private int swidth;
 	private int sheight;
+	private StartData sd;
 	
-	public void init(Font f, GameContainer gc) throws SlickException {		
+	public void init(Font f, GameContainer gc, StartData sd) throws SlickException {
+		this.sd = sd;
 		uf = new UnicodeFont(f.deriveFont(Font.BOLD, 15));
 		hf = new UnicodeFont(f.deriveFont(Font.BOLD, 50));
 		hf.getEffects().add(new ColorEffect(java.awt.Color.white));
@@ -38,6 +42,8 @@ public class MapChooser extends MenuTempl {
 		uf.loadGlyphs();
 		mapnames = MapList.getInstance().getMapNames();
 		btns = new Button[mapnames.length];
+		btnsp = new Button[btns.length];
+		btnsPressed = new boolean[btns.length];
 		swidth = gc.getWidth();
 		sheight = gc.getHeight();
 		int width = 200;
@@ -51,7 +57,8 @@ public class MapChooser extends MenuTempl {
 				row++;
 				count = 0;
 			}
-			btns[i] = new Button(count*width + 2, row * height + 80 + 2, width - 2, height - 2, Color.blue, mapnames[i], uf);
+			btns[i] = new Button(count*width + 2, row * height + 80 + 2, width - 2, height - 2, null , sd.getUI().getButton(), mapnames[i], uf);
+			btnsp[i] = new Button(count*width + 2, row * height + 80 + 2, width - 2, height - 2, null , sd.getUI().getButtonPressed(), mapnames[i], uf);
 			count++;
 		}
 	}
@@ -59,13 +66,21 @@ public class MapChooser extends MenuTempl {
 	public void draw(Graphics g) {
 		hf.drawString(swidth/2 - hf.getWidth("Choose a map")/2, 0, "Choose a map");
 		for (int i = 0; i < btns.length; i++) {
-			btns[i].draw(g);
+			if (btnsPressed[i]) {
+				btnsp[i].draw(g);
+			} else {
+				btns[i].draw(g);				
+			}
 		}
 	}
 	
 	public void update(StartData sd, boolean mousePressed) {
 		for (int i = 0; i < btns.length; i++) {
 			if (btns[i].isClicked(mousePressed)) {
+				btnsPressed[i] = true;
+			}
+			
+			if (btnsPressed[i] && !btns[i].isClicked(mousePressed)) {
 				sd.setMap(MapList.getInstance().getMap(mapnames[i]));
 				switchState = true;
 			}

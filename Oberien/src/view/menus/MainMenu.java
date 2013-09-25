@@ -14,7 +14,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
-import view.gamesstates.Menu;
+import view.data.StartData;
 import view.menus.elements.Button;
 
 /**
@@ -24,42 +24,68 @@ import view.menus.elements.Button;
 public class MainMenu extends MenuTempl {
 	private boolean modeSwitch = false, switchMenu = false, shouldExit = false;
 	private String menuName = null;
-    private Button start, exit, settings;
+    private Button start, exit, settings, startp, exitp, settingsp;
     private Font f;
     private UnicodeFont uf;
+	private boolean startPressed, exitPressed, settingsPressed;
     
-    public void init(Input in, GameContainer gc, Font f) throws FontFormatException, IOException, SlickException {
+    public void init(Input in, GameContainer gc, StartData sd) throws FontFormatException, IOException, SlickException {
 		Button.init(in);
-		this.f = f;
+		f = sd.getFont();
         f = f.deriveFont(Font.BOLD, 20);
         uf = new UnicodeFont(f);
         uf.getEffects().add(new ColorEffect(java.awt.Color.white));
         uf.addAsciiGlyphs();
         uf.loadGlyphs();       
-        start = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 100, 500, 100, Color.blue , "Start Game", uf);
-        exit = new Button(0, 0, 100, 100, Color.red , "Exit Game", uf);
-        settings = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 250, 500, 100, Color.green , "Settings", uf);
+        start = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 100, 500, 100, null, sd.getUI().getStartGame());
+		startp = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 100, 500, 100, null, sd.getUI().getStartGamePressed());
+        exit = new Button(0, 0, sd.getUI().getExit().getWidth(), sd.getUI().getExit().getHeight(), null, sd.getUI().getExit());
+		exitp = new Button(0, 0, sd.getUI().getExit().getWidth(), sd.getUI().getExit().getHeight(), null, sd.getUI().getExitPressed());
+        settings = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 250, 500, 100, null, sd.getUI().getSettings());
+		settingsp = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 250, 500, 100, null, sd.getUI().getSettingsPressed());
     }
     
     public void draw(Graphics g) {
-        start.draw(g);
-        exit.draw(g);
-        settings.draw(g);
+		if (!startPressed) {
+			start.draw(g);			
+		} else {
+			startp.draw(g);
+		}
+		
+		if (!exitPressed) {
+			exit.draw(g);
+		} else {
+			exitp.draw(g);
+		}
+		
+		if (!settingsPressed) {
+	        settings.draw(g);		
+		} else {
+			settingsp.draw(g);
+		}
     }
     
     public void update(boolean mousePressed) {
         if (start.isClicked(mousePressed)) {
-			switchMenu = true;
-            menuName = "MapChooser";
+			startPressed = true;
         }
         
         if (exit.isClicked(mousePressed)) {
-            shouldExit = true;
+			exitPressed = true;
         }
         
         if (settings.isClicked(mousePressed)) {
-            
+            settingsPressed = true;
         }
+		
+		if (startPressed && !start.isClicked(mousePressed)) {
+			switchMenu = true;
+            menuName = "MapChooser";
+		} else if (exitPressed && !exit.isClicked(mousePressed)) {
+			shouldExit = true;
+		} else if(settingsPressed && !settings.isClicked(mousePressed)) {
+			settingsPressed = false;
+		}
     }
 
 	@Override

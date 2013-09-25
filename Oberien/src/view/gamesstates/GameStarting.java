@@ -19,6 +19,7 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
+import view.menus.elements.UIElements;
 
 /**
  *
@@ -28,7 +29,10 @@ public class GameStarting extends BasicGameState {
 	private Font f;
 	private UnicodeFont uf;
 	private StartData sd;
-	private Image[] ui;
+	private UIElements ui;
+	private Image logo;
+	
+	private int count = 0;
 	
 	public GameStarting(StartData sd) {
 		this.sd = sd;
@@ -55,19 +59,34 @@ public class GameStarting extends BasicGameState {
 		uf.addAsciiGlyphs();
 		uf.loadGlyphs();
 		
-		/*ui = new Image[1];
-		ui[0] = new Image("/res/imgs/ui/Button.png");
-		sd.setUI(ui);*/
+		ui = new UIElements();
+		ui.loadLogo();
+		
+		logo = ui.getLogo();
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-		
+		logo.draw(gc.getWidth()/2 - logo.getWidth()/2, gc.getHeight()/2 - logo.getHeight()/2);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
-		sbg.enterState(getID() + 1);
+		if (count == 0) {
+			ui.loadBackground();
+		} else if (count == 1) {
+			ui.loadExit();
+		} else if (count == 2) {
+			ui.loadSettings();
+		} else if (count == 3) {
+			ui.loadStartGame();
+		} else if( count == 4) {
+			ui.loadButton();
+		} else {
+			sd.setUI(ui);
+			sbg.getState(getID() + 1).init(gc, sbg);
+			sbg.enterState(getID() + 1);			
+		}
+		count++;
 	}
-	
 }

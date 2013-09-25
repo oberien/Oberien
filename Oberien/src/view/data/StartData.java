@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import controller.StateMap;
 
 import model.map.Map;
+import view.menus.elements.UIElements;
 import view.renderer.*;
 
 public class StartData {
@@ -21,6 +22,7 @@ public class StartData {
     private UnitRenderer ur;
     private DamageRenderer dr;
     private Font font;
+	private UIElements ui;
 
 	public HUDRenderer getHudr() {
 		return hudr;
@@ -108,5 +110,13 @@ public class StartData {
 
 	public void setAgr(ActionGroundRenderer agr) {
 		this.agr = agr;
+	}
+	
+	public UIElements getUI() {
+		return ui;
+	}
+	
+	public void setUI(UIElements ui) {
+		this.ui = ui;
 	}
 }

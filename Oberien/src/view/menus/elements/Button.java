@@ -6,6 +6,7 @@ package view.menus.elements;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.UnicodeFont;
 
@@ -19,11 +20,14 @@ public class Button {
     private int style;
     private UnicodeFont uf;
     private String letters;
+	private Image img;
     private static final int STYLE_SIMPLE_SQUARE = 1;
     private static final int STYLE_SQUARE_WITH_BORDER = 2; 
     private static final int STYLE_SQUARE_WITH_DOUBLE_BORDER = 3;    
     private static final int STYLE_SQUARE_WITH_LETTERS = 4;
     private static final int STYLE_SQUARE_WITH_BORDER_AND_LETTERS = 5;
+	private static final int STYLE_SQUARE_TEXTURED = 6;
+	private static final int STYLE_SQUARE_TEXTURED_WITH_LETTERS = 7;
     
     private static Input input;
     
@@ -91,6 +95,28 @@ public class Button {
         this.letters = letters;
         this.uf = uf;
     }
+	
+    public Button(int x, int y, int width, int height, Color color, Image img) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.style = STYLE_SQUARE_TEXTURED;
+		this.img = img;
+    } 
+	
+	public Button(int x, int y, int width, int height, Color color, Image img, String letters, UnicodeFont uf) {		
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.style = STYLE_SQUARE_TEXTURED_WITH_LETTERS;
+		this.img = img;
+		this.letters = letters;
+		this.uf = uf;
+    } 
     
     public void draw(Graphics g) {
         g.setColor(color);
@@ -118,7 +144,24 @@ public class Button {
                 g.setColor(bcolor);
                 g.drawRect(x - (bwidth - width)/2, y - (bwidth - width)/2, bwidth, bheight);
                 uf.drawString(x - uf.getWidth(letters)/2 + width/2, y - uf.getHeight(letters) + height/2, letters);
-                break;                
+                break; 
+			case STYLE_SQUARE_TEXTURED:
+				g.resetTransform();
+				if (color != null) {
+					img.draw(x, y, width, height, color);
+				} else {
+					img.draw(x, y, width , height);
+				}
+				break;
+			case STYLE_SQUARE_TEXTURED_WITH_LETTERS:
+				g.resetTransform();
+				if (color != null) {
+					img.draw(x, y, width , height, color);
+				} else {
+					img.draw(x, y, width, height);
+				}
+				uf.drawString(x - uf.getWidth(letters)/2 + width/2, y - uf.getHeight(letters) + height/2, letters);
+				break;
             default: 
                 throw new RuntimeException();                
         }

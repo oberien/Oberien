@@ -20,6 +20,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import controller.StateMap;
+import org.newdawn.slick.Image;
 import view.data.StartData;
 import view.menus.MainMenu;
 import view.menus.MapChooser;
@@ -36,6 +37,7 @@ public class Menu extends BasicGameState {
 	private MenuTempl currentMenu;
     private static boolean switchMode, exit;
 	private static int state = 0;
+	private Image bg;
     
     public Menu(StartData sd) {
         this.sd = sd;
@@ -51,19 +53,17 @@ public class Menu extends BasicGameState {
         mm = new MainMenu();
 		mc = new MapChooser();
         try {
-            mm.init(gc.getInput(), gc, sd.getFont());
-			//mc.init(sd.getFont(), gc, sd);
-			mc.init(sd.getFont(), gc);
-        } catch (FontFormatException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException e) {
-        	e.printStackTrace();
-        }
-		currentMenu = mm;
+            mm.init(gc.getInput(), gc, sd);
+			mc.init(sd.getFont(), gc, sd);
+			currentMenu = mm;		
+			bg = sd.getUI().getBg();
+        } catch (Exception e) {		
+		}
     }    
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		bg.draw(0, 0, gc.getWidth(), gc.getHeight());
         if (state == 0) {
             mm.draw(g);   
         } else if (state == 1) {
@@ -74,7 +74,7 @@ public class Menu extends BasicGameState {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
 		Input input = gc.getInput();
-		boolean mousePressed = input.isMousePressed(0);
+		boolean mousePressed = input.isMouseButtonDown(0);
     	if (state == 0) {
 			mm.update(mousePressed);			
 		} else if (state == 1) {
