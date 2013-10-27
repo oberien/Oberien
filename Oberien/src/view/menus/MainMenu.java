@@ -15,7 +15,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import view.data.StartData;
-import view.menus.elements.Button;
+import view.components.Button;
 
 /**
  *

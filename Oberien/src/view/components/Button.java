@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.menus.elements;
+package view.components;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;

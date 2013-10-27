@@ -19,7 +19,7 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
-import view.menus.elements.UIElements;
+import view.components.UIElements;
 
 /**
  *
