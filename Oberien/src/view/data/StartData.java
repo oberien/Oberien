@@ -7,7 +7,6 @@ import org.newdawn.slick.Image;
 import controller.StateMap;
 
 import model.map.Map;
-import view.components.UIElements;
 import view.renderer.*;
 
 public class StartData {

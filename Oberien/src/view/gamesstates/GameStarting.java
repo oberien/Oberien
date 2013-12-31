@@ -19,12 +19,8 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
-import view.components.UIElements;
+import view.data.UIElements;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class GameStarting extends BasicGameState {
 	private Font f;
 	private UnicodeFont uf;

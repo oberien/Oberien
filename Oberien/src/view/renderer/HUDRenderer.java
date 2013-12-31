@@ -19,10 +19,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import view.huds.BuildHUD;
 import view.huds.MainHUD;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class HUDRenderer {
     
     private MainHUD mhud;

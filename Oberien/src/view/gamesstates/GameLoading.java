@@ -28,10 +28,6 @@ import view.renderer.HUDRenderer;
 import view.renderer.SimpleMapRenderer;
 import view.renderer.UnitRenderer;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class GameLoading extends BasicGameState {
 	private StartData sd;
 	private String[] loading;

@@ -4,10 +4,6 @@
  */
 package view.huds;
 
-/**
- *
- * @author Bobthepeanut
- */
 public interface HUD {
     /**
      * Used to determine the rendering order in HUDRenderer.

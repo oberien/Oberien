@@ -14,10 +14,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.StateBasedGame;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class BuildHUD implements HUD {
 
 	private int width = 400, height = 200, sWidth, sHeight, textureHeight, textureWidth, imagesPerRow, posx, posy;

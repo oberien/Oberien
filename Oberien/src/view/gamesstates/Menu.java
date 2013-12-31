@@ -23,10 +23,6 @@ import view.menus.MainMenu;
 import view.menus.MapChooser;
 import view.menus.MenuTempl;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class Menu extends BasicGameState {
     private StartData sd;
     private MainMenu mm;
@@ -67,21 +63,15 @@ public class Menu extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		bg.draw(0, 0, gc.getWidth(), gc.getHeight());
         if (state == 0) {
-            mm.draw(g);   
+            mm.repaint(g);   
         } else if (state == 1) {
-			mc.draw(g);
+			mc.repaint(g);
 		}
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
 		Input input = gc.getInput();
-		boolean mousePressed = input.isMouseButtonDown(0);
-    	if (state == 0) {
-			mm.update(mousePressed);			
-		} else if (state == 1) {
-			mc.update(sd, mousePressed);
-		}
         if (input.isKeyDown(Input.KEY_ESCAPE) || currentMenu.shouldExit()) {
             gc.exit();
         }

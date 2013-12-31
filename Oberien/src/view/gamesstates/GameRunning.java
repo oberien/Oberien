@@ -29,10 +29,6 @@ import view.eventhandler.MouseEvents;
 import view.music.MusicManager;
 import view.renderer.*;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class GameRunning extends BasicGameState {
 	private StartData sd;
 	private Map map;

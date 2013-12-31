@@ -7,10 +7,6 @@ package view.music;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class MusicManager {
 	private Music m1;
 	

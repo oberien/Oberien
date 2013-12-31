@@ -16,10 +16,6 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class MainHUD implements HUD {
     
     private int hudWidth;

@@ -9,10 +9,6 @@ import org.newdawn.slick.geom.Point;
 
 import view.ViewStarter;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class MouseEvents {
     
     private Input in;

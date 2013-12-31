@@ -13,17 +13,14 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import view.data.StartData;
+import view.event.ActionEvent;
+import view.event.ActionListener;
 import view.components.Button;
 
-/**
- *
- * @author Bobthepeanut
- */
-public class MapChooser extends MenuTempl {
+public class MapChooser extends MenuTempl implements ActionListener{
 	private UnicodeFont uf, hf;
 	private String[] mapnames;
 	private Button[] btns;
-	private Button[] btnsp;
 	private boolean[] btnsPressed;
 	private boolean switchState = false, exit = false;
 	private int swidth;
@@ -42,7 +39,6 @@ public class MapChooser extends MenuTempl {
 		uf.loadGlyphs();
 		mapnames = MapList.getInstance().getMapNames();
 		btns = new Button[mapnames.length];
-		btnsp = new Button[btns.length];
 		btnsPressed = new boolean[btns.length];
 		swidth = gc.getWidth();
 		sheight = gc.getHeight();
@@ -57,34 +53,17 @@ public class MapChooser extends MenuTempl {
 				row++;
 				count = 0;
 			}
-			btns[i] = new Button(count*width + 2, row * height + 80 + 2, width - 2, height - 2, null , sd.getUI().getButton(), mapnames[i], uf);
-			btnsp[i] = new Button(count*width + 2, row * height + 80 + 2, width - 2, height - 2, null , sd.getUI().getButtonPressed(), mapnames[i], uf);
+			btns[i] = new Button(count*width + 2, row * height + 80 + 2, width - 2, height - 2, null , sd.getUI().getButton(), sd.getUI().getButtonPressed(), mapnames[i], uf);
+			btns[i].setActionCommand(i + "");
+			btns[i].addActionListener(this);
+			add(btns[i]);
 			count++;
 		}
 	}
 	
-	public void draw(Graphics g) {
+	public void paintComponent(Graphics g) {
 		hf.drawString(swidth/2 - hf.getWidth("Choose a map")/2, 0, "Choose a map");
-		for (int i = 0; i < btns.length; i++) {
-			if (btnsPressed[i]) {
-				btnsp[i].draw(g);
-			} else {
-				btns[i].draw(g);				
-			}
-		}
-	}
-	
-	public void update(StartData sd, boolean mousePressed) {
-		for (int i = 0; i < btns.length; i++) {
-			if (btns[i].isClicked(mousePressed)) {
-				btnsPressed[i] = true;
-			}
-			
-			if (btnsPressed[i] && !btns[i].isClicked(mousePressed)) {
-				sd.setMap(MapList.getInstance().getMap(mapnames[i]));
-				switchState = true;
-			}
-		}
+		super.paintComponent(g);
 	}
 
 	@Override
@@ -105,5 +84,11 @@ public class MapChooser extends MenuTempl {
 	@Override
 	public boolean shouldExit() {
 		return exit;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		sd.setMap(MapList.getInstance().getMap(mapnames[Integer.parseInt(e.getActionCommand())]));
+		switchState = true;
 	}
 }

@@ -15,13 +15,11 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import view.data.StartData;
+import view.event.ActionEvent;
+import view.event.ActionListener;
 import view.components.Button;
 
-/**
- *
- * @author Bobthepeanut
- */
-public class MainMenu extends MenuTempl {
+public class MainMenu extends MenuTempl implements ActionListener {
 	private boolean modeSwitch = false, switchMenu = false, shouldExit = false;
 	private String menuName = null;
     private Button start, exit, settings, startp, exitp, settingsp;
@@ -30,62 +28,25 @@ public class MainMenu extends MenuTempl {
 	private boolean startPressed, exitPressed, settingsPressed;
     
     public void init(Input in, GameContainer gc, StartData sd) throws FontFormatException, IOException, SlickException {
-		Button.init(in);
+		Button.setInput(in);
 		f = sd.getFont();
         f = f.deriveFont(Font.BOLD, 20);
         uf = new UnicodeFont(f);
         uf.getEffects().add(new ColorEffect(java.awt.Color.white));
         uf.addAsciiGlyphs();
         uf.loadGlyphs();       
-        start = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 100, 500, 100, null, sd.getUI().getStartGame());
-		startp = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 100, 500, 100, null, sd.getUI().getStartGamePressed());
-        exit = new Button(0, 0, sd.getUI().getExit().getWidth(), sd.getUI().getExit().getHeight(), null, sd.getUI().getExit());
-		exitp = new Button(0, 0, sd.getUI().getExit().getWidth(), sd.getUI().getExit().getHeight(), null, sd.getUI().getExitPressed());
-        settings = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 250, 500, 100, null, sd.getUI().getSettings());
-		settingsp = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 250, 500, 100, null, sd.getUI().getSettingsPressed());
-    }
-    
-    public void draw(Graphics g) {
-		if (!startPressed) {
-			start.draw(g);			
-		} else {
-			startp.draw(g);
-		}
-		
-		if (!exitPressed) {
-			exit.draw(g);
-		} else {
-			exitp.draw(g);
-		}
-		
-		if (!settingsPressed) {
-	        settings.draw(g);		
-		} else {
-			settingsp.draw(g);
-		}
-    }
-    
-    public void update(boolean mousePressed) {
-        if (start.isClicked(mousePressed)) {
-			startPressed = true;
-        }
-        
-        if (exit.isClicked(mousePressed)) {
-			exitPressed = true;
-        }
-        
-        if (settings.isClicked(mousePressed)) {
-            settingsPressed = true;
-        }
-		
-		if (startPressed && !start.isClicked(mousePressed)) {
-			switchMenu = true;
-            menuName = "MapChooser";
-		} else if (exitPressed && !exit.isClicked(mousePressed)) {
-			shouldExit = true;
-		} else if(settingsPressed && !settings.isClicked(mousePressed)) {
-			settingsPressed = false;
-		}
+        start = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 100, 500, 100, null, sd.getUI().getStartGame(), sd.getUI().getStartGamePressed());
+        start.addActionListener(this);
+        start.setActionCommand("start");
+        add(start);
+        exit = new Button(0, 0, sd.getUI().getExit().getWidth(), sd.getUI().getExit().getHeight(), null, sd.getUI().getExit(), sd.getUI().getExitPressed());
+        exit.addActionListener(this);
+        exit.setActionCommand("exit");
+        add(exit);
+        settings = new Button(gc.getWidth()/2 - 500/2, gc.getHeight()/2 - 250, 500, 100, null, sd.getUI().getSettings(), sd.getUI().getSettingsPressed());
+        settings.addActionListener(this);
+        settings.setActionCommand("settings");
+        add(settings);
     }
 
 	@Override
@@ -106,5 +67,18 @@ public class MainMenu extends MenuTempl {
 	@Override
 	public boolean shouldExit() {
 		return shouldExit;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String ac = e.getActionCommand();
+		if (ac.equals("start")) {
+			switchMenu = true;
+            menuName = "MapChooser";
+		} else if (ac.equals("exit")) {
+			shouldExit = true;
+		} else if (ac.equals("settings")) {
+			settingsPressed = false;
+		}
 	}
 }

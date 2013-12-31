@@ -17,11 +17,11 @@ public class Options {
 	 */
 	public static boolean vsync = false;
 	/**
-	 * 1 = fullscreen <br>
-	 * 2 = windowed <br>
-	 * 3 = borderless <br>
+	 * 0 = fullscreen <br>
+	 * 1 = windowed <br>
+	 * 2 = borderless <br>
 	 */
-	public static int screenMode = 1;
+	public static int screenMode = 2;
 	/**
 	 * indicates wheather the game is only rendered when it is visible or not
 	 */

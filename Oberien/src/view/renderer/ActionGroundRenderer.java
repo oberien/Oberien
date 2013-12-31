@@ -11,10 +11,6 @@ import model.map.Coordinate;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class ActionGroundRenderer {
 
     private Coordinate[] enmop;

@@ -4,11 +4,9 @@
  */
 package view.menus;
 
-/**
- *
- * @author Bobthepeanut
- */
-public abstract class MenuTempl {
+import view.components.Component;
+
+public abstract class MenuTempl extends Component {
 	
 	/**
 	 * Used by Menu to get if the GameMode must be switched.

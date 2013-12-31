@@ -18,10 +18,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class UnitRenderer {
     private Coordinate[] pos;
     private Image[][] units;

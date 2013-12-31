@@ -16,10 +16,6 @@ import view.gamesstates.GameStarting;
 import view.gamesstates.Menu;
 import view.gamesstates.StartPositionChooser;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class View extends StateBasedGame {
 
     public View() {

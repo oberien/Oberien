@@ -9,10 +9,6 @@ import org.newdawn.slick.SlickException;
 
 import controller.Options;
 
-/**
- *
- * @author Bobthepeanut
- */
 public class ViewStarter {
     
     private static AppGameContainer game;
@@ -22,12 +18,12 @@ public class ViewStarter {
     public static void main(String[] args) throws SlickException {
         game = new AppGameContainer(new View());
 	    game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), true);
-	    if (Options.screenMode == 1) {
+	    if (Options.screenMode == 0) {
 	    	game.setFullscreen(true);
-	    } else if (Options.screenMode == 2) {
+	    } else if (Options.screenMode == 1) {
 	    	game.setFullscreen(false);
 	    }
-	    if (Options.screenMode == 3) {
+	    if (Options.screenMode == 2) {
 	        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 	    }
 	    game.setVSync(Options.vsync);
