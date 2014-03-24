@@ -15,6 +15,9 @@ public class BufferedMapRenderer implements MapRenderer {
     	this.map = map;
     }
 
+	@Override
+	public void init() {}
+	
     @Override
     public void draw(Graphics g) throws SlickException {
     	g.drawImage(map, 0, 0);

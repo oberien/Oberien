@@ -83,6 +83,7 @@ public class GameRunning extends BasicGameState {
 		if (MapList.getInstance().getCurrentMap() != null) {
 			map = sd.getMap();
 			mr = sd.getMr();
+			mr.init();
 			
 			hudr = sd.getHudr();
 			ur = sd.getUr();

@@ -1,9 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 
 import model.map.Coordinate;
 import model.map.FieldList;
@@ -12,33 +10,35 @@ import model.map.MapList;
 import model.*;
 
 public class StateMap {
+
 	public static final int MOVERANGE = 0;
 	public static final int VIEWRANGE = 1;
 	public static final int FULL_ATTACKRANGE = 2;
 	public static final int DIRECT_ATTACKRANGE = 3;
 	public static final int BUILDRANGE = 4;
-	
+
 	MyHashMap<Coordinate, Model> models;
 	Player[] players;
 	int currentPlayer;
-	
+
 	int round;
-	
+
 	Map map;
-	
+
 	public StateMap(Player[] players) {
 		models = new MyHashMap<Coordinate, Model>();
 		this.players = players;
 		round = 0;
 		map = MapList.getInstance().getCurrentMap();
 	}
-	
+
 	public Player getCurrentPlayer() {
 		return players[currentPlayer];
 	}
-	
+
 	/**
 	 * Returns all keys of all allied models as Coordinate-array
+	 *
 	 * @return Coordinate-array with all positions of models
 	 */
 	public Coordinate[] getPlayerModelPositions() {
@@ -50,7 +50,7 @@ public class StateMap {
 				ret.add(c);
 			}
 		}
-			
+
 		o = ret.toArray();
 		Coordinate[] retur = new Coordinate[o.length];
 		for (int i = 0; i < o.length; i++) {
@@ -58,9 +58,10 @@ public class StateMap {
 		}
 		return retur;
 	}
-	
+
 	/**
 	 * Returns all keys of all allied models as Coordinate-array
+	 *
 	 * @return Coordinate-array with all positions of models
 	 */
 	public Coordinate[] getAllyModelPositions() {
@@ -72,7 +73,7 @@ public class StateMap {
 				ret.add(c);
 			}
 		}
-			
+
 		o = ret.toArray();
 		Coordinate[] retur = new Coordinate[o.length];
 		for (int i = 0; i < o.length; i++) {
@@ -80,9 +81,10 @@ public class StateMap {
 		}
 		return retur;
 	}
-	
+
 	/**
 	 * Returns all Modelpositons (allies+enemies) in the given area
+	 *
 	 * @param c Coordinate-array of area
 	 * @return Coordinate-array of all models in area
 	 */
@@ -101,9 +103,10 @@ public class StateMap {
 		}
 		return retur;
 	}
-	
+
 	/**
 	 * Returns all Modelpositions (allies+enemies) in the given area
+	 *
 	 * @param c Coordinate-array of area
 	 * @return Coordinate-array of all models in area
 	 */
@@ -122,16 +125,16 @@ public class StateMap {
 		}
 		return retur;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param c Coordinate of field
 	 * @return Model on the field of c
 	 */
 	public Model getModel(Coordinate c) {
 		return models.get(c);
 	}
-	
+
 	private Model[] getPlayerModels() {
 		Coordinate[] c = getPlayerModelPositions();
 		Model[] ret = new Model[c.length];
@@ -140,19 +143,20 @@ public class StateMap {
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Moves the Model on Coordinate old to Coordinate new
+	 *
 	 * @param old Coordinate of Model
 	 * @param neu Coordinate where the Model should move
 	 * @return <ul>
-	 * 			<li>-4 when there is already a model on that field</li>
-	 * 			<li>-3 when the Model doesn't belong to the current palyer</li>
-	 * 			<li>-2 when the Model's action is done</li>
-	 * 			<li>-1 when the Model can't move</li>
-	 * 			<li>0 when the Field where to move isn't in Moverange</li>
-	 * 			<li>1 when Model moved successfully</li>
-	 * 		  </ul>
+	 * <li>-4 when there is already a model on that field</li>
+	 * <li>-3 when the Model doesn't belong to the current palyer</li>
+	 * <li>-2 when the Model's action is done</li>
+	 * <li>-1 when the Model can't move</li>
+	 * <li>0 when the Field where to move isn't in Moverange</li>
+	 * <li>1 when Model moved successfully</li>
+	 * </ul>
 	 */
 	public int move(Coordinate old, Coordinate neu) {
 		if (getModel(old).getMovespeed() == 0) {
@@ -180,21 +184,22 @@ public class StateMap {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Attacker damages Defender
+	 *
 	 * @param attacker Coordinate of attacker
 	 * @param defender Coordinate of Defender
 	 * @return <ul>
-	 * 			<li>-2 when the Model's action is done</li>
-	 * 			<li>-1 when the Model can't attack (no damage/not finished to build)</li>
-	 * 			<li>0 when the Field where to attack isn't in Attackrange</li>
-	 * 			<li>1 when both Models attacked</li>
-	 * 			<li>2 when only the attacker attacked</li>
-	 * 			<li>3 when the attacker attacked and the defender missed</li>
-	 * 			<li>4 when the attacker missed but the defender attacked</li>
-	 *			<li>5 when both the attacker and the defender missed</li>
-	 * 		  </ul>
+	 * <li>-2 when the Model's action is done</li>
+	 * <li>-1 when the Model can't attack (no damage/not finished to build)</li>
+	 * <li>0 when the Field where to attack isn't in Attackrange</li>
+	 * <li>1 when both Models attacked</li>
+	 * <li>2 when only the attacker attacked</li>
+	 * <li>3 when the attacker attacked and the defender missed</li>
+	 * <li>4 when the attacker missed but the defender attacked</li>
+	 * <li>5 when both the attacker and the defender missed</li>
+	 * </ul>
 	 */
 	public int attack(Coordinate attacker, Coordinate defender) {
 		if (getModel(attacker).getDamage() == 0) {
@@ -217,7 +222,7 @@ public class StateMap {
 				Model def = models.get(defender);
 				//calc and evaluate strikeChance
 				strikeChance = atk.getStrike() - def.getEvade();
-				random = (int)(Math.random()*100);
+				random = (int) (Math.random() * 100);
 				if (random <= strikeChance) {
 					//ATTACKER
 					//calculating damage
@@ -258,7 +263,7 @@ public class StateMap {
 						}
 						//strikeChance
 						strikeChance = def.getStrike() - atk.getEvade();
-						random = (int)(Math.random()*100);
+						random = (int) (Math.random() * 100);
 						if (random > strikeChance) {
 							if (attackerMissed) {
 								return 5;
@@ -282,29 +287,32 @@ public class StateMap {
 						return 1;
 					}
 				}
-                                if (!attackerMissed) {
-                                    return 2;
-                                }
+				if (!attackerMissed) {
+					return 2;
+				}
 				return 0;
 			}
 		}
 		return 0;
 	}
-	
+
 	public void actionDone(Coordinate c) {
 		getModel(c).setActionDone(true);
 	}
+
 	public void moved(Coordinate c) {
 		getModel(c).setMoved(true);
 	}
-	
+
 	/**
-	 * Adds an Model to the map - Only use for testing/debugging reasons
-	 * To build an Model use buildModel()
+	 * Adds an Model to the map - Only use for testing/debugging reasons To
+	 * build an Model use buildModel()
+	 *
 	 * @param x x-Coordinate where to add
 	 * @param y y-Coordinate where to add
 	 * @param i ID of Model to add
-	 * @return whether the Model is added or not (e.g. when on that spot there already is an Model)
+	 * @return whether the Model is added or not (e.g. when on that spot there
+	 * already is an Model)
 	 */
 	public boolean addModel(int x, int y, int i) {
 		Model m = ModelList.getInstance().get(i, getCurrentPlayer());
@@ -316,26 +324,28 @@ public class StateMap {
 		}
 		return false;
 	}
-	
+
 	public void removeModel(Coordinate c) {
 		models.remove(c);
 	}
-	
+
 	/**
 	 * Starts building an Model
+	 *
 	 * @param model Model which is building
 	 * @param x x-Coordinate where to build
 	 * @param y y-Coordinate where to build
 	 * @param i ID of Model to build
 	 * @return <ul>
-	 * 			<li>0 when there already is an Model on that spot</li>
-	 * 			<li>1 when the Model is built</li>
-	 * 			<li>-1 when there is not enough Money to build the Model</li>
-	 * 			<li>-2 when there is not enough Energy to build the Model</li>
-	 * 			<li>-3 when there is not enough Population to build the Model</li>
-	 * 			<li>-4 when the unit to build is out of range</li>
-	 * 			<li>-5 when the Buildingtype of model and the Type of build doesn't fit</li>
-	 * 		   </ul>
+	 * <li>0 when there already is an Model on that spot</li>
+	 * <li>1 when the Model is built</li>
+	 * <li>-1 when there is not enough Money to build the Model</li>
+	 * <li>-2 when there is not enough Energy to build the Model</li>
+	 * <li>-3 when there is not enough Population to build the Model</li>
+	 * <li>-4 when the unit to build is out of range</li>
+	 * <li>-5 when the Buildingtype of model and the Type of build doesn't
+	 * fit</li>
+	 * </ul>
 	 */
 	public int buildModel(Coordinate model, int x, int y, int i) {
 		Model b = ModelList.getInstance().get(i, getCurrentPlayer());
@@ -369,12 +379,14 @@ public class StateMap {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Adds an Model to build another model
+	 *
 	 * @param model Model willing to build
 	 * @param build Model that will be built
-	 * @return whether model is added to build or not (when model can't build Type of build / build is already finished / action is done)
+	 * @return whether model is added to build or not (when model can't build
+	 * Type of build / build is already finished / action is done)
 	 */
 	public boolean addModelToBuild(Coordinate model, Coordinate build) {
 		Model m = getModel(model);
@@ -385,19 +397,20 @@ public class StateMap {
 		m.setCurrentBuilding(b);
 		return true;
 	}
-	
+
 	/**
 	 * Returns the Viewrange of all allied Models
+	 *
 	 * @return Coordinate-array of all fields in viewrange
 	 */
 	public Coordinate[] getSight() {
-		
+
 		if (round == 0) {
 			return map.getStartAreaOfTeam(getCurrentPlayer().getTeam());
 		}
-		
+
 		ArrayList<Coordinate> c = new ArrayList<Coordinate>();
-		
+
 		Coordinate[] keys = getAllyModelPositions();
 		for (int i = 0; i < keys.length; i++) {
 			Model m = getModel(keys[i]);
@@ -416,12 +429,14 @@ public class StateMap {
 		}
 		return ret;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param c Coordinate where the unit is on
-	 * @param type Type of range (StateMap.MOVERANGE/VIEWRANGE/ATTACKRANGE/BUILDRANGE)
-	 * @return Coordinate-Array of all fields that the unit can move/view/attack/build
+	 * @param type Type of range
+	 * (StateMap.MOVERANGE/VIEWRANGE/ATTACKRANGE/BUILDRANGE)
+	 * @return Coordinate-Array of all fields that the unit can
+	 * move/view/attack/build
 	 */
 	public Coordinate[] getRange(Coordinate c, int type) {
 		if (c == null) {
@@ -438,28 +453,28 @@ public class StateMap {
 			return getMoveRange(c, model, model.getMovespeed());
 		} else if (type == VIEWRANGE) {
 			int viewrange = model.getViewrange() + FieldList.getInstance().get(MapList.getInstance().getCurrentMap().get(c.getX(), c.getY())).getViewplus();
-			viewrange = viewrange<1 ? 1 : viewrange;
+			viewrange = viewrange < 1 ? 1 : viewrange;
 			return getViewRange(c, viewrange);
 		} else if (type == FULL_ATTACKRANGE) {
 			if (model.isActionDone()) {
 				return null;
 			}
 			int attackrange = model.getAttackrange();
-            if (attackrange == 0) {
-            	return null;
-            }
-            if (attackrange > 1) {
-            	attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
-            }
-            if (attackrange < 1) {
-                attackrange = 1;
-            }
+			if (attackrange == 0) {
+				return null;
+			}
+			if (attackrange > 1) {
+				attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
+			}
+			if (attackrange < 1) {
+				attackrange = 1;
+			}
 			ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
 			Coordinate[] mr = getRange(c, MOVERANGE);
-			
+
 			for (Coordinate m : mr) {
 				ret.add(m);
-				Coordinate[] ar = getAttackRange(m, attackrange-getDifference(c, m));
+				Coordinate[] ar = getAttackRange(m, attackrange - getDifference(c, m));
 				for (Coordinate a : ar) {
 					ret.add(a);
 				}
@@ -468,20 +483,21 @@ public class StateMap {
 			Coordinate[] retur = new Coordinate[ret.size()];
 			retur = ret.toArray(retur);
 			return retur;
-		}if (type == DIRECT_ATTACKRANGE) {
+		}
+		if (type == DIRECT_ATTACKRANGE) {
 			if (model.isActionDone()) {
 				return null;
 			}
 			int attackrange = model.getAttackrange();
-            if (attackrange == 0) {
-            	return null;
-            }
-            if (attackrange > 1) {
-            	attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
-            }
-            if (attackrange < 1) {
-                attackrange = 1;
-            }
+			if (attackrange == 0) {
+				return null;
+			}
+			if (attackrange > 1) {
+				attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
+			}
+			if (attackrange < 1) {
+				attackrange = 1;
+			}
 			return getAttackRange(c, attackrange);
 		} else {
 			if (model.isActionDone()) {
@@ -490,9 +506,9 @@ public class StateMap {
 			return getBuildRange(c, model.getBuildRange());
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param c Coordinate where the unit is on
 	 * @param model Model wanting to move
 	 * @param maxRange the maximum range to move, usually unit.getMovespeed()
@@ -507,13 +523,13 @@ public class StateMap {
 			Coordinate act;
 			for (int j = 1; move > 0; j++) {
 				if (i == 0) {
-					act = new Coordinate(c.getX(), c.getY()-j, Layer.Ground);
+					act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
 				} else if (i == 1) {
-					act = new Coordinate(c.getX()+j, c.getY(), Layer.Ground);
+					act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
 				} else if (i == 2) {
-					act = new Coordinate(c.getX(), c.getY()+j, Layer.Ground);
+					act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
 				} else {
-					act = new Coordinate(c.getX()-j, c.getY(), Layer.Ground);
+					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 				}
 				byte b = map.get(act.getX(), act.getY());
 				if (b < 0) {
@@ -543,7 +559,7 @@ public class StateMap {
 		}
 		return retur;
 	}
-	
+
 	/**
 	 * @param c Coordinate where the unit is on
 	 * @param maxRange the maximum range to see, usually unit.getViewrange()
@@ -551,28 +567,28 @@ public class StateMap {
 	 */
 	private Coordinate[] getViewRange(Coordinate c, int viewRange) {
 		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		
+
 		getViewRangeOfDirectionVertical(c, ret, 0, viewRange);
 		getViewRangeOfDirectionVertical(c, ret, 2, viewRange);
-		
+
 		removeDuplicates(ret);
 		Coordinate[] coords = new Coordinate[ret.size()];
 		coords = ret.toArray(coords);
 		return coords;
 	}
-	
+
 	private void getViewRangeOfDirection(Coordinate c, ArrayList<Coordinate> ret, int dir, int viewRange) {
 		int view = viewRange;
 		Coordinate act;
 		for (int j = 1; view > 0; j++) {
 			if (dir == 0) {
-				act = new Coordinate(c.getX(), c.getY()-j, Layer.Ground);
+				act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
 			} else if (dir == 1) {
-				act = new Coordinate(c.getX()+j, c.getY(), Layer.Ground);
+				act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
 			} else if (dir == 2) {
-				act = new Coordinate(c.getX(), c.getY()+j, Layer.Ground);
+				act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
 			} else {
-				act = new Coordinate(c.getX()-j, c.getY(), Layer.Ground);
+				act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 			}
 			byte b = map.get(act.getX(), act.getY());
 			if (b < 0) {
@@ -584,22 +600,23 @@ public class StateMap {
 			}
 		}
 	}
+
 	private void getViewRangeOfDirectionVertical(Coordinate c, ArrayList<Coordinate> ret, int dir, int viewRange) {
 		int view = viewRange;
 		ret.add(c);
 		getViewRangeOfDirection(c, ret, 1, view);
 		getViewRangeOfDirection(c, ret, 3, view);
-		
+
 		Coordinate act;
 		for (int j = 1; view > 0; j++) {
 			if (dir == 0) {
-				act = new Coordinate(c.getX(), c.getY()-j, Layer.Ground);
+				act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
 			} else if (dir == 1) {
-				act = new Coordinate(c.getX()+j, c.getY(), Layer.Ground);
+				act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
 			} else if (dir == 2) {
-				act = new Coordinate(c.getX(), c.getY()+j, Layer.Ground);
+				act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
 			} else {
-				act = new Coordinate(c.getX()-j, c.getY(), Layer.Ground);
+				act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 			}
 			byte b = map.get(act.getX(), act.getY());
 			if (b < 0) {
@@ -615,10 +632,11 @@ public class StateMap {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param c Coordinate where the unit is on
-	 * @param maxRange the maximum range of attack, usually unit.getAttackrange()
+	 * @param maxRange the maximum range of attack, usually
+	 * unit.getAttackrange()
 	 * @return Coordinate-Array of all fields that the unit can move
 	 */
 	private Coordinate[] getAttackRange(Coordinate c, int maxRange) {
@@ -629,13 +647,13 @@ public class StateMap {
 			Coordinate act;
 			for (int j = 1; attack > 0; j++) {
 				if (i == 0) {
-					act = new Coordinate(c.getX(), c.getY()-j, Layer.Ground);
+					act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
 				} else if (i == 1) {
-					act = new Coordinate(c.getX()+j, c.getY(), Layer.Ground);
+					act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
 				} else if (i == 2) {
-					act = new Coordinate(c.getX(), c.getY()+j, Layer.Ground);
+					act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
 				} else {
-					act = new Coordinate(c.getX()-j, c.getY(), Layer.Ground);
+					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 				}
 				byte b = map.get(act.getX(), act.getY());
 				if (b < 0) {
@@ -659,7 +677,7 @@ public class StateMap {
 		}
 		return retur;
 	}
-	
+
 	/**
 	 * @param c Coordinate where the unit is on
 	 * @param maxRange the maximum range of build, usually unit.getBuildRange()
@@ -674,13 +692,13 @@ public class StateMap {
 			Coordinate act;
 			for (int j = 1; build > 0; j++) {
 				if (i == 0) {
-					act = new Coordinate(c.getX(), c.getY()-j, Layer.Ground);
+					act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
 				} else if (i == 1) {
-					act = new Coordinate(c.getX()+j, c.getY(), Layer.Ground);
+					act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
 				} else if (i == 2) {
-					act = new Coordinate(c.getX(), c.getY()+j, Layer.Ground);
+					act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
 				} else {
-					act = new Coordinate(c.getX()-j, c.getY(), Layer.Ground);
+					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 				}
 				byte b = map.get(act.getX(), act.getY());
 				if (b < 0) {
@@ -710,7 +728,7 @@ public class StateMap {
 				ret.remove(i);
 			}
 		}
-		
+
 		removeDuplicates(ret);
 		Object[] o = ret.toArray();
 		Coordinate[] retur = new Coordinate[o.length];
@@ -719,12 +737,12 @@ public class StateMap {
 		}
 		return retur;
 	}
-	
+
 	public int getRound() {
 		return round;
 	}
-	
-	public void endTurn() {		
+
+	public void endTurn() {
 		Model[] models = getPlayerModels();
 		for (Model m : models) {
 			m.setActionDone(false);
@@ -740,7 +758,7 @@ public class StateMap {
 				}
 			}
 		}
-		if (currentPlayer == players.length-1) {
+		if (currentPlayer == players.length - 1) {
 			round++;
 			currentPlayer = 0;
 		} else {
@@ -763,7 +781,7 @@ public class StateMap {
 			getCurrentPlayer().setPopulationStorage(populationStorage);
 		}
 	}
-	
+
 	private void removeDuplicates(ArrayList<Coordinate> list) {
 		Collections.sort(list);
 		Coordinate prove = null;
@@ -778,7 +796,7 @@ public class StateMap {
 			}
 		}
 	}
-	
+
 	public int getDirectionOf(Coordinate from, Coordinate to) {
 		if (from == null || to == null) {
 			return -1;
@@ -799,15 +817,15 @@ public class StateMap {
 			}
 		}
 	}
-	
+
 	private int getDifference(Coordinate c1, Coordinate c2) {
 		int dx = c1.getX() - c2.getX();
 		int dy = c1.getY() - c2.getY();
 		dx = Math.abs(dx);
 		dy = Math.abs(dy);
-		return dx+dy;
+		return dx + dy;
 	}
-	
+
 	public void printModels() {
 		System.out.println(models);
 	}

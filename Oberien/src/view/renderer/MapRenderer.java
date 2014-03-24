@@ -6,4 +6,5 @@ import org.newdawn.slick.SlickException;
 
 public interface MapRenderer {
 	public void draw(Graphics g) throws SlickException;
+	public void init();
 }
