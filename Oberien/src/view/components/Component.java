@@ -23,14 +23,19 @@ public class Component {
 		this.size = new Dimension(width, height);
 	}
 	
+	public Component(float x, float y) {
+		location = new Point(x, y);
+	}
+	
 	public void paintComponent(Graphics g) {
-		for (int i = 0; i < components.size(); i++) {
-			components.get(i).paintComponent(g);
-		}
+		
 	}
 	
 	public void repaint(Graphics g) {
 		paintComponent(g);
+		for (int i = 0; i < components.size(); i++) {
+			components.get(i).paintComponent(g);
+		}
 	}
 	
 	public void add(Component c) {
@@ -46,10 +51,16 @@ public class Component {
 	}
 	
 	public float getX() {
+		if (location == null) {
+			return -1;
+		}
 		return location.getX();
 	}
 	
 	public float getY() {
+		if (location == null) {
+			return -1;
+		}
 		return location.getY();
 	}
 
@@ -62,10 +73,16 @@ public class Component {
 	}
 	
 	public float getWidth() {
+		if (size == null) {
+			return -1;
+		}
 		return size.getWidth();
 	}
 	
 	public float getHeight() {
+		if (size == null) {
+			return -1;
+		}
 		return size.getHeight();
 	}
 	

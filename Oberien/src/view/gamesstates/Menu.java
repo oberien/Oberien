@@ -50,19 +50,20 @@ public class Menu extends BasicGameState {
 			mm.init(gc, sd);
 			mc.init(sd.getFont(), gc, sd);
 			currentMenu = mm;
+			
 			int r = new Random().nextInt(2);
 			if (r == 0) {
-				bg = sd.getUI().getBg();				
+				bg = sd.getUI().getBg();
 			} else {
 				bg = sd.getUI().getBg1();
 			}
-		} catch (Exception e) {		
-		}
+			mm.setBackgroundImage(bg);
+			mc.setBackgroundImage(bg);
+		} catch (Exception e) {}
 	}	
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		bg.draw(0, 0, gc.getWidth(), gc.getHeight());
 		if (state == 0) {
 			mm.repaint(g);   
 		} else if (state == 1) {

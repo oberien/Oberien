@@ -4,9 +4,9 @@
  */
 package view.menu;
 
-import view.components.Component;
+import view.components.*;
 
-public abstract class MenuTempl extends Component {
+public abstract class MenuTempl extends Panel {
 	
 	public MenuTempl(float x, float y, float width, float height) {
 		super(x, y, width, height);

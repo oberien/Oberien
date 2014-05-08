@@ -19,6 +19,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import controller.Options;
 
+import view.components.Label;
+import view.components.Panel;
 import view.data.StartData;
 import view.renderer.ActionGroundRenderer;
 import view.renderer.BufferedMapRenderer;
@@ -33,9 +35,10 @@ public class GameLoading extends BasicGameState {
 
 	private StartData sd;
 	private String[] loading;
+	private Label[] labels;
+	private Panel panel;
 	private Font f;
-	private UnicodeFont uf;
-
+	
 	private Image[] tiles;
 	private Image[][] units;
 	private byte[][] data;
@@ -53,20 +56,24 @@ public class GameLoading extends BasicGameState {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		loading = new String[17];
 		f = sd.getFont();
 		System.out.println();
-		f = f.deriveFont(Font.PLAIN, container.getScreenHeight() / loading.length - 5);
-		uf = new UnicodeFont(f);
+		f = f.deriveFont(Font.PLAIN, gc.getScreenHeight() / loading.length - 5);
+		UnicodeFont uf = new UnicodeFont(f);
 		uf.getEffects().add(new ColorEffect(java.awt.Color.white));
 		uf.addAsciiGlyphs();
 		uf.loadGlyphs();
-		/*String[] mapNames = MapList.getInstance().getMapNames();
-		 int sel = JOptionPane.showOptionDialog(null, "Choose your map", "Map", JOptionPane.DEFAULT_OPTION,
-		 JOptionPane.QUESTION_MESSAGE, null, mapNames, 0);*/
+		
+		panel = new Panel(0, 0, gc.getWidth(), gc.getHeight());
+		labels = new Label[loading.length];
+		for (int i = 0; i < labels.length; i++) {
+			labels[i] = new Label(0, i * (gc.getScreenHeight() / loading.length - 5), uf);
+			panel.add(labels[i]);
+		}
+		
 		mapd = sd.getMap();
-		//sd.setMap(map);
 
 		tiles = new Image[256];
 		units = new Image[513][4];
@@ -78,8 +85,9 @@ public class GameLoading extends BasicGameState {
 			if (loading[i] == null) {
 				break;
 			}
-			uf.drawString(0, i * (gc.getScreenHeight() / loading.length - 5), loading[i]);
+			labels[i].setText(loading[i]);
 		}
+		panel.repaint(g);
 	}
 
 	@Override

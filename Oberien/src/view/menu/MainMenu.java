@@ -31,7 +31,7 @@ public class MainMenu extends MenuTempl implements ActionListener {
 		super(x, y, width, height);
 	}
 	
-	public void init(GameContainer gc, StartData sd) throws FontFormatException, IOException, SlickException {
+	public void init(GameContainer gc, StartData sd) throws SlickException {
 		f = sd.getFont();
 		f = f.deriveFont(Font.BOLD, 20);
 		uf = new UnicodeFont(f);

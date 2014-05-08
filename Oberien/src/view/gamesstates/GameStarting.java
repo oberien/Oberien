@@ -18,6 +18,8 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import view.components.Panel;
 import view.data.StartData;
 import view.data.UIElements;
 
@@ -26,7 +28,7 @@ public class GameStarting extends BasicGameState {
 	private UnicodeFont uf;
 	private StartData sd;
 	private UIElements ui;
-	private Image logo;
+	private Panel panel;
 	
 	private int count = 0;
 	
@@ -58,12 +60,14 @@ public class GameStarting extends BasicGameState {
 		ui = new UIElements();
 		ui.loadLogo();
 		
-		logo = ui.getLogo();
+		Image logo = ui.getLogo();
+		panel = new Panel(0, 0, gc.getWidth(), gc.getHeight());
+		panel.setBackgroundImage(logo, gc.getWidth()/2 - logo.getWidth()/2, gc.getHeight()/2 - logo.getHeight()/2);
 	}
 
 	@Override
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-		logo.draw(gc.getWidth()/2 - logo.getWidth()/2, gc.getHeight()/2 - logo.getHeight()/2);
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		panel.repaint(g);
 	}
 
 	@Override
