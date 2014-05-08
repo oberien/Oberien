@@ -13,14 +13,14 @@ public class StartData {
 	private StateMap sm;
 	private Map map;
 	private Image[] tiles;
-    private Image[][] units;
-    private MapRenderer mr;
-    private FoWRenderer fowr;
+	private Image[][] units;
+	private MapRenderer mr;
+	private FoWRenderer fowr;
 	private ActionGroundRenderer agr;
-    private HUDRenderer hudr;
-    private UnitRenderer ur;
-    private DamageRenderer dr;
-    private Font font;
+	private HUDRenderer hudr;
+	private UnitRenderer ur;
+	private DamageRenderer dr;
+	private Font font;
 	private UIElements ui;
 
 	public HUDRenderer getHudr() {

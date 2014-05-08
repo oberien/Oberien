@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.menus;
+package view.menu;
 
 import java.awt.Font;
 import model.map.MapList;
@@ -26,6 +26,10 @@ public class MapChooser extends MenuTempl implements ActionListener{
 	private int swidth;
 	private int sheight;
 	private StartData sd;
+	
+	public MapChooser(float x, float y, float width, float height) {
+		super(x, y, width, height);
+	}
 	
 	public void init(Font f, GameContainer gc, StartData sd) throws SlickException {
 		this.sd = sd;

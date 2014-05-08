@@ -156,7 +156,7 @@ public class StartPositionChooser extends BasicGameState {
 				basey = -1;
 				if (sm.getRound() == 1) {
 					sbg.getState(4).init(gc, sbg);
-			        sbg.enterState(getID() + 1);
+					sbg.enterState(getID() + 1);
 				}
 			}
 		}
@@ -169,7 +169,7 @@ public class StartPositionChooser extends BasicGameState {
 	
 	@Override
 	public void keyPressed(int key, char c) {
-//    	System.out.println("Pressed: " + key + " " + c);
+//		System.out.println("Pressed: " + key + " " + c);
 		if (c == '+') {
 			scaleUp = true;
 		}
@@ -192,7 +192,7 @@ public class StartPositionChooser extends BasicGameState {
 
 	@Override
 	public void keyReleased(int key, char c) {
-//    	System.out.println("Released: " + key + " " + c);
+//		System.out.println("Released: " + key + " " + c);
 		if (c == '+') {
 			scaleUp = false;
 		}

@@ -3,12 +3,16 @@ package view.components;
 import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
 
+import view.event.MouseEvent;
+import view.event.MouseListener;
+
 public class Component {
 	private Point location;
 	private Dimension size;
 	private boolean visible;
 	
-	ArrayList<Component> components = new ArrayList<Component>();
+	private ArrayList<Component> components = new ArrayList<Component>();
+	private ArrayList<MouseListener> mouseListeners = new ArrayList<MouseListener>();
 	
 	public Component() {
 		
@@ -90,5 +94,53 @@ public class Component {
 			return true;
 		}
 		return false;
+	}
+	
+	//MouseListeners
+	public void addMouseListener(MouseListener l) {
+		mouseListeners.add(l);
+	}
+	
+	public void fireMouseClicked(final MouseEvent e) {
+		new Thread("MouseClicked: " + this) {
+			public void run() {
+				if (belongsToThisComponent(e.getX(), e.getY())) {
+					for (int i = 0; i < mouseListeners.size(); i++) {
+						mouseListeners.get(i).mouseClicked(e);
+					}
+				} else {
+					for (int i = 0; i < components.size(); i++) {
+						components.get(i).fireMouseClicked(e);
+					}
+				}
+			}
+		}.start();
+	}
+	public void fireMousePressed(final MouseEvent e) {
+		new Thread("MousePressed: " + this) {
+			public void run() {
+				if (belongsToThisComponent(e.getX(), e.getY())) {
+					for (int i = 0; i < mouseListeners.size(); i++) {
+						mouseListeners.get(i).mousePressed(e);
+					}
+				} else {
+					for (int i = 0; i < components.size(); i++) {
+						components.get(i).fireMousePressed(e);
+					}
+				}
+			}
+		}.start();
+	}
+	public void fireMouseReleased(final MouseEvent e) {
+		new Thread("MouseReleased: " + this) {
+			public void run() {
+				for (int i = 0; i < mouseListeners.size(); i++) {
+					mouseListeners.get(i).mouseReleased(e);
+				}
+				for (int i = 0; i < components.size(); i++) {
+					components.get(i).fireMouseReleased(e);
+				}
+			}
+		}.start();
 	}
 }

@@ -9,17 +9,17 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class BufferedMapRenderer implements MapRenderer {
-    private Image map;
-    
-    public BufferedMapRenderer(Image map) {
-    	this.map = map;
-    }
+	private Image map;
+	
+	public BufferedMapRenderer(Image map) {
+		this.map = map;
+	}
 
 	@Override
 	public void init() {}
 	
-    @Override
-    public void draw(Graphics g) throws SlickException {
-    	g.drawImage(map, 0, 0);
-    }
+	@Override
+	public void draw(Graphics g) throws SlickException {
+		g.drawImage(map, 0, 0);
+	}
 }

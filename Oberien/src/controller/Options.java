@@ -13,15 +13,15 @@ public class Options {
 	 */
 	public static boolean bufferMap = false;
 	/**
-	 * indicates wheather vertical synchronisation is activated
+	 * indicates whether vertical synchronisation is activated
 	 */
-	public static boolean vsync = false;
+	public static boolean vsync = true;
 	/**
 	 * 0 = fullscreen <br>
 	 * 1 = windowed <br>
 	 * 2 = borderless <br>
 	 */
-	public static int screenMode = 2;
+	public static int screenMode = 1;
 	/**
 	 * indicates wheather the game is only rendered when it is visible or not
 	 */
@@ -35,6 +35,11 @@ public class Options {
 	 * higher values result in less notifications but in a higher load speed
 	 */
 	public static double loadingSpeed = 0.01;
+	/**
+	 * indicates the number of frames per second to be displayed<br>
+	 * -1 = max FPS
+	 */
+	public static int fps = 200;
 	
 	public static void save() {
 		try {

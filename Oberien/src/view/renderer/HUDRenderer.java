@@ -20,20 +20,20 @@ import view.huds.BuildHUD;
 import view.huds.MainHUD;
 
 public class HUDRenderer {
-    
-    private MainHUD mhud;
+	
+	private MainHUD mhud;
 	private BuildHUD bhud;
-    
-    public HUDRenderer(Font font, int width, Image[][] units, GameContainer gc) throws SlickException {
-    	mhud = new MainHUD(font, width);
+	
+	public HUDRenderer(Font font, int width, Image[][] units, GameContainer gc) throws SlickException {
+		mhud = new MainHUD(font, width);
 		bhud = new BuildHUD();
 		bhud.init(gc, units);
-    }
-    
-    public void draw(Graphics g, StateMap sm, StateBasedGame sbg, Model selected) { 
-        mhud.draw(g, sm, sbg);
+	}
+	
+	public void draw(Graphics g, StateMap sm, StateBasedGame sbg, Model selected) { 
+		mhud.draw(g, sm, sbg);
 		bhud.draw(g, sm, sbg, selected);
-    }
+	}
 	
 	public void update(boolean mousePressed, Point mcoord) {
 		bhud.update(mousePressed, mcoord);

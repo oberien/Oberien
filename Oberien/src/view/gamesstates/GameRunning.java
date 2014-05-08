@@ -340,7 +340,7 @@ public class GameRunning extends BasicGameState {
 
 	@Override
 	public void keyPressed(int key, char c) {
-//    	System.out.println("Pressed: " + key + " " + c);
+//		System.out.println("Pressed: " + key + " " + c);
 		if (c == '+') {
 			scaleUp = true;
 		}
@@ -366,7 +366,7 @@ public class GameRunning extends BasicGameState {
 
 	@Override
 	public void keyReleased(int key, char c) {
-//    	System.out.println("Released: " + key + " " + c);
+//		System.out.println("Released: " + key + " " + c);
 		if (c == '+') {
 			scaleUp = false;
 		}

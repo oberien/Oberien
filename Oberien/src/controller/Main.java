@@ -7,7 +7,9 @@ import model.map.*;
 
 public class Main {
 	public static void main(String[] args) {
-		MapList.getInstance().getMap("Four Tribes");
+		Map map = MapList.getInstance().getMap("Tera Rising");
+		String s = map.toString();
+		System.out.println(map);
 		StateMap sm = new StateMap(new Player[]{new Player("BH16", Color.green, 0), new Player("Enemy", Color.red, 1)});
 		sm.addModel(9, 12, 0);
 		long time = System.currentTimeMillis();

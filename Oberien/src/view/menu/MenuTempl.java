@@ -2,11 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.menus;
+package view.menu;
 
 import view.components.Component;
 
 public abstract class MenuTempl extends Component {
+	
+	public MenuTempl(float x, float y, float width, float height) {
+		super(x, y, width, height);
+	}
 	
 	/**
 	 * Used by Menu to get if the GameMode must be switched.

@@ -97,12 +97,12 @@ public class ModelList {
 					50, 20, 5,
 					250, 5, 7,
 					85, 0, 50, 3, Type.Tank,
-                    7, true, false, false, false, false, Layer.Ground,
+					7, true, false, false, false, false, Layer.Ground,
 					0, 0, 0,
 					0, 0,
 					null, 0, 0,
 					0);
-                case 65:
+				case 65:
 			return new Model("Laser Tank", Type.Tank, 65, player,
 					25, 50, 3,
 					150, 5, 7,

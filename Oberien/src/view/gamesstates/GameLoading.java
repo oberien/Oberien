@@ -66,7 +66,7 @@ public class GameLoading extends BasicGameState {
 		 int sel = JOptionPane.showOptionDialog(null, "Choose your map", "Map", JOptionPane.DEFAULT_OPTION,
 		 JOptionPane.QUESTION_MESSAGE, null, mapNames, 0);*/
 		mapd = sd.getMap();
-        //sd.setMap(map);
+		//sd.setMap(map);
 
 		tiles = new Image[256];
 		units = new Image[513][4];
