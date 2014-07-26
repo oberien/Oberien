@@ -34,6 +34,7 @@ public class Model {
 	private Layer defaultLayer;
 	
 	private boolean actionDone;
+	private boolean moved;
 	
 	private int level;
 	
@@ -62,6 +63,7 @@ public class Model {
 		this.defaultLayer = defaultLayer;
 		this.direction = 1;
 		this.actionDone = false;
+		this.moved = moved;
 	}
 	
 	public String getName() {
@@ -178,6 +180,14 @@ public class Model {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isMoved() {
+		return moved;
+	}
+
+	public void setMoved(boolean moved) {
+		this.moved = moved;
 	}
 }
 
