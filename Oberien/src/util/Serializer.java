@@ -1,6 +1,6 @@
 package util;
 
-import controller.StateMap;
+import controller.Controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * This class is used to save and load a StateMap and thus a complete
+ * This class is used to save and load a Controller and thus a complete
  * gamesession.
  */
 public class Serializer implements Runnable {
@@ -19,7 +19,7 @@ public class Serializer implements Runnable {
 	private FileInputStream fin;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private StateMap sm;
+	private Controller controller;
 	private File f;
 
 	/**
@@ -52,15 +52,15 @@ public class Serializer implements Runnable {
 	}
 
 	/**
-	 * Tells the thread to write a StateMap to the specified File.
+	 * Tells the thread to write a Controller to the specified File.
 	 *
-	 * @param sm The StateMap to write.
+	 * @param controller The Controller to write.
 	 * @throws IllegalStateException when the File to write to wasn't specified
 	 * with <code>setTargetFile(File f)</code> before.
 	 */
-	public void write(StateMap sm) throws IllegalStateException {
+	public void write(Controller controller) throws IllegalStateException {
 		if (f != null) {
-			this.sm = sm;
+			this.controller = controller;
 			write = true;
 			notify();
 		} else {
@@ -69,10 +69,10 @@ public class Serializer implements Runnable {
 	}
 
 	/**
-	 * Reads a StateMap from the specified File. This method behaves slightly
+	 * Reads a Controller from the specified File. This method behaves slightly
 	 * different from other read methods, as it doesn't return the read object,
 	 * but instead writes it to an internal object which can be accessed by
-	 * calling <code>getStateMap()</code>.
+	 * calling <code>getController()</code>.
 	 *
 	 * @throws IllegalStateException when the File to read from wasn't specified
 	 * with <code>setTargetFile(File f)</code> before.
@@ -87,25 +87,25 @@ public class Serializer implements Runnable {
 	}
 
 	/**
-	 * Getter for the StateMap that was read with <code>read()</code> before.
+	 * Getter for the Controller that was read with <code>read()</code> before.
 	 *
-	 * @return the StateMap that was read before.
+	 * @return the Controller that was read before.
 	 * @throws IllegalStateException when read() wasn't called first or the
 	 * reading process wasn't done yet.
 	 */
-	public synchronized StateMap getStateMap() throws IllegalStateException {
+	public synchronized Controller getController() throws IllegalStateException {
 		if (updated) {
 			updated = false;
-			return sm;
+			return controller;
 		} else {
-			throw new IllegalStateException("StateMap wasn't updated yet. Call read() first before you call this method.");
+			throw new IllegalStateException("Controller wasn't updated yet. Call read() first before you call this method.");
 		}
 	}
 
 	/**
 	 * Sets the target File to perform the next operations on. Must be invoked
 	 * before all calls to <code>read()</code> or
-	 * <code>write(StateMap sm)</code>.
+	 * <code>write(Controller controller)</code>.
 	 *
 	 * @param f The new target File.
 	 */

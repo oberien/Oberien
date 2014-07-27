@@ -5,7 +5,7 @@
 package view.gamesstates;
 
 import controller.Options;
-import controller.StateMap;
+import controller.Controller;
 
 import java.util.Arrays;
 import model.Layer;
@@ -13,6 +13,7 @@ import model.Model;
 import model.map.Coordinate;
 import model.map.Map;
 import model.map.MapList;
+import model.unit.builder.Builder;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -32,7 +33,7 @@ import view.renderer.*;
 public class GameRunning extends BasicGameState {
 	private StartData sd;
 	private Map map;
-	private StateMap statemap;
+	private Controller controller;
 	private MouseEvents me;
 	private MapRenderer mr;
 	private HUDRenderer hudr;
@@ -94,9 +95,9 @@ public class GameRunning extends BasicGameState {
 			me.init();
 			screenWidth = gc.getScreenWidth();
 			screenHeight = gc.getScreenHeight();
-			statemap = sd.getSm();
+			controller = sd.getController();
 			
-			sight = statemap.getSight();
+			sight = controller.getSight();
 			
 			mm = new MusicManager();
 			mm.init();
@@ -110,24 +111,24 @@ public class GameRunning extends BasicGameState {
 		g.translate(-camX * scale, -camY * scale);
 		g.scale(scale, scale);
 		mr.draw(g);
-		fowr.draw(g, statemap, sight);
+		fowr.draw(g, controller, sight);
 		boolean build;
 		if (buildModel == true) {
 			build = true;
 		} else {
 			build = hudr.getSelectedModel()!=null;
 		}
-		agr.draw(g, statemap, mapcoord, build);
+		agr.draw(g, controller, mapcoord, build);
 		Model model;
 		if (hudr.getSelectedModel() != null) {
 			model = hudr.getSelectedModel();
 		} else {
-			model = statemap.getModel(mapcoord);
+			model = controller.getModel(mapcoord);
 		}
-		ur.draw(g, statemap, unitMoving, model, statemap.getDirectionOf(mapcoord, unitMoving), statemap.getCurrentPlayer().getColor());
+		ur.draw(g, controller, unitMoving, model, controller.getDirectionOf(mapcoord, unitMoving), controller.getCurrentPlayer().getColor());
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
-		hudr.draw(g, statemap, sbg, statemap.getModel(mapcoord));
+		hudr.draw(g, controller, sbg, controller.getModel(mapcoord));
 	}
 
 	@Override
@@ -194,9 +195,9 @@ public class GameRunning extends BasicGameState {
 		int mapy = (int) (camY + mpoint.getY() / scale);
 		Coordinate c = new Coordinate(mapx / 32, mapy / 32, Layer.Ground);
 		//model of current field
-		Model m = statemap.getModel(c);
+		Model m = controller.getModel(c);
 		//selected model
-		Model model = statemap.getModel(mapcoord);
+		Model model = controller.getModel(mapcoord);
 		
 		Model modelToBuild = hudr.getSelectedModel();
 		//Mouse button down -> Unit gets selected/moves/attacks
@@ -207,7 +208,7 @@ public class GameRunning extends BasicGameState {
 				if (m == null) {
 					//if a model is selected to build
 					if (modelToBuild != null) {
-						int id = statemap.buildModel(mapcoord, c.getX(), c.getY(), modelToBuild.getId());
+						int id = controller.buildModel(mapcoord, c.getX(), c.getY(), modelToBuild.getName());
 						if (id == 1) {
 							model.setActionDone(true);
 						} else {
@@ -220,19 +221,19 @@ public class GameRunning extends BasicGameState {
 						buildModel = false;
 						
 					//if model moved successfully
-					} else if (statemap.move(mapcoord, c) == 1) {
+					} else if (controller.move(mapcoord, c) == 1) {
 						//if model can attack
-						Coordinate[] range = statemap.getRange(c, StateMap.DIRECT_ATTACKRANGE);
+						Coordinate[] range = controller.getRange(c, Controller.DIRECT_ATTACKRANGE);
 						if (range != null) {
-							if (statemap.getEnemyModelPositionsInArea(range).length == 0) {
+							if (controller.getEnemyModelPositionsInArea(range).length == 0) {
 								mapcoord = null;
-								statemap.actionDone(c);
+								controller.actionDone(c);
 							} else {
 								mapcoord = c;
 							}
 						} else {
 							//if model can build
-							range = statemap.getRange(c, StateMap.BUILDRANGE);
+							range = controller.getRange(c, Controller.BUILDRANGE);
 							if (range != null) {
 								buildModel = true;
 								mapcoord = c;
@@ -245,12 +246,12 @@ public class GameRunning extends BasicGameState {
 						unitMoving = null;
 					}
 				//if there is an EMEMY model on the field to move
-				} else if (m.getPlayer().getTeam() != statemap.getCurrentPlayer().getTeam()) {
+				} else if (m.getPlayer().getTeam() != controller.getCurrentPlayer().getTeam()) {
 					int life1 = model.getLife();
 					int life2 = m.getLife();
-					int result = statemap.attack(mapcoord, c);
+					int result = controller.attack(mapcoord, c);
 					if (result > 0) {
-						if (statemap.getModel(mapcoord) != null) {
+						if (controller.getModel(mapcoord) != null) {
 							dmgCoord1 = mapcoord;
 							if (result == 1 || result == 4) {
 								dmg1 = (life1 - model.getLife()) + "";
@@ -263,7 +264,7 @@ public class GameRunning extends BasicGameState {
 							dmgCoord1 = null;
 						}
 
-						if (statemap.getModel(c) != null) {
+						if (controller.getModel(c) != null) {
 							dmgCoord2 = c;
 							if (result == 1 || result == 2 || result == 3) {
 								dmg2 = (life2 - m.getLife()) + "";
@@ -279,24 +280,24 @@ public class GameRunning extends BasicGameState {
 					unitMoving = null;
 					
 				//if model belongs to current player AND model isn't finished to build yet AND selected model can build
-				} else if (m.getPlayer() == statemap.getCurrentPlayer() && m.getTimeToBuild() != 0 && model.getBuildSpeed() != 0) {
-					statemap.addModelToBuild(mapcoord, c);
+				} else if (m.getPlayer() == controller.getCurrentPlayer() && m.getTimeToBuild() != 0 && model instanceof Builder) {
+					controller.addModelToBuild(mapcoord, c);
 					buildModel = false;
 				//if clicked onto itself
 				} else if (mapcoord.equals(c)) {
-					statemap.actionDone(c);
+					controller.actionDone(c);
 					mapcoord = null;
 					unitMoving = null;
 				}
 			//if no model is selected, it will be selected if unit belongs to current player AND is finished building
-			} else if (m != null && !m.isActionDone() && m.getPlayer() == statemap.getCurrentPlayer() && m.getTimeToBuild() == 0) {
+			} else if (m != null && !m.isActionDone() && m.getPlayer() == controller.getCurrentPlayer() && m.getTimeToBuild() == 0) {
 				mapcoord = c;
 			//if model can't move there
 			} else {
 				mapcoord = null;
 				unitMoving = null;
 			}
-			sight = statemap.getSight();
+			sight = controller.getSight();
 		//Mousebutton not down
 		} else {
 			//modelToBuild is selected
@@ -308,9 +309,9 @@ public class GameRunning extends BasicGameState {
 				Coordinate[] range;
 				//if selected unit is building
 				if (buildModel) {
-					range = statemap.getRange(mapcoord, StateMap.BUILDRANGE);
+					range = controller.getRange(mapcoord, Controller.BUILDRANGE);
 				} else {
-					range = statemap.getRange(mapcoord, StateMap.MOVERANGE);
+					range = controller.getRange(mapcoord, Controller.MOVERANGE);
 				}
 				if (Arrays.asList(range).contains(c)) {
 					unitMoving = c;
@@ -332,9 +333,9 @@ public class GameRunning extends BasicGameState {
 			unitMoving = null;
 			dmgCoord1 = null;
 			dmgCoord2 = null;
-			statemap.endTurn();
+			controller.endTurn();
 			endTurn = false;
-			sight = statemap.getSight();
+			sight = controller.getSight();
 		}
 	}
 

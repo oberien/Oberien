@@ -4,7 +4,7 @@
  */
 package view.renderer;
 
-import controller.StateMap;
+import controller.Controller;
 import model.Layer;
 import model.Model;
 import model.map.Coordinate;
@@ -23,7 +23,7 @@ public class GroundRenderer {
 		this.mapHeight = mapHeight;
 	}
 	
-	public void draw(Graphics g, StateMap sm,  Coordinate[] sight, Coordinate mouse) {
+	public void draw(Graphics g, Controller controller,  Coordinate[] sight, Coordinate mouse) {
 		g.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
 		//more visible than hidden -> render hidden
 //		if (sight.length > mapWidth*mapHeight/2) {
@@ -60,11 +60,11 @@ public class GroundRenderer {
 //		}
 		
 		if (mouse != null) {
-			Model m = sm.getModel(mouse);
+			Model m = controller.getModel(mouse);
 			if (m != null && !m.isActionDone()) {
 				if (!m.isMoved()) {
 					g.setColor(new Color(0.3f, 0.9f, 0.3f, 0.5f));
-					sight = sm.getRange(mouse, StateMap.MOVERANGE);
+					sight = controller.getRange(mouse, Controller.MOVERANGE);
 					for (int i = 0; i < sight.length; i++) {
 						g.fillRect(sight[i].getX() * 32, sight[i].getY() * 32, 32, 32);
 					}
@@ -72,11 +72,11 @@ public class GroundRenderer {
 			
 				g.setColor(new Color(1.0f, 0.1f, 0.1f, 0.5f));
 				if (!m.isMoved()) {
-					sight = sm.getRange(mouse, StateMap.FULL_ATTACKRANGE);
+					sight = controller.getRange(mouse, Controller.FULL_ATTACKRANGE);
 				} else {
-					sight = sm.getRange(mouse, StateMap.DIRECT_ATTACKRANGE);
+					sight = controller.getRange(mouse, Controller.DIRECT_ATTACKRANGE);
 				}
-				enmop = sm.getEnemyModelPositionsInArea(sight);
+				enmop = controller.getEnemyModelPositionsInArea(sight);
 				for (Coordinate c : sight) {
 					for (Coordinate p : enmop) {
 						if (c.equals(p)) {

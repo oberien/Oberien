@@ -4,9 +4,10 @@
  */
 package view.huds;
 
-import controller.StateMap;
+import controller.Controller;
 import model.Model;
 import model.ModelList;
+import model.unit.builder.*;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -36,14 +37,15 @@ public class BuildHUD implements HUD {
 		posy = sHeight - height;
 	}
 
-	public void draw(Graphics g, StateMap sm, StateBasedGame sbg, Model unit) {
+	public void draw(Graphics g, Controller controller, StateBasedGame sbg, Model unit) {
 		g.setColor(new Color(0.8f, 0.8f, 0.7f, 0.7f));
 		g.fillRoundRect(posx, posy, width, height, 20);
-		if (unit != null) {
+		if (unit != null && unit instanceof Builder) {
+			Builder b = (Builder)unit;
 			if (index > -1) { 
 				g.fillRect((index + posx) *32, posy, 32, 32);
 			}
-			modelArray = modelList.getModelsOfType(unit.getBuilds());
+			modelArray = modelList.getModelsOfType(b.getBuilds());
 			int currentRow = 0;
 			int currentImage = 0;
 			for (int i = 0; i < modelArray.length; i++) {

@@ -4,7 +4,7 @@
  */
 package view.renderer;
 
-import controller.StateMap;
+import controller.Controller;
 
 import java.awt.Font;
 import model.Model;
@@ -30,9 +30,9 @@ public class HUDRenderer {
 		bhud.init(gc, units);
 	}
 	
-	public void draw(Graphics g, StateMap sm, StateBasedGame sbg, Model selected) { 
-		mhud.draw(g, sm, sbg);
-		bhud.draw(g, sm, sbg, selected);
+	public void draw(Graphics g, Controller controller, StateBasedGame sbg, Model selected) { 
+		mhud.draw(g, controller, sbg);
+		bhud.draw(g, controller, sbg, selected);
 	}
 	
 	public void update(boolean mousePressed, Point mcoord) {

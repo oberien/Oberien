@@ -4,7 +4,8 @@
  */
 package view.renderer;
 
-import controller.StateMap;
+import controller.Controller;
+import model.AttackingModel;
 import model.Layer;
 import model.Model;
 import model.map.Coordinate;
@@ -19,35 +20,35 @@ public class ActionGroundRenderer {
 		
 	}
 	
-	public void draw(Graphics g, StateMap sm, Coordinate selectedModel, boolean build) {
+	public void draw(Graphics g, Controller controller, Coordinate selectedModel, boolean build) {
 		Coordinate[] range;
 		
 		if (selectedModel != null) {
-			Model m = sm.getModel(selectedModel);
+			Model m = controller.getModel(selectedModel);
 			if (m != null && !m.isActionDone()) {
 				if (build) {
 					g.setColor(new Color(0.1f, 0.1f, 0.1f, 0.5f));
-					range = sm.getRange(selectedModel, StateMap.BUILDRANGE);
+					range = controller.getRange(selectedModel, Controller.BUILDRANGE);
 					for (int i = 0; i < range.length; i++) {
 						g.fillRect(range[i].getX() * 32, range[i].getY() * 32, 32, 32);
 					}
 				} else {
 					if (!m.isMoved()) {
 						g.setColor(new Color(0.3f, 0.9f, 0.3f, 0.5f));
-						range = sm.getRange(selectedModel, StateMap.MOVERANGE);
+						range = controller.getRange(selectedModel, Controller.MOVERANGE);
 						for (int i = 0; i < range.length; i++) {
 							g.fillRect(range[i].getX() * 32, range[i].getY() * 32, 32, 32);
 						}
 					}
 					
-					if (m.getAttackrange() != 0) {
+					if (m instanceof AttackingModel) {
 						g.setColor(new Color(1.0f, 0.1f, 0.1f, 0.5f));
 						if (!m.isMoved()) {
-							range = sm.getRange(selectedModel, StateMap.FULL_ATTACKRANGE);
+							range = controller.getRange(selectedModel, Controller.FULL_ATTACKRANGE);
 						} else {
-							range = sm.getRange(selectedModel, StateMap.DIRECT_ATTACKRANGE);
+							range = controller.getRange(selectedModel, Controller.DIRECT_ATTACKRANGE);
 						}
-						enmop = sm.getEnemyModelPositionsInArea(range);
+						enmop = controller.getEnemyModelPositionsInArea(range);
 						for (Coordinate c : range) {
 							for (Coordinate p : enmop) {
 								if (c.equals(p)) {

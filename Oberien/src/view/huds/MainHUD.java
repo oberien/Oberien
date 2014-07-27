@@ -4,7 +4,7 @@
  */
 package view.huds;
 
-import controller.StateMap;
+import controller.Controller;
 import java.awt.Font;
 
 import model.Player;
@@ -32,12 +32,12 @@ public class MainHUD implements HUD {
 		hudPosX = (int) (width/2 - width*0.2f);
 	}
 
-		public void draw(Graphics g, StateMap sm, StateBasedGame sbg) {
+		public void draw(Graphics g, Controller controller, StateBasedGame sbg) {
 		g.setColor(new Color(0.1f, 0.1f, 0.1f, 1.0f));
 		g.fillRoundRect(hudPosX, -10, hudWidth, 100, 20);  
 		g.drawRoundRect(hudPosX - 3, -10, hudWidth + 6, 103, 20);
 		
-		Player player = sm.getCurrentPlayer();
+		Player player = controller.getCurrentPlayer();
 		int spaceWidth = hudWidth / 10;
 		int widthOfBar = hudWidth / 2 - spaceWidth * 2;
 		int money = player.getMoney();
@@ -68,11 +68,11 @@ public class MainHUD implements HUD {
 		
 		textPos = hudPosX + hudWidth - hudWidth/4;
 		//round
-		s = "Round: " + sm.getRound();
+		s = "Round: " + controller.getRound();
 		uf.drawString(textPos - uf.getWidth(s)/2, 25 - uf.getHeight(s), s, Color.gray);
 		
 		//player
-		s = "Player: " + sm.getCurrentPlayer().getName();
+		s = "Player: " + controller.getCurrentPlayer().getName();
 		uf.drawString(textPos - uf.getWidth(s)/2, 55 - uf.getHeight(s), s, Color.gray);
 	}
 

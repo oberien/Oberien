@@ -4,7 +4,7 @@
  */
 package view.renderer;
 
-import controller.StateMap;
+import controller.Controller;
 import model.Layer;
 import model.Model;
 import model.map.Coordinate;
@@ -23,7 +23,7 @@ public class FoWRenderer {
 		this.mapHeight = mapHeight;
 	}
 	
-	public void draw(Graphics g, StateMap sm, Coordinate[] sight) {
+	public void draw(Graphics g, Controller controller, Coordinate[] sight) {
 		g.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
 		//more visible than hidden -> render hidden
 //		if (sight.length > mapWidth*mapHeight/2) {

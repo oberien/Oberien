@@ -6,7 +6,7 @@ package view.renderer;
 
 import java.awt.Font;
 
-import controller.StateMap;
+import controller.Controller;
 import model.Model;
 import model.Player;
 import model.map.Coordinate;
@@ -32,14 +32,14 @@ public class UnitRenderer {
 		uf.loadGlyphs();
 	}
 	
-	public void draw(Graphics g, StateMap sm, Coordinate unitMoving, Model model, int direction, Color col) throws SlickException {
-		pos = sm.getModelPositionsInArea(sm.getSight());
+	public void draw(Graphics g, Controller controller, Coordinate unitMoving, Model model, int direction, Color col) throws SlickException {
+		pos = controller.getModelPositionsInArea(controller.getSight());
 		Model m;
 		Image img;
 		Color color;
 		
 		for (int i = 0; i < pos.length; i++) {
-			m = sm.getModel(pos[i]);
+			m = controller.getModel(pos[i]);
 			float alpha = (float) (0.75 * ((m.getCostMoney()-m.getTimeToBuild())/m.getCostMoney()));
 			Player player = m.getPlayer();
 			if (player == null) {

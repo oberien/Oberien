@@ -15,7 +15,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import controller.StateMap;
+import controller.Controller;
 import java.util.Random;
 import org.newdawn.slick.Image;
 import view.data.StartData;
@@ -80,7 +80,7 @@ public class Menu extends BasicGameState {
 		
 		if (currentMenu.getModeSwitch()) {
 			//TODO create StateMap in teamselection
-			sd.setSm(new StateMap(new Player[]{new Player("BH16", Color.red, 0), new Player("Enemy", Color.green, 1)}));
+			sd.setController(new Controller(new Player[]{new Player("BH16", Color.red, 0), new Player("Enemy", Color.green, 1)}));
 			sbg.enterState(getID() + 1);
 		}
 		if (currentMenu.switchMenu()) {

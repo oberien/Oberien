@@ -18,7 +18,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import controller.Options;
-import controller.StateMap;
+import controller.Controller;
 
 import view.data.StartData;
 import view.eventhandler.MouseEvents;
@@ -28,7 +28,7 @@ import view.renderer.UnitRenderer;
 
 public class StartPositionChooser extends BasicGameState {
 	private StartData sd;
-	private StateMap sm;
+	private Controller controller;
 	private MapRenderer mr;
 	private Map map;
 	private MouseEvents me;
@@ -59,7 +59,7 @@ public class StartPositionChooser extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		if (MapList.getInstance().getCurrentMap() != null) {
-			sm = sd.getSm();
+			controller = sd.getController();
 			mr = sd.getMr();
 			map = sd.getMap();
 			me = new MouseEvents();
@@ -79,8 +79,8 @@ public class StartPositionChooser extends BasicGameState {
 		g.translate(-camX * scale, -camY * scale);
 		g.scale(scale, scale);
 		mr.draw(g);
-		fowr.draw(g, sm, sm.getSight());
-		ur.draw(g, sm, null, null, 0, sm.getCurrentPlayer().getColor());
+		fowr.draw(g, controller, controller.getSight());
+		ur.draw(g, controller, null, null, 0, controller.getCurrentPlayer().getColor());
 	}
 
 	@Override
@@ -137,24 +137,24 @@ public class StartPositionChooser extends BasicGameState {
 			int mapx = (int) (camX + p.getX() / scale);
 			int mapy = (int) (camY + p.getY() / scale);
 			if (basex != -1) {
-				sm.removeModel(new Coordinate(basex, basey, Layer.Ground));
+				controller.removeModel(new Coordinate(basex, basey, Layer.Ground));
 			}
 			basex = mapx/32;
 			basey = mapy/32;
-			if (!Arrays.asList(map.getStartAreaOfTeam(sm.getCurrentPlayer().getTeam())).contains(new Coordinate(basex, basey, Layer.Ground))) {
+			if (!Arrays.asList(map.getStartAreaOfTeam(controller.getCurrentPlayer().getTeam())).contains(new Coordinate(basex, basey, Layer.Ground))) {
 				basex = -1;
 				basey = -1;
 			}
-			sm.addModel(basex, basey, 512);
+			controller.addModel(basex, basey, "Base");
 		}
 		
 		if (endTurn) {
 			endTurn = false;
 			if (basex != -1 && basey != -1) {
-				sm.endTurn();
+				controller.endTurn();
 				basex = -1;
 				basey = -1;
-				if (sm.getRound() == 1) {
+				if (controller.getRound() == 1) {
 					sbg.getState(4).init(gc, sbg);
 					sbg.enterState(getID() + 1);
 				}
