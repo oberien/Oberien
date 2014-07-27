@@ -39,7 +39,32 @@ public class ModelList {
 	}
 
 	private ModelList() {
-		
+		models = new Model[25];
+		models[0] = new Soldier(null);
+		models[1] = new Rocketeer(null);
+		models[2] = new HeavyAssaultWalker(null);
+		models[3] = new Strider(null);
+		models[4] = new Leopard5(null);
+		models[5] = new LaserTank(null);
+		models[6] = new Spy(null);
+		models[7] = new ResourceCollectorBuilder(null);
+		models[8] = new StorageBuilder(null);
+		models[9] = new ProducingBuilder(null);
+		models[10] = new TurretBuilder(null);
+		models[11] = new HighRangeTurretBuilder(null);
+		models[12] = new SolarCell(null);
+		models[13] = new HamsterWheel(null);
+		models[14] = new House(null);
+		models[15] = new NuclearReactor(null);
+		models[16] = new SmallStorage(null);
+		models[17] = new MediumStorage(null);
+		models[18] = new BigStorage(null);
+		models[19] = new Barracks(null);
+		models[20] = new Factory(null);
+		models[21] = new SpyCenter(null);
+		models[22] = new GatlingGun(null);
+		models[23] = new LaserCannon(null);
+		models[24] = new Base(null);
 	}
 	
 	public Model[] getAllModels() {
