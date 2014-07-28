@@ -19,7 +19,7 @@ import view.gamesstates.StartPositionChooser;
 public class View extends StateBasedGame {
 
 	public View() {
-		super("Futuristic roundbased game");
+		super("Oberien");
 	}
 	
 	@Override

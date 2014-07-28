@@ -35,7 +35,6 @@ public class ListingMapRenderer implements MapRenderer {
 			for (int y = 0; y < data[0].length; y++) {
 				float posy = y * tiles[1].getHeight();
 				byte b = data[x][y];
-				System.out.println(b);
 				
 				tiles[b].draw(posx, posy);
 			}
