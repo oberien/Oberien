@@ -10,6 +10,8 @@ import model.building.resourceCollector.HamsterWheel;
 import model.building.resourceCollector.House;
 import model.building.resourceCollector.NuclearReactor;
 import model.building.resourceCollector.SolarCell;
+import model.building.resourceCollector.Watergenerator;
+import model.building.resourceCollector.Windmill;
 import model.building.storage.BigStorage;
 import model.building.storage.MediumStorage;
 import model.building.storage.SmallStorage;
@@ -42,7 +44,7 @@ public class ModelList {
 	}
 
 	private ModelList() {
-		models = new Model[28];
+		models = new Model[30];
 		models[0] = new Soldier(null);
 		models[1] = new Rocketeer(null);
 		models[2] = new HeavyAssaultWalker(null);
@@ -71,6 +73,8 @@ public class ModelList {
 		models[25] = new Sharpshooter(null);
 		models[26] = new Warrior(null);
 		models[27] = new AnnoyBot(null);
+		models[28] = new Windmill(null);
+		models[29] = new Watergenerator(null);
 	}
 	
 	public Model[] getAllModels() {
@@ -131,6 +135,10 @@ public class ModelList {
 			return new House(player);
 		} else if(name.equals("Nuclear Reactor")) {
 			return new NuclearReactor(player);
+		} else if(name.equals("Windmill")) {
+			return new Windmill(player);
+		} else if(name.equals("Watergenerator")) {
+			return new Watergenerator(player);
 		} else if(name.equals("Small Storage")) {
 			return new SmallStorage(player);
 		} else if(name.equals("Medium Storage")) {

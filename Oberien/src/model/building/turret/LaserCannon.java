@@ -11,6 +11,6 @@ public class LaserCannon extends Turret {
 				75, 75, 0,
 				75, 5, 7, 
 				0, true, false, false, false, false, Layer.Ground,
-				95, 0, 15, 3, Type.Robot);
+				95, 15, 3, Type.Robot);
 	}
 }

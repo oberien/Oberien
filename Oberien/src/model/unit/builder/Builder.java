@@ -15,12 +15,12 @@ public class Builder extends Unit {
 
 	public Builder(String name, Type type, int id, Player player,
 			int costMoney, int costEnergy, int costPopulation, 
-			int maxLife, int defense, int viewrange, 
+			int maxLife, int defense, int evade, int viewrange, 
 			int movespeed, boolean moveGround, boolean moveWater, boolean moveAir, boolean moveUnderground, boolean moveUnderwater, Layer defaultLayer, 
 			Type builds, int buildSpeed, int buildRange) {
 		super(name, type, id, player, 
 				costMoney, costEnergy, costPopulation, 
-				maxLife, defense, viewrange, 
+				maxLife, defense, evade, viewrange, 
 				movespeed, moveGround, moveWater, moveAir, moveUnderground, moveUnderwater, defaultLayer);
 		this.builds = builds;
 		this.buildSpeed = buildSpeed;

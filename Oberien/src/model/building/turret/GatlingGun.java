@@ -11,6 +11,6 @@ public class GatlingGun extends Turret {
 				50, 50, 0, 
 				100, 5, 7, 
 				0, true, false, false, false, false, Layer.Ground,
-				100, 0, 10, 3, Type.Infantry);
+				100, 10, 3, Type.Infantry);
 	}
 }
