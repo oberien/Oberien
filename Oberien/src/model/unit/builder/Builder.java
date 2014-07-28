@@ -1,12 +1,13 @@
 package model.unit.builder;
 
+import model.BuildingModel;
 import model.Layer;
 import model.Model;
 import model.Player;
 import model.Type;
 import model.unit.Unit;
 
-public class Builder extends Unit {
+public class Builder extends Unit implements BuildingModel {
 	private Type builds;
 	private int buildSpeed;
 	private int buildRange;
@@ -27,25 +28,29 @@ public class Builder extends Unit {
 		this.buildRange = buildRange;
 		this.currentBuilding = null;
 	}
-	
+
+	@Override
 	public Type getBuilds() {
 		return builds;
 	}
 
+	@Override
 	public int getBuildSpeed() {
 		return buildSpeed;
 	}
 
+	@Override
 	public int getBuildRange() {
 		return buildRange;
 	}
-	
+
+	@Override
 	public Model getCurrentBuilding() {
 		return currentBuilding;
 	}
-	
+
+	@Override
 	public void setCurrentBuilding(Model m) {
 		this.currentBuilding = m;
 	}
-	
 }
