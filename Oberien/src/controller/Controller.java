@@ -235,7 +235,7 @@ public class Controller {
 				}
 				
 				//calc and evaluate strikeChance
-				strikeChance = am.getStrike() - (du == null ? 0 : du.getEvade());
+				strikeChance = am.getStrike() - (du == null ? 0 : du.getEvasion());
 				random = (int) (Math.random() * 100);
 				if (random <= strikeChance) {
 					//ATTACKER
@@ -280,7 +280,7 @@ public class Controller {
 							return 2;
 						}
 						//strikeChance
-						strikeChance = dm.getStrike() - au.getEvade();
+						strikeChance = dm.getStrike() - au.getEvasion();
 						random = (int) (Math.random() * 100);
 						if (random > strikeChance) {
 							if (attackerMissed) {

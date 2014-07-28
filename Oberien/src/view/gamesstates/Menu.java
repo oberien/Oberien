@@ -79,8 +79,8 @@ public class Menu extends BasicGameState {
 		}
 		
 		if (currentMenu.getModeSwitch()) {
-			//TODO create StateMap in teamselection
-			sd.setController(new Controller(new Player[]{new Player("BH16", Color.red, 0), new Player("Enemy", Color.green, 1)}));
+			//TODO create Controller in teamselection
+			sd.setController(new Controller(new Player[]{new Player("Player 1", Color.red, 0), new Player("Player 2", Color.green, 1)}));
 			sbg.enterState(getID() + 1);
 		}
 		if (currentMenu.switchMenu()) {
