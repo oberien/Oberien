@@ -22,8 +22,11 @@ import model.unit.builder.StorageBuilder;
 import model.unit.builder.TurretBuilder;
 import model.unit.infantry.HeavyAssaultWalker;
 import model.unit.infantry.Rocketeer;
+import model.unit.infantry.Sharpshooter;
 import model.unit.infantry.Soldier;
+import model.unit.infantry.Warrior;
 import model.unit.recon.Spy;
+import model.unit.robot.AnnoyBot;
 import model.unit.robot.Strider;
 import model.unit.tank.LaserTank;
 import model.unit.tank.Leopard5;
@@ -39,7 +42,7 @@ public class ModelList {
 	}
 
 	private ModelList() {
-		models = new Model[25];
+		models = new Model[28];
 		models[0] = new Soldier(null);
 		models[1] = new Rocketeer(null);
 		models[2] = new HeavyAssaultWalker(null);
@@ -65,6 +68,9 @@ public class ModelList {
 		models[22] = new GatlingGun(null);
 		models[23] = new LaserCannon(null);
 		models[24] = new Base(null);
+		models[25] = new Sharpshooter(null);
+		models[26] = new Warrior(null);
+		models[27] = new AnnoyBot(null);
 	}
 	
 	public Model[] getAllModels() {
@@ -93,8 +99,14 @@ public class ModelList {
 			return new Rocketeer(player);
 		} else if(name.equals("Heavy Assault Walker")) {
 			return new HeavyAssaultWalker(player);
+		} else if(name.equals("Sharpshooter")) {
+			return new Sharpshooter(player);
+		} else if(name.equals("Warrior")) {
+			return new Warrior(player);
 		} else if(name.equals("Strider")) {
 			return new Strider(player);
+		} else if(name.equals("Annoy Bot")) {
+			return new AnnoyBot(player);
 		} else if(name.equals("Leopard 5")) {
 			return new Leopard5(player);
 		} else if(name.equals("Laser Tank")) {
