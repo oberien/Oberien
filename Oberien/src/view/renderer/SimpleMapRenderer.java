@@ -39,7 +39,7 @@ public class SimpleMapRenderer implements MapRenderer {
 	public SimpleMapRenderer(byte[][] data, Image[] tiles) throws SlickException {
 		this.data = data;
 		//TODO: Transfer this image into StartData and load it in gameLoading
-		this.tiles = new Image("imgs/tiles/tiles.png");
+		this.tiles = new Image("res/imgs/tiles/tiles.png");
 		this.init();
 	}
 
