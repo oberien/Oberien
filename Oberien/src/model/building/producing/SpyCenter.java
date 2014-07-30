@@ -3,14 +3,14 @@ package model.building.producing;
 import model.Layer;
 import model.Player;
 import model.Type;
+import model.building.Producing;
 
 public class SpyCenter extends Producing {
 
 	public SpyCenter(Player player) {
 		super("Spy Center", Type.Producing, 322, player,
 				75, 75, 0,
-				100, 0, 5, 
-				0, true, false, false, false, false, Layer.Ground,
-				Type.Recon, 10, 1);
+				100, 0, 5,
+				Type.Recon, 10, 1, Layer.Ground);
 	}
 }

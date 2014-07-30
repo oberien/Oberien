@@ -1,7 +1,10 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 
 import model.map.Coordinate;
 import model.map.FieldList;
@@ -10,143 +13,23 @@ import model.map.MapList;
 import model.unit.*;
 import model.unit.builder.*;
 import model.building.*;
+import model.building.base.Base;
 import model.building.resourceCollector.ResourceCollector;
 import model.building.storage.Storage;
 import model.*;
 
 public class Controller {
-
-	public static final int MOVERANGE = 0;
-	public static final int VIEWRANGE = 1;
+	public static final int VIEWRANGE = 0;
+	public static final int MOVERANGE = 1;
 	public static final int FULL_ATTACKRANGE = 2;
 	public static final int DIRECT_ATTACKRANGE = 3;
 	public static final int BUILDRANGE = 4;
+	
+	private State state;
 
-	MyHashMap<Coordinate, Model> models;
-	Player[] players;
-	int currentPlayer;
-
-	int round;
-
-	Map map;
-
-	public Controller(Player[] players) {
-		models = new MyHashMap<Coordinate, Model>();
-		this.players = players;
-		round = 0;
-		map = MapList.getInstance().getCurrentMap();
-	}
-
-	public Player getCurrentPlayer() {
-		return players[currentPlayer];
-	}
-
-	/**
-	 * Returns all keys of all allied models as Coordinate-array
-	 *
-	 * @return Coordinate-array with all positions of models
-	 */
-	public Coordinate[] getPlayerModelPositions() {
-		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		Object[] o = models.keySet().toArray();
-		for (int i = 0; i < o.length; i++) {
-			Coordinate c = (Coordinate) o[i];
-			if (getModel(c).getPlayer().equals(getCurrentPlayer())) {
-				ret.add(c);
-			}
-		}
-
-		o = ret.toArray();
-		Coordinate[] retur = new Coordinate[o.length];
-		for (int i = 0; i < o.length; i++) {
-			retur[i] = (Coordinate) o[i];
-		}
-		return retur;
-	}
-
-	/**
-	 * Returns all keys of all allied models as Coordinate-array
-	 *
-	 * @return Coordinate-array with all positions of models
-	 */
-	public Coordinate[] getAllyModelPositions() {
-		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		Object[] o = models.keySet().toArray();
-		for (int i = 0; i < o.length; i++) {
-			Coordinate c = (Coordinate) o[i];
-			if (getModel(c).getPlayer().getTeam() == getCurrentPlayer().getTeam()) {
-				ret.add(c);
-			}
-		}
-
-		o = ret.toArray();
-		Coordinate[] retur = new Coordinate[o.length];
-		for (int i = 0; i < o.length; i++) {
-			retur[i] = (Coordinate) o[i];
-		}
-		return retur;
-	}
-
-	/**
-	 * Returns all Modelpositons (allies+enemies) in the given area
-	 *
-	 * @param c Coordinate-array of area
-	 * @return Coordinate-array of all models in area
-	 */
-	public Coordinate[] getModelPositionsInArea(Coordinate[] c) {
-		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		for (int i = 0; i < c.length; i++) {
-			Model model = getModel(c[i]);
-			if (model != null) {
-				ret.add(c[i]);
-			}
-		}
-		Object[] o = ret.toArray();
-		Coordinate[] retur = new Coordinate[o.length];
-		for (int i = 0; i < o.length; i++) {
-			retur[i] = (Coordinate) o[i];
-		}
-		return retur;
-	}
-
-	/**
-	 * Returns all Modelpositions (allies+enemies) in the given area
-	 *
-	 * @param c Coordinate-array of area
-	 * @return Coordinate-array of all models in area
-	 */
-	public Coordinate[] getEnemyModelPositionsInArea(Coordinate[] c) {
-		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		for (int i = 0; i < c.length; i++) {
-			Model model = getModel(c[i]);
-			if (model != null && model.getPlayer().getTeam() != getCurrentPlayer().getTeam()) {
-				ret.add(c[i]);
-			}
-		}
-		Object[] o = ret.toArray();
-		Coordinate[] retur = new Coordinate[o.length];
-		for (int i = 0; i < o.length; i++) {
-			retur[i] = (Coordinate) o[i];
-		}
-		return retur;
-	}
-
-	/**
-	 *
-	 * @param c Coordinate of field
-	 * @return Model on the field of c
-	 */
-	public Model getModel(Coordinate c) {
-		return models.get(c);
-	}
-
-	private Model[] getPlayerModels() {
-		Coordinate[] c = getPlayerModelPositions();
-		Model[] ret = new Model[c.length];
-		for (int i = 0; i < c.length; i++) {
-			ret[i] = getModel(c[i]);
-		}
-		return ret;
+	public Controller(State state) {
+		this.state = state;
+		state.setSight(getSight());
 	}
 
 	/**
@@ -164,7 +47,7 @@ public class Controller {
 	 * </ul>
 	 */
 	public int move(Coordinate old, Coordinate neu) {
-		Model m = getModel(old);
+		Model m = state.getModel(old);
 		if (!(m instanceof Unit)) {
 			return -1;
 		}
@@ -172,17 +55,16 @@ public class Controller {
 		if (u.isActionDone() || u.isMoved()) {
 			return -2;
 		}
-		if (!u.getPlayer().equals(getCurrentPlayer())) {
+		if (!u.getPlayer().equals(state.getCurrentPlayer())) {
 			return -3;
 		}
-		if (getModel(neu) != null) {
+		if (state.getModel(neu) != null) {
 			return -4;
 		}
 		Coordinate[] c = getRange(old, MOVERANGE);
 		for (int i = 0; i < c.length; i++) {
 			if (c[i].equals(neu)) {
-				models.remove(old);
-				models.put(neu, u);
+				updateModel(old, neu);
 				u.setDirection(getDirectionOf(old, neu));
 				u.setMoved(true);
 				return 1;
@@ -208,7 +90,7 @@ public class Controller {
 	 * </ul>
 	 */
 	public int attack(Coordinate attacker, Coordinate defender) {
-		Model m = getModel(attacker);
+		Model m = state.getModel(attacker);
 		if (!(m instanceof AttackingModel)) {
 			return -1;
 		}
@@ -227,7 +109,7 @@ public class Controller {
 			//if enemy in range
 			if (c[i].equals(defender)) {
 				//get models
-				Model def = models.get(defender);
+				Model def = state.getModels().get(defender);
 				
 				Unit du = null;
 				if (def instanceof Unit) {
@@ -251,14 +133,14 @@ public class Controller {
 						m.levelUp();
 						//if died unit isn't built yet all builders are removed from it
 						if (def.getTimeToBuild() != 0) {
-							Model[] builders = getPlayerModels();
+							Model[] builders = state.getPlayerModels();
 							for (int j = 0; j < builders.length; j++) {
-								if (builders[j] instanceof Builder && ((Builder)builders[j]).getCurrentBuilding() == def) {
-									((Builder)builders[j]).setCurrentBuilding(null);
+								if (builders[j] instanceof BuildingModel && ((BuildingModel)builders[j]).getCurrentBuilding() == def) {
+									((BuildingModel)builders[j]).setCurrentBuilding(null);
 								}
 							}
 						}
-						models.remove(defender);
+						removeModel(defender);
 						return 2;
 					}
 				} else {
@@ -297,7 +179,7 @@ public class Controller {
 						survived = m.damage(damage);
 						if (!survived) {
 							def.levelUp();
-							models.remove(attacker);
+							removeModel(attacker);
 						}
 						if (attackerMissed) {
 							return 4;
@@ -315,11 +197,14 @@ public class Controller {
 	}
 
 	public void actionDone(Coordinate c) {
-		getModel(c).setActionDone(true);
+		state.getModel(c).setActionDone(true);
 	}
 
 	public void moved(Coordinate c) {
-		getModel(c).setMoved(true);
+		Model m = state.getModel(c);
+		if (m instanceof Unit) {
+			((Unit)m).setMoved(true);
+		}
 	}
 
 	/**
@@ -332,19 +217,11 @@ public class Controller {
 	 * @return whether the Model is added or not (e.g. when on that spot there
 	 * already is an Model)
 	 */
-	public boolean addModel(int x, int y, String name) {
-		Model m = ModelList.getInstance().getModel(name, getCurrentPlayer());
+	public void addModel(int x, int y, String name) {
+		Model m = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Coordinate c = new Coordinate(x, y, m.getDefaultLayer());
-		if (!models.containsKey(c)) {
-			m.decreaseTimeToBuild(m.getTimeToBuild());
-			models.put(c, m);
-			return true;
-		}
-		return false;
-	}
-
-	public void removeModel(Coordinate c) {
-		models.remove(c);
+		m.decreaseTimeToBuild(m.getTimeToBuild());
+		addModel(c, m);
 	}
 
 	/**
@@ -366,30 +243,30 @@ public class Controller {
 	 * </ul>
 	 */
 	public int buildModel(Coordinate model, int x, int y, String name) {
-		Model b = ModelList.getInstance().getModel(name, getCurrentPlayer());
-		Model m = getModel(model);
+		Model b = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
+		Model m = state.getModel(model);
 		Coordinate build = new Coordinate(x, y, b.getDefaultLayer());
-		if (!models.containsKey(build)) {
-			if (m instanceof Builder && ((Builder)m).getBuilds() != b.getType()) {
+		if (!state.getModels().containsKey(build)) {
+			if (m instanceof BuildingModel && ((BuildingModel)m).getBuilds() != b.getType()) {
 				return -5;
 			}
 			Coordinate[] range = getRange(model, BUILDRANGE);
 			for (int j = 0; j < range.length; j++) {
 				if (range[j].equals(build)) {
-					if (getCurrentPlayer().getMoney() < b.getCostMoney()) {
+					if (state.getCurrentPlayer().getMoney() < b.getCostMoney()) {
 						return -1;
 					}
-					if (getCurrentPlayer().getEnergy() < b.getCostEnergy()) {
+					if (state.getCurrentPlayer().getEnergy() < b.getCostEnergy()) {
 						return -2;
 					}
-					if (getCurrentPlayer().getPopulation() < b.getCostPopulation()) {
+					if (state.getCurrentPlayer().getPopulation() < b.getCostPopulation()) {
 						return -3;
 					}
-					getCurrentPlayer().useMoney(b.getCostMoney());
-					getCurrentPlayer().useEnergy(b.getCostEnergy());
-					getCurrentPlayer().usePopulation(b.getCostPopulation());
-					models.put(build, b);
-					((Builder)m).setCurrentBuilding(b);
+					state.getCurrentPlayer().useMoney(b.getCostMoney());
+					state.getCurrentPlayer().useEnergy(b.getCostEnergy());
+					state.getCurrentPlayer().usePopulation(b.getCostPopulation());
+					addModel(build, b);
+					((BuildingModel)m).setCurrentBuilding(b);
 					return 1;
 				}
 			}
@@ -407,12 +284,12 @@ public class Controller {
 	 * Type of build / build is already finished / action is done)
 	 */
 	public boolean addModelToBuild(Coordinate model, Coordinate build) {
-		Model m = getModel(model);
-		Model b = getModel(build);
-		if (b.getTimeToBuild() == 0 || !(m instanceof Builder) || ((Builder)m).getBuilds() != b.getType() || m.isActionDone()) {
+		Model m = state.getModel(model);
+		Model b = state.getModel(build);
+		if (b.getTimeToBuild() == 0 || !(m instanceof BuildingModel) || ((BuildingModel)m).getBuilds() != b.getType() || m.isActionDone()) {
 			return false;
 		}
-		((Builder)m).setCurrentBuilding(b);
+		((BuildingModel)m).setCurrentBuilding(b);
 		return true;
 	}
 
@@ -421,31 +298,51 @@ public class Controller {
 	 *
 	 * @return Coordinate-array of all fields in viewrange
 	 */
-	public Coordinate[] getSight() {
-
-		if (round == 0) {
-			return map.getStartAreaOfTeam(getCurrentPlayer().getTeam());
+	private Coordinate[] getSight() {
+		if (state.getRound() == 0) {
+			return state.getMap().getStartAreaOfTeam(state.getCurrentPlayer().getTeam());
 		}
-
-		ArrayList<Coordinate> c = new ArrayList<Coordinate>();
-
-		Coordinate[] keys = getAllyModelPositions();
-		for (int i = 0; i < keys.length; i++) {
-			Model m = getModel(keys[i]);
-			if (m.getPlayer().getTeam() == getCurrentPlayer().getTeam() && m.getTimeToBuild() == 0) {
-				Coordinate[] viewRange = getRange(keys[i], VIEWRANGE);
-				for (int j = 0; j < viewRange.length; j++) {
-					c.add(viewRange[j]);
+		
+		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
+		HashMap<Model, Coordinate[]> viewrange = state.getViewranges();
+		Object[] keys = viewrange.keySet().toArray();
+		for (Object o : keys) {
+			Model m = (Model) o;
+			if (m.getPlayer().equals(state.getCurrentPlayer())) {
+				Coordinate[] coords = (Coordinate[]) viewrange.get(m);
+				for (Coordinate c : coords) {
+					ret.add(c);
 				}
 			}
 		}
-		removeDuplicates(c);
-		Object[] o = c.toArray();
-		Coordinate[] ret = new Coordinate[o.length];
-		for (int i = 0; i < o.length; i++) {
-			ret[i] = (Coordinate) o[i];
-		}
-		return ret;
+		removeDuplicates(ret);
+		Coordinate[] retur = new Coordinate[ret.size()];
+		retur = ret.toArray(retur);
+		return retur;
+		
+//		if (state.getRound() == 0) {
+//			return state.getMap().getStartAreaOfTeam(state.getCurrentPlayer().getTeam());
+//		}
+//
+//		ArrayList<Coordinate> c = new ArrayList<Coordinate>();
+//
+//		Coordinate[] keys = state.getAllyModelPositions();
+//		for (int i = 0; i < keys.length; i++) {
+//			Model m = state.getModel(keys[i]);
+//			if (m.getPlayer().getTeam() == state.getCurrentPlayer().getTeam() && m.getTimeToBuild() == 0) {
+//				Coordinate[] viewRange = getRange(keys[i], VIEWRANGE);
+//				for (int j = 0; j < viewRange.length; j++) {
+//					c.add(viewRange[j]);
+//				}
+//			}
+//		}
+//		
+//		Object[] o = c.toArray();
+//		Coordinate[] ret = new Coordinate[o.length];
+//		for (int i = 0; i < o.length; i++) {
+//			ret[i] = (Coordinate) o[i];
+//		}
+//		return ret;
 	}
 
 	/**
@@ -456,19 +353,19 @@ public class Controller {
 	 * @return Coordinate-Array of all fields that the unit can
 	 * move/view/attack/build
 	 */
-	public Coordinate[] getRange(Coordinate c, int type) {
+	private Coordinate[] getRange(Coordinate c, int type) {
 		if (c == null) {
 			return null;
 		}
-		Model model = getModel(c);
+		Model model = state.getModel(c);
 		if (model.getTimeToBuild() != 0) {
-			return null;
+			return new Coordinate[0];
 		}
 		if (type == MOVERANGE) {
-			if (model.isMoved()) {
+			if (!(model instanceof Unit) || ((Unit)model).isMoved()) {
 				return null;
 			}
-			return getMoveRange(c, model, model.getMovespeed());
+			return getMoveRange(c, model, ((Unit)model).getMovespeed());
 		} else if (type == VIEWRANGE) {
 			int viewrange = model.getViewrange() + FieldList.getInstance().get(MapList.getInstance().getCurrentMap().get(c.getX(), c.getY())).getViewplus();
 			viewrange = viewrange < 1 ? 1 : viewrange;
@@ -483,7 +380,7 @@ public class Controller {
 				return null;
 			}
 			if (attackrange > 1) {
-				attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
+				attackrange += FieldList.getInstance().get(state.getMap().get(c.getX(), c.getY())).getAttackplus();
 			}
 			if (attackrange < 1) {
 				attackrange = 1;
@@ -513,17 +410,17 @@ public class Controller {
 				return null;
 			}
 			if (attackrange > 1) {
-				attackrange += FieldList.getInstance().get(map.get(c.getX(), c.getY())).getAttackplus();
+				attackrange += FieldList.getInstance().get(state.getMap().get(c.getX(), c.getY())).getAttackplus();
 			}
 			if (attackrange < 1) {
 				attackrange = 1;
 			}
 			return getAttackRange(c, attackrange);
 		} else {
-			if (model.isActionDone() || !(model instanceof Builder)) {
+			if (model.isActionDone() || !(model instanceof BuildingModel)) {
 				return null;
 			}
-			Builder b = (Builder)model;
+			BuildingModel b = (BuildingModel)model;
 			return getBuildRange(c, b.getBuildRange());
 		}
 	}
@@ -557,7 +454,7 @@ public class Controller {
 				} else {
 					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 				}
-				byte b = map.get(act.getX(), act.getY());
+				byte b = state.getMap().get(act.getX(), act.getY());
 				if (b < 0) {
 					break;
 				}
@@ -578,11 +475,8 @@ public class Controller {
 			}
 		}
 		removeDuplicates(ret);
-		Object[] o = ret.toArray();
-		Coordinate[] retur = new Coordinate[o.length];
-		for (int i = 0; i < o.length; i++) {
-			retur[i] = (Coordinate) o[i];
-		}
+		Coordinate[] retur = new Coordinate[ret.size()];
+		retur = ret.toArray(retur);
 		return retur;
 	}
 
@@ -608,7 +502,7 @@ public class Controller {
 				} else {
 					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 				}
-				byte b = map.get(act.getX(), act.getY());
+				byte b = state.getMap().get(act.getX(), act.getY());
 				if (b < 0) {
 					break;
 				}
@@ -655,7 +549,7 @@ public class Controller {
 				} else {
 					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 				}
-				byte b = map.get(act.getX(), act.getY());
+				byte b = state.getMap().get(act.getX(), act.getY());
 				if (b < 0) {
 					break;
 				}
@@ -670,11 +564,8 @@ public class Controller {
 			}
 		}
 		removeDuplicates(ret);
-		Object[] o = ret.toArray();
-		Coordinate[] retur = new Coordinate[o.length];
-		for (int i = 0; i < o.length; i++) {
-			retur[i] = (Coordinate) o[i];
-		}
+		Coordinate[] retur = new Coordinate[ret.size()];
+		retur = ret.toArray(retur);
 		return retur;
 	}
 
@@ -700,7 +591,7 @@ public class Controller {
 				} else {
 					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
 				}
-				byte b = map.get(act.getX(), act.getY());
+				byte b = state.getMap().get(act.getX(), act.getY());
 				if (b < 0) {
 					break;
 				}
@@ -716,7 +607,7 @@ public class Controller {
 				}
 			}
 		}
-		Coordinate[] sight = getSight();
+		Coordinate[] sight = state.getSight();
 		for (int i = 0; i < ret.size(); i++) {
 			boolean inSight = false;
 			for (int j = 0; j < sight.length; j++) {
@@ -730,20 +621,18 @@ public class Controller {
 		}
 
 		removeDuplicates(ret);
-		Object[] o = ret.toArray();
-		Coordinate[] retur = new Coordinate[o.length];
-		for (int i = 0; i < o.length; i++) {
-			retur[i] = (Coordinate) o[i];
-		}
+		Coordinate[] retur = new Coordinate[ret.size()];
+		retur = ret.toArray(retur);
 		return retur;
 	}
 
 	public int getRound() {
-		return round;
+		return state.getRound();
 	}
 
 	public void endTurn() {
-		Model[] models = getPlayerModels();
+		//START finish up current player
+		Model[] models = state.getPlayerModels();
 		for (Model m : models) {
 			m.setActionDone(false);
 			if (m instanceof Unit) {
@@ -751,47 +640,87 @@ public class Controller {
 				u.setMoved(false);
 			}
 			if (m.getTimeToBuild() == 0) {
-				if (m instanceof Builder) {
-					Builder b = (Builder) m;
+				if (m instanceof BuildingModel) {
+					BuildingModel b = (BuildingModel) m;
 					if (b.getCurrentBuilding() != null) {
 						b.getCurrentBuilding().decreaseTimeToBuild(b.getBuildSpeed());
 						if (b.getCurrentBuilding().getTimeToBuild() == 0) {
 							b.setCurrentBuilding(null);
 						} else {
-							b.setActionDone(true);
+							m.setActionDone(true);
 						}
 					}
 				}
 			}
 		}
-		if (currentPlayer == players.length - 1) {
-			round++;
-			currentPlayer = 0;
+		//END
+		
+		//START set new Player
+		int currentPlayerIndex = state.getCurrentPlayerIndex();
+		if (currentPlayerIndex == state.getPlayers().length - 1) {
+			state.increaseRound();
+			state.setCurrentPlayerIndex(0);
 		} else {
-			currentPlayer++;
+			state.setCurrentPlayerIndex(currentPlayerIndex+1);
 		}
-		if (round != 0) {
-			models = getPlayerModels();
+		//END
+		
+		//START reinitiate State
+		ArrayList<Model> playerModelList = new ArrayList<Model>();
+		ArrayList<Coordinate> playerModelPositionList = new ArrayList<Coordinate>();
+		ArrayList<Coordinate> allyModelPositionList = new ArrayList<Coordinate>();
+		MyHashMap<Coordinate, Model> modelMap = state.getModels();
+		Object[] keys = modelMap.keySet().toArray();
+		for (Object o : keys) {
+			Coordinate c = (Coordinate) o;
+			Model m = modelMap.get(c);
+			if (m.getPlayer().equals(state.getCurrentPlayer())) {
+				playerModelList.add(m);
+				playerModelPositionList.add(c);
+			}
+			if (m.getPlayer().getTeam() == state.getCurrentPlayer().getTeam()) {
+				allyModelPositionList.add(c);
+			}
+		}
+		ArrayList<Coordinate> modelPositionsInSightList = new ArrayList<Coordinate>(Arrays.asList(state.getModelPositionsInArea(state.getSight())));
+		state.reinitiate(playerModelList, playerModelPositionList, allyModelPositionList, modelPositionsInSightList);
+		state.setSight(getSight());
+		//END
+		
+		//START calculate new player's stats
+		if (state.getRound() != 0) {
+			models = state.getPlayerModels();
 			int storage = 0;
 			int populationStorage = 0;
 			for (Model m : models) {
 				if (m.getTimeToBuild() == 0) {
+					//normal buildings
 					if (m instanceof ResourceCollector) {
 						ResourceCollector rc = (ResourceCollector) m;
-						getCurrentPlayer().addMoney(rc.getProducingMoney());
-						getCurrentPlayer().addEnergy(rc.getProducingEnergy());
-						getCurrentPlayer().addPopulation(rc.getProducingPopulation());
+						state.getCurrentPlayer().addMoney(rc.getProducingMoney());
+						state.getCurrentPlayer().addEnergy(rc.getProducingEnergy());
+						state.getCurrentPlayer().addPopulation(rc.getProducingPopulation());
 					}
 					if (m instanceof Storage) {
 						Storage s = (Storage) m;
 						storage += s.getStoragePlus();
 						populationStorage += s.getPopulationStoragePlus();
 					}
+					//BASE
+					if (m instanceof Base) {
+						Base b = (Base) m;
+						state.getCurrentPlayer().addMoney(b.getProducingMoney());
+						state.getCurrentPlayer().addEnergy(b.getProducingEnergy());
+						state.getCurrentPlayer().addPopulation(b.getProducingPopulation());
+						storage += b.getStoragePlus();
+						populationStorage += b.getPopulationStoragePlus();
+					}
 				}
 			}
-			getCurrentPlayer().setStorage(storage);
-			getCurrentPlayer().setPopulationStorage(populationStorage);
+			state.getCurrentPlayer().setStorage(storage);
+			state.getCurrentPlayer().setPopulationStorage(populationStorage);
 		}
+		//END
 	}
 
 	private void removeDuplicates(ArrayList<Coordinate> list) {
@@ -807,6 +736,117 @@ public class Controller {
 				prove = list.get(i);
 			}
 		}
+	}
+	
+	private boolean updateModel(final Coordinate from, final Coordinate to) {
+		if (state.getModels().containsKey(to)) {
+			return false;
+		}
+		new Thread() {
+			public void run() {
+				Model model = state.getModel(from);
+				state.updateModel(from, to);
+				state.updateViewrange(model, getRange(to, Controller.VIEWRANGE));
+				if (model instanceof Unit) {
+					state.updateMoverange(model, getRange(to, Controller.MOVERANGE));
+				}
+				if (model instanceof AttackingModel) {
+					state.updateFullAttackrange(model, getRange(to, Controller.FULL_ATTACKRANGE));
+					state.updateDirectAttackrange(model, getRange(to, Controller.DIRECT_ATTACKRANGE));
+				} 
+				if (model instanceof BuildingModel) {
+					state.updateBuildrange(model, getRange(to, Controller.BUILDRANGE));
+				}
+				if (model.getPlayer().equals(state.getCurrentPlayer())) {
+					state.updatePlayerModelPosition(from, to);
+				}
+				if (model.getPlayer().getTeam() == state.getCurrentPlayer().getTeam()) {
+					state.updateAllyModelPosition(from, to);
+				}
+				state.setSight(getSight());
+				Coordinate[] sight = state.getSight();
+				for (int i = 0; i < sight.length; i++) {
+					if (sight[i].equals(to)) {
+						state.updateModelPositionInSight(from, to);
+						break;
+					}
+				}
+			}
+		}.start();
+		return true;
+	}
+	
+	private boolean addModel(final Coordinate c, final Model model) {
+		if (state.getModels().containsKey(c)) {
+			return false;
+		}
+		new Thread() {
+			public void run() {
+				state.addModel(c, model);
+				state.addViewrange(model, getRange(c, Controller.VIEWRANGE));
+				if (model instanceof Unit) {
+					state.addMoverange(model, getRange(c, Controller.MOVERANGE));
+				}
+				if (model instanceof AttackingModel) {
+					state.addFullAttackrange(model, getRange(c, Controller.FULL_ATTACKRANGE));
+					state.addDirectAttackrange(model, getRange(c, Controller.DIRECT_ATTACKRANGE));
+				} 
+				if (model instanceof BuildingModel) {
+					state.addBuildrange(model, getRange(c, Controller.BUILDRANGE));
+				}
+				if (model.getPlayer().equals(state.getCurrentPlayer())) {
+					state.addPlayerModel(model);
+					state.addPlayerModelPosition(c);
+				}
+				if (model.getPlayer().getTeam() == state.getCurrentPlayer().getTeam()) {
+					state.addAllyModelPosition(c);
+				}
+				Coordinate[] sight = state.getSight();
+				for (int i = 0; i < sight.length; i++) {
+					if (sight[i].equals(c)) {
+						state.addModelPositionInSight(c);
+						break;
+					}
+				}
+				state.setSight(getSight());
+			}
+		}.start();
+		return true;
+	}
+	
+	public void removeModel(final Coordinate c) {
+		new Thread() {
+			public void run() {
+				Model model = state.getModel(c);
+				state.removeViewrange(model);
+				if (model instanceof Unit) {
+					state.removeMoverange(model);
+				}
+				if (model instanceof AttackingModel) {
+					state.removeFullAttackrange(model);
+					state.removeDirectAttackrange(model);
+				} 
+				if (model instanceof BuildingModel) {
+					state.removeBuildrange(model);
+				}
+				if (model.getPlayer().equals(state.getCurrentPlayer())) {
+					state.removePlayerModel(model);
+					state.removePlayerModelPosition(c);
+				}
+				if (model.getPlayer().getTeam() == state.getCurrentPlayer().getTeam()) {
+					state.removeAllyModelPosition(c);
+				}
+				Coordinate[] sight = state.getSight();
+				for (int i = 0; i < sight.length; i++) {
+					if (sight[i].equals(c)) {
+						state.removeModelPositionInSight(c);
+						break;
+					}
+				}
+				state.removeModel(c);
+				state.setSight(getSight());
+			}
+		}.start();
 	}
 
 	public int getDirectionOf(Coordinate from, Coordinate to) {
@@ -836,9 +876,5 @@ public class Controller {
 		dx = Math.abs(dx);
 		dy = Math.abs(dy);
 		return dx + dy;
-	}
-
-	public void printModels() {
-		System.out.println(models);
 	}
 }

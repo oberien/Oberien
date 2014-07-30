@@ -4,10 +4,12 @@
  */
 package view.renderer;
 
-import controller.Controller;
+import controller.State;
 import model.Layer;
 import model.Model;
 import model.map.Coordinate;
+import model.unit.Unit;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -23,7 +25,7 @@ public class GroundRenderer {
 		this.mapHeight = mapHeight;
 	}
 	
-	public void draw(Graphics g, Controller controller,  Coordinate[] sight, Coordinate mouse) {
+	public void draw(Graphics g, State state,  Coordinate[] sight, Coordinate mouse) {
 		g.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
 		//more visible than hidden -> render hidden
 //		if (sight.length > mapWidth*mapHeight/2) {
@@ -60,23 +62,23 @@ public class GroundRenderer {
 //		}
 		
 		if (mouse != null) {
-			Model m = controller.getModel(mouse);
+			Model m = state.getModel(mouse);
 			if (m != null && !m.isActionDone()) {
-				if (!m.isMoved()) {
+				if (m instanceof Unit && !((Unit)m).isMoved()) {
 					g.setColor(new Color(0.3f, 0.9f, 0.3f, 0.5f));
-					sight = controller.getRange(mouse, Controller.MOVERANGE);
+					sight = state.getMoverange(mouse);
 					for (int i = 0; i < sight.length; i++) {
 						g.fillRect(sight[i].getX() * 32, sight[i].getY() * 32, 32, 32);
 					}
 				}
 			
 				g.setColor(new Color(1.0f, 0.1f, 0.1f, 0.5f));
-				if (!m.isMoved()) {
-					sight = controller.getRange(mouse, Controller.FULL_ATTACKRANGE);
+				if (m instanceof Unit && !((Unit)m).isMoved()) {
+					sight = state.getFullAttackrange(mouse);
 				} else {
-					sight = controller.getRange(mouse, Controller.DIRECT_ATTACKRANGE);
+					sight = state.getDirectAttackrange(mouse);
 				}
-				enmop = controller.getEnemyModelPositionsInArea(sight);
+				enmop = state.getEnemyModelPositionsInArea(sight);
 				for (Coordinate c : sight) {
 					for (Coordinate p : enmop) {
 						if (c.equals(p)) {

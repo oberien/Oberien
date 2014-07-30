@@ -7,8 +7,9 @@ import model.Model;
 import model.Type;
 import model.Player;
 import model.building.Building;
+import model.building.Producing;
 
-public class Base extends Building {
+public class Base extends Producing {
 	
 	private int storagePlus;
 	private int populationStoragePlus;
@@ -20,7 +21,7 @@ public class Base extends Building {
 		super("Base", Type.Base, 512, player,
 				500, 500, 50,
 				500, 0, 10,
-				0, true, false, false, false, false, Layer.Ground);
+				Type.Builder, 25, 1, Layer.Ground);
 		this.storagePlus = 100;
 		this.populationStoragePlus = 10;
 		this.canStore = 5;
@@ -43,5 +44,17 @@ public class Base extends Building {
 		Model[] ret = new Model[stored.size()];
 		ret = stored.toArray(ret);
 		return ret;
+	}
+	
+	public int getProducingMoney() {
+		return 10;
+	}
+	
+	public int getProducingEnergy() {
+		return 10;
+	}
+	
+	public int getProducingPopulation() {
+		return 1;
 	}
 }

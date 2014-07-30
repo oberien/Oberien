@@ -14,13 +14,11 @@ public class Turret extends Building implements AttackingModel {
 	
 	public Turret (String name, Type type, int id, Player player,
 			int costMoney, int costEnergy, int costPopulation, 
-			int maxLife, int defense, int viewrange, 
-			int movespeed, boolean moveGround, boolean moveWater, boolean moveAir, boolean moveUnderground, boolean moveUnderwater, Layer defaultLayer,
+			int maxLife, int defense, int viewrange, Layer defaultLayer,
 			int damage, int strike, int attackrange, Type strongAgainst) {
 		super(name, type, id, player, 
 				costMoney, costEnergy, costPopulation, 
-				maxLife, defense, viewrange, 
-				movespeed, moveGround, moveWater, moveAir, moveUnderground, moveUnderwater, defaultLayer);
+				maxLife, defense, viewrange, defaultLayer);
 		this.damage = damage;
 		this.strike = strike;
 		this.attackrange = attackrange;

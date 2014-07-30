@@ -5,12 +5,14 @@ import java.awt.Font;
 import org.newdawn.slick.Image;
 
 import controller.Controller;
+import controller.State;
 
 import model.map.Map;
 import view.renderer.*;
 
 public class StartData {
 	private Controller controller;
+	private State state;
 	private Map map;
 	private Image[] tiles;
 	private Image[][] units;
@@ -93,6 +95,14 @@ public class StartData {
 
 	public void setController(Controller controller) {
 		this.controller = controller;
+	}
+	
+	public State getState() {
+		return state;
+	}
+	
+	public void setState(State state) {
+		this.state = state;
 	}
 
 	public FoWRenderer getFowr() {

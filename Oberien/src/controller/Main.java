@@ -7,13 +7,14 @@ import model.map.*;
 
 public class Main {
 	public static void main(String[] args) {
-		Map map = MapList.getInstance().getMap("Tera Rising");
+		Map map = MapList.getInstance().getMap("Test");
 		String s = map.toString();
 		System.out.println(map);
-		Controller controller = new Controller(new Player[]{new Player("BH16", Color.green, 0), new Player("Enemy", Color.red, 1)});
+		State state = new State(MapList.getInstance().getCurrentMap(), new Player[]{new Player("BH16", Color.green, 0), new Player("Enemy", Color.red, 1)});
+		Controller controller = new Controller(state);
 		controller.addModel(9, 12, "Infantry");
 		long time = System.currentTimeMillis();
-		Coordinate[] c = controller.getRange(new Coordinate(9, 12, Layer.Ground), Controller.VIEWRANGE);
+		Coordinate[] c = state.getViewrange(new Coordinate(9, 12, Layer.Ground));
 		System.out.println("time getSight: " + (System.currentTimeMillis()-time));
 		for (Coordinate c1 : c) {
 			System.out.println(c1);

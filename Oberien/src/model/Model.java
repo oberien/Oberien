@@ -23,25 +23,16 @@ public class Model {
 	private int viewrange;
 	private int timeToBuild;
 	
-	private boolean moveGround;
-	private boolean moveWater;
-	private boolean moveAir;
-	private boolean moveUnderground;
-	private boolean moveUnderwater;
-	
-	private int movespeed;
 	private int direction;
 	private Layer defaultLayer;
 	
 	private boolean actionDone;
-	private boolean moved;
 	
 	private int level;
 	
 	public Model(String name, Type type, int id, Player player,
 			int costMoney, int costEnergy, int costPopulation, 
-			int maxLife, int defense, int viewrange,
-			int movespeed, boolean moveGround, boolean moveWater, boolean moveAir, boolean moveUnderground, boolean moveUnderwater, Layer defaultLayer) {
+			int maxLife, int defense, int viewrange, Layer defaultLayer) {
 		this.name = name;
 		this.type = type;
 		this.id = id;
@@ -54,16 +45,9 @@ public class Model {
 		this.defense = defense;
 		this.viewrange = viewrange;
 		this.timeToBuild = costMoney;
-		this.movespeed = movespeed;
-		this.moveGround = moveGround;
-		this.moveWater = moveWater;
-		this.moveAir = moveAir;
-		this.moveUnderground = moveUnderground;
-		this.moveUnderwater = moveUnderwater;
 		this.defaultLayer = defaultLayer;
 		this.direction = 1;
 		this.actionDone = false;
-		this.moved = moved;
 	}
 	
 	public String getName() {
@@ -114,30 +98,6 @@ public class Model {
 		return timeToBuild;
 	}
 
-	public boolean isMoveGround() {
-		return moveGround;
-	}
-
-	public boolean isMoveWater() {
-		return moveWater;
-	}
-
-	public boolean isMoveAir() {
-		return moveAir;
-	}
-
-	public boolean isMoveUnderground() {
-		return moveUnderground;
-	}
-
-	public boolean isMoveUnderwater() {
-		return moveUnderwater;
-	}
-
-	public int getMovespeed() {
-		return movespeed;
-	}
-
 	public int getDirection() {
 		return direction;
 	}
@@ -180,14 +140,6 @@ public class Model {
 			return true;
 		}
 		return false;
-	}
-	
-	public boolean isMoved() {
-		return moved;
-	}
-
-	public void setMoved(boolean moved) {
-		this.moved = moved;
 	}
 }
 
