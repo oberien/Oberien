@@ -40,6 +40,7 @@ public class SimpleMapRenderer implements MapRenderer {
 		this.data = data;
 		//TODO: Transfer this image into StartData and load it in gameLoading
 		this.tiles = new Image("imgs/tiles/tiles.png");
+		this.init();
 	}
 
 	/**
@@ -52,6 +53,7 @@ public class SimpleMapRenderer implements MapRenderer {
 	public SimpleMapRenderer(byte[][] data, Image tiles) {
 		this.data = data;
 		this.tiles = tiles;
+		this.init();
 	}
 
 	@Override
@@ -72,10 +74,10 @@ public class SimpleMapRenderer implements MapRenderer {
 				Vector2f c2 = getTileCoordinates(data[x][y], 2);
 				Vector2f c3 = getTileCoordinates(data[x][y], 3);
 
-				tB.put(c0.x).put(c0.y).put(0);
-				tB.put(c1.x).put(c1.y).put(0);
-				tB.put(c2.x).put(c2.y).put(0);
-				tB.put(c3.x).put(c3.y).put(0);
+				tB.put(c0.x).put(c0.y);
+				tB.put(c1.x).put(c1.y);
+				tB.put(c2.x).put(c2.y);
+				tB.put(c3.x).put(c3.y);
 			}
 		}
 		vB.flip();
@@ -90,7 +92,7 @@ public class SimpleMapRenderer implements MapRenderer {
 	@Override
 	public void draw(Graphics mapg) throws SlickException {
 
-		//leave your fingers of this code if you don't want to get hurt!
+		//leave your fingers off this code if you don't want to get hurt!
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, tiles.getTexture().getTextureID());
 
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);

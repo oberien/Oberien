@@ -181,7 +181,7 @@ public class GameLoading extends BasicGameState {
 				}
 			} else {
 				loading[2] = "Created SimpleMapRenderer.";
-				sd.setMr(new ListingMapRenderer(data, sd.getTiles()));
+				sd.setMr(new SimpleMapRenderer(data, sd.getTiles()));
 				counter = 0;
 				currentPart++;
 			}

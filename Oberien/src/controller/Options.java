@@ -15,13 +15,13 @@ public class Options {
 	/**
 	 * indicates whether vertical synchronisation is activated
 	 */
-	public static boolean vsync = true;
+	public static boolean vsync = false;
 	/**
 	 * 0 = fullscreen <br>
 	 * 1 = windowed <br>
 	 * 2 = borderless <br>
 	 */
-	public static int screenMode = 1;
+	public static int screenMode = 0;
 	/**
 	 * indicates wheather the game is only rendered when it is visible or not
 	 */
