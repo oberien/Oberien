@@ -37,7 +37,7 @@ public class Producing extends Building implements BuildingModel {
 	}
 
 	@Override
-	public int getBuildRange() {
+	public int getBuildrange() {
 		return buildRange;
 	}
 

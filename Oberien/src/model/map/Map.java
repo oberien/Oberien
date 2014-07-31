@@ -1,7 +1,6 @@
 package model.map;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import model.Layer;
 

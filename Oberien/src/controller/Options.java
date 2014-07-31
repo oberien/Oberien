@@ -21,7 +21,7 @@ public class Options {
 	 * 1 = windowed <br>
 	 * 2 = borderless <br>
 	 */
-	public static int screenMode = 0;
+	public static int screenMode = 1;
 	/**
 	 * indicates wheather the game is only rendered when it is visible or not
 	 */
