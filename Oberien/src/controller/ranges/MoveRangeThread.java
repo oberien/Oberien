@@ -39,11 +39,9 @@ public class MoveRangeThread extends Thread {
 	}
 	
 	public void run() {
-		System.out.println(model);
 		if (!(model instanceof Unit)) {
 			return;
 		}
-		System.out.println("false");
 		u = (Unit)model;
 		ret.add(c);
 		fields.put(c, movespeed);
