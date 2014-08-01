@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Arrays;
+
 import org.newdawn.slick.Color;
 
 import controller.ranges.FullAttackRangeThread;
@@ -20,8 +22,8 @@ public class Main {
 		Coordinate c = new Coordinate(76, 60, Layer.Ground);
 //		controller.addModel(76, 60, "Base");
 //		Coordinate c = new Coordinate(0, 0, Layer.Ground);
-		state.addModel(c, ModelList.getInstance().getModel("Soldier", state.getCurrentPlayer()));
-		new MoveRangeThread(null, state, c, state.getModel(c), 10, new MyHashMap<Coordinate, Integer>(), true).start();
-		new FullAttackRangeThread(null, state, c, 5, new MyHashMap<Coordinate, Integer>(), true).start();
+		controller.addModel(c, ModelList.getInstance().getModel("Producing Builder", state.getCurrentPlayer()));
+		Thread.sleep(1000);
+		System.out.println(Arrays.toString(state.getMoverange(c)));
 	}
 }
