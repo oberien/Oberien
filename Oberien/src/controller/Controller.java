@@ -2,17 +2,18 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
+import controller.ranges.BuildRangeThread;
+import controller.ranges.DirectAttackRangeThread;
+import controller.ranges.FullAttackRangeThread;
+import controller.ranges.MoveRangeThread;
+import controller.ranges.ViewRangeThread;
+
 import model.map.Coordinate;
 import model.map.FieldList;
-import model.map.Map;
-import model.map.MapList;
 import model.unit.*;
-import model.unit.builder.*;
-import model.building.*;
 import model.building.base.Base;
 import model.building.resourceCollector.ResourceCollector;
 import model.building.storage.Storage;
@@ -61,7 +62,7 @@ public class Controller {
 		if (state.getModel(neu) != null) {
 			return -4;
 		}
-		Coordinate[] c = getRange(old, MOVERANGE);
+		Coordinate[] c = state.getMoverange(old);
 		for (int i = 0; i < c.length; i++) {
 			if (c[i].equals(neu)) {
 				updateModel(old, neu);
@@ -100,7 +101,7 @@ public class Controller {
 			return -2;
 		}
 		boolean attackerMissed = false;
-		Coordinate[] c = getRange(attacker, DIRECT_ATTACKRANGE);
+		Coordinate[] c = state.getDirectAttackrange(attacker);
 		int damage;
 		int strikeChance;
 		int random;
@@ -146,7 +147,7 @@ public class Controller {
 				} else {
 					attackerMissed = true;
 				}
-				c = getRange(defender, DIRECT_ATTACKRANGE);
+				c = state.getDirectAttackrange(defender);
 				if (c == null) {
 					return 2;
 				}
@@ -220,8 +221,9 @@ public class Controller {
 	public void addModel(int x, int y, String name) {
 		Model m = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Coordinate c = new Coordinate(x, y, m.getDefaultLayer());
+		System.out.println(c);
 		m.decreaseTimeToBuild(m.getTimeToBuild());
-		addModel(c, m);
+		System.out.println(addModel(c, m));
 	}
 
 	/**
@@ -250,7 +252,7 @@ public class Controller {
 			if (m instanceof BuildingModel && ((BuildingModel)m).getBuilds() != b.getType()) {
 				return -5;
 			}
-			Coordinate[] range = getRange(model, BUILDRANGE);
+			Coordinate[] range = state.getBuildrange(model);
 			for (int j = 0; j < range.length; j++) {
 				if (range[j].equals(build)) {
 					if (state.getCurrentPlayer().getMoney() < b.getCostMoney()) {
@@ -315,311 +317,6 @@ public class Controller {
 				}
 			}
 		}
-		removeDuplicates(ret);
-		Coordinate[] retur = new Coordinate[ret.size()];
-		retur = ret.toArray(retur);
-		return retur;
-		
-//		if (state.getRound() == 0) {
-//			return state.getMap().getStartAreaOfTeam(state.getCurrentPlayer().getTeam());
-//		}
-//
-//		ArrayList<Coordinate> c = new ArrayList<Coordinate>();
-//
-//		Coordinate[] keys = state.getAllyModelPositions();
-//		for (int i = 0; i < keys.length; i++) {
-//			Model m = state.getModel(keys[i]);
-//			if (m.getPlayer().getTeam() == state.getCurrentPlayer().getTeam() && m.getTimeToBuild() == 0) {
-//				Coordinate[] viewRange = getRange(keys[i], VIEWRANGE);
-//				for (int j = 0; j < viewRange.length; j++) {
-//					c.add(viewRange[j]);
-//				}
-//			}
-//		}
-//		
-//		Object[] o = c.toArray();
-//		Coordinate[] ret = new Coordinate[o.length];
-//		for (int i = 0; i < o.length; i++) {
-//			ret[i] = (Coordinate) o[i];
-//		}
-//		return ret;
-	}
-
-	/**
-	 *
-	 * @param c Coordinate where the unit is on
-	 * @param type Type of range
-	 * (StateMap.MOVERANGE/VIEWRANGE/ATTACKRANGE/BUILDRANGE)
-	 * @return Coordinate-Array of all fields that the unit can
-	 * move/view/attack/build
-	 */
-	private Coordinate[] getRange(Coordinate c, int type) {
-		if (c == null) {
-			return null;
-		}
-		Model model = state.getModel(c);
-		if (model.getTimeToBuild() != 0) {
-			return new Coordinate[0];
-		}
-		if (type == MOVERANGE) {
-			if (!(model instanceof Unit) || ((Unit)model).isMoved()) {
-				return null;
-			}
-			return getMoveRange(c, model, ((Unit)model).getMovespeed());
-		} else if (type == VIEWRANGE) {
-			int viewrange = model.getViewrange() + FieldList.getInstance().get(MapList.getInstance().getCurrentMap().get(c.getX(), c.getY())).getViewplus();
-			viewrange = viewrange < 1 ? 1 : viewrange;
-			return getViewRange(c, viewrange);
-		} else if (type == FULL_ATTACKRANGE) {
-			if (model.isActionDone() || !(model instanceof AttackingModel)) {
-				return null;
-			}
-			AttackingModel am = (AttackingModel)model;
-			int attackrange = am.getAttackrange();
-			if (attackrange == 0) {
-				return null;
-			}
-			if (attackrange > 1) {
-				attackrange += FieldList.getInstance().get(state.getMap().get(c.getX(), c.getY())).getAttackplus();
-			}
-			if (attackrange < 1) {
-				attackrange = 1;
-			}
-			ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-			Coordinate[] mr = getRange(c, MOVERANGE);
-
-			for (Coordinate m : mr) {
-				ret.add(m);
-				Coordinate[] ar = getAttackRange(m, attackrange - getDifference(c, m));
-				for (Coordinate a : ar) {
-					ret.add(a);
-				}
-			}
-			removeDuplicates(ret);
-			Coordinate[] retur = new Coordinate[ret.size()];
-			retur = ret.toArray(retur);
-			return retur;
-		}
-		if (type == DIRECT_ATTACKRANGE) {
-			if (model.isActionDone() || !(model instanceof AttackingModel)) {
-				return null;
-			}
-			AttackingModel am = (AttackingModel)model;
-			int attackrange = am.getAttackrange();
-			if (attackrange == 0) {
-				return null;
-			}
-			if (attackrange > 1) {
-				attackrange += FieldList.getInstance().get(state.getMap().get(c.getX(), c.getY())).getAttackplus();
-			}
-			if (attackrange < 1) {
-				attackrange = 1;
-			}
-			return getAttackRange(c, attackrange);
-		} else {
-			if (model.isActionDone() || !(model instanceof BuildingModel)) {
-				return null;
-			}
-			BuildingModel b = (BuildingModel)model;
-			return getBuildRange(c, b.getBuildRange());
-		}
-	}
-
-	/**
-	 *
-	 * @param c Coordinate where the unit is on
-	 * @param model Model wanting to move
-	 * @param maxRange the maximum range to move, usually unit.getMovespeed()
-	 * @return Coordinate-Array of all fields that the unit can move or <b>null</b> if the model can't move.
-	 */
-	private Coordinate[] getMoveRange(Coordinate c, Model model, int maxRange) {
-		if (!(model instanceof Unit)) {
-			return null;
-		}
-		Unit u = (Unit)model;
-		
-		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		ret.add(c);
-		//0=North; 1=East; 2=South; 3=West
-		for (int i = 0; i < 4; i++) {
-			int move = maxRange;
-			Coordinate act;
-			for (int j = 1; move > 0; j++) {
-				if (i == 0) {
-					act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
-				} else if (i == 1) {
-					act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
-				} else if (i == 2) {
-					act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
-				} else {
-					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
-				}
-				byte b = state.getMap().get(act.getX(), act.getY());
-				if (b < 0) {
-					break;
-				}
-				if (u.canPass(b)) {
-					move -= FieldList.getInstance().get(b).getMovespeed();
-					if (move >= 0) {
-						ret.add(act);
-						if (move != 0) {
-							Coordinate[] sub = getMoveRange(act, u, move);
-							for (Coordinate coord : sub) {
-								ret.add(coord);
-							}
-						}
-					}
-				} else {
-					break;
-				}
-			}
-		}
-		removeDuplicates(ret);
-		Coordinate[] retur = new Coordinate[ret.size()];
-		retur = ret.toArray(retur);
-		return retur;
-	}
-
-	/**
-	 * @param c Coordinate where the unit is on
-	 * @param maxRange the maximum range to see, usually unit.getViewrange()
-	 * @return Coordinate-Array of all fields that the unit can view
-	 */
-	private Coordinate[] getViewRange(Coordinate c, int viewRange) {
-		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		ret.add(c);
-		//0=North; 1=East; 2=South; 3=West
-		for (int i = 0; i < 4; i++) {
-			int view = viewRange;
-			Coordinate act;
-			for (int j = 1; view > 0; j++) {
-				if (i == 0) {
-					act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
-				} else if (i == 1) {
-					act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
-				} else if (i == 2) {
-					act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
-				} else {
-					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
-				}
-				byte b = state.getMap().get(act.getX(), act.getY());
-				if (b < 0) {
-					break;
-				}
-				view -= FieldList.getInstance().get(b).getViewrange();
-				if (view >= 0) {
-					ret.add(act);
-					if (view != 0) {
-						Coordinate[] sub = getViewRange(act, view);
-						for (Coordinate coord : sub) {
-							ret.add(coord);
-						}
-					}
-				} else {
-					break;
-				}
-			}
-		}
-
-		removeDuplicates(ret);
-		Coordinate[] coords = new Coordinate[ret.size()];
-		coords = ret.toArray(coords);
-		return coords;
-	}
-
-	/**
-	 * @param c Coordinate where the unit is on
-	 * @param maxRange the maximum range of attack, usually
-	 * unit.getAttackrange()
-	 * @return Coordinate-Array of all fields that the unit can attack
-	 */
-	private Coordinate[] getAttackRange(Coordinate c, int maxRange) {
-		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		//0=North; 1=East; 2=South; 3=West
-		for (int i = 0; i < 4; i++) {
-			int attack = maxRange;
-			Coordinate act;
-			for (int j = 1; attack > 0; j++) {
-				if (i == 0) {
-					act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
-				} else if (i == 1) {
-					act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
-				} else if (i == 2) {
-					act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
-				} else {
-					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
-				}
-				byte b = state.getMap().get(act.getX(), act.getY());
-				if (b < 0) {
-					break;
-				}
-				attack -= FieldList.getInstance().get(b).getAttackrange();
-				ret.add(act);
-				if (attack > 0) {
-					Coordinate[] sub = getAttackRange(act, attack);
-					for (Coordinate coord : sub) {
-						ret.add(coord);
-					}
-				}
-			}
-		}
-		removeDuplicates(ret);
-		Coordinate[] retur = new Coordinate[ret.size()];
-		retur = ret.toArray(retur);
-		return retur;
-	}
-
-	/**
-	 * @param c Coordinate where the unit is on
-	 * @param maxRange the maximum range of build, usually unit.getBuildRange()
-	 * @return Coordinate-Array of all fields that the unit can build on or <b>null</b> if it can't build
-	 */
-	private Coordinate[] getBuildRange(Coordinate c, int maxRange) {
-		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		ret.add(c);
-		//0=North; 1=East; 2=South; 3=West
-		for (int i = 0; i < 4; i++) {
-			int build = maxRange;
-			Coordinate act;
-			for (int j = 1; build > 0; j++) {
-				if (i == 0) {
-					act = new Coordinate(c.getX(), c.getY() - j, Layer.Ground);
-				} else if (i == 1) {
-					act = new Coordinate(c.getX() + j, c.getY(), Layer.Ground);
-				} else if (i == 2) {
-					act = new Coordinate(c.getX(), c.getY() + j, Layer.Ground);
-				} else {
-					act = new Coordinate(c.getX() - j, c.getY(), Layer.Ground);
-				}
-				byte b = state.getMap().get(act.getX(), act.getY());
-				if (b < 0) {
-					break;
-				}
-				build -= FieldList.getInstance().get(b).getAttackrange();
-				if (build >= 0) {
-					ret.add(act);
-					if (build != 0) {
-						Coordinate[] sub = getBuildRange(act, build);
-						for (Coordinate coord : sub) {
-							ret.add(coord);
-						}
-					}
-				}
-			}
-		}
-		Coordinate[] sight = state.getSight();
-		for (int i = 0; i < ret.size(); i++) {
-			boolean inSight = false;
-			for (int j = 0; j < sight.length; j++) {
-				if (ret.get(i).equals(sight[j])) {
-					inSight = true;
-				}
-			}
-			if (!inSight) {
-				ret.remove(i);
-			}
-		}
-
 		removeDuplicates(ret);
 		Coordinate[] retur = new Coordinate[ret.size()];
 		retur = ret.toArray(retur);
@@ -722,21 +419,6 @@ public class Controller {
 		}
 		//END
 	}
-
-	private void removeDuplicates(ArrayList<Coordinate> list) {
-		Collections.sort(list);
-		Coordinate prove = null;
-		for (int i = 0; i < list.size(); i++) {
-			if (prove == null) {
-				prove = list.get(i);
-			} else if (prove.equals(list.get(i))) {
-				list.remove(i);
-				i--;
-			} else {
-				prove = list.get(i);
-			}
-		}
-	}
 	
 	private boolean updateModel(final Coordinate from, final Coordinate to) {
 		if (state.getModels().containsKey(to)) {
@@ -746,16 +428,18 @@ public class Controller {
 			public void run() {
 				Model model = state.getModel(from);
 				state.updateModel(from, to);
-				state.updateViewrange(model, getRange(to, Controller.VIEWRANGE));
+				new ViewRangeThread(null, state, to, model.getViewrange(), new MyHashMap<Coordinate, Integer>(), false).start();
 				if (model instanceof Unit) {
-					state.updateMoverange(model, getRange(to, Controller.MOVERANGE));
+					new MoveRangeThread(null, state, to, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), false).start();
 				}
 				if (model instanceof AttackingModel) {
-					state.updateFullAttackrange(model, getRange(to, Controller.FULL_ATTACKRANGE));
-					state.updateDirectAttackrange(model, getRange(to, Controller.DIRECT_ATTACKRANGE));
+					new DirectAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackrange(), new MyHashMap<Coordinate, Integer>(), false).start();
+					if (model instanceof Unit) {
+						new FullAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackrange(), new MyHashMap<Coordinate, Integer>(), false).start();
+					}
 				} 
 				if (model instanceof BuildingModel) {
-					state.updateBuildrange(model, getRange(to, Controller.BUILDRANGE));
+					new BuildRangeThread(null, state, to, ((BuildingModel)model).getBuildrange(), new MyHashMap<Coordinate, Integer>(), false).start();
 				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
 					state.updatePlayerModelPosition(from, to);
@@ -776,23 +460,25 @@ public class Controller {
 		return true;
 	}
 	
-	private boolean addModel(final Coordinate c, final Model model) {
+	public boolean addModel(final Coordinate c, final Model model) {
 		if (state.getModels().containsKey(c)) {
 			return false;
 		}
 		new Thread() {
 			public void run() {
 				state.addModel(c, model);
-				state.addViewrange(model, getRange(c, Controller.VIEWRANGE));
+				new ViewRangeThread(null, state, c, model.getViewrange(), new MyHashMap<Coordinate, Integer>(), true).start();
 				if (model instanceof Unit) {
-					state.addMoverange(model, getRange(c, Controller.MOVERANGE));
+					new MoveRangeThread(null, state, c, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), true).start();
 				}
 				if (model instanceof AttackingModel) {
-					state.addFullAttackrange(model, getRange(c, Controller.FULL_ATTACKRANGE));
-					state.addDirectAttackrange(model, getRange(c, Controller.DIRECT_ATTACKRANGE));
+					new DirectAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackrange(), new MyHashMap<Coordinate, Integer>(), true).start();
+					if (model instanceof Unit) {
+						new FullAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackrange(), new MyHashMap<Coordinate, Integer>(), true).start();
+					}
 				} 
 				if (model instanceof BuildingModel) {
-					state.addBuildrange(model, getRange(c, Controller.BUILDRANGE));
+					new BuildRangeThread(null, state, c, ((BuildingModel)model).getBuildrange(), new MyHashMap<Coordinate, Integer>(), true).start();
 				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
 					state.addPlayerModel(model);
@@ -848,7 +534,7 @@ public class Controller {
 			}
 		}.start();
 	}
-
+	
 	public int getDirectionOf(Coordinate from, Coordinate to) {
 		if (from == null || to == null) {
 			return -1;
@@ -869,7 +555,22 @@ public class Controller {
 			}
 		}
 	}
-
+	
+	private void removeDuplicates(ArrayList<Coordinate> list) {
+		Collections.sort(list);
+		Coordinate prove = null;
+		for (int i = 0; i < list.size(); i++) {
+			if (prove == null) {
+				prove = list.get(i);
+			} else if (prove.equals(list.get(i))) {
+				list.remove(i);
+				i--;
+			} else {
+				prove = list.get(i);
+			}
+		}
+	}
+	
 	private int getDifference(Coordinate c1, Coordinate c2) {
 		int dx = c1.getX() - c2.getX();
 		int dy = c1.getY() - c2.getY();

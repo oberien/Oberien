@@ -1,11 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-
-import model.map.FieldList;
-
 public class Model {
 	
 	private String name;

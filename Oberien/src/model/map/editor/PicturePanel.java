@@ -2,10 +2,7 @@ package model.map.editor;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.io.IOException;
-import java.net.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class PicturePanel extends JPanel { 

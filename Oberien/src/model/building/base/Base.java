@@ -6,7 +6,6 @@ import model.Layer;
 import model.Model;
 import model.Type;
 import model.Player;
-import model.building.Building;
 import model.building.Producing;
 
 public class Base extends Producing {

@@ -3,7 +3,6 @@ package model.unit.infantry;
 import model.Layer;
 import model.Player;
 import model.Type;
-import model.unit.Unit;
 
 public class HeavyAssaultWalker extends Infantry {
 

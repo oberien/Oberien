@@ -40,7 +40,7 @@ public class Builder extends Unit implements BuildingModel {
 	}
 
 	@Override
-	public int getBuildRange() {
+	public int getBuildrange() {
 		return buildRange;
 	}
 

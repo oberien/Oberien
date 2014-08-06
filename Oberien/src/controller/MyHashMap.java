@@ -1,11 +1,11 @@
 package controller;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import model.map.Coordinate;
 
-public class MyHashMap<K, V> extends HashMap {
-	public V get(Object o) {
+public class MyHashMap<K, V> extends ConcurrentHashMap {
+	public synchronized V get(Object o) {
 		Object[] keys = keySet().toArray();
 		Coordinate c = (Coordinate) o;
 		for (int i = 0; i < keys.length; i++) {
@@ -17,7 +17,7 @@ public class MyHashMap<K, V> extends HashMap {
 		return null;
 	}
 	
-	public Object remove(Object o) {
+	public synchronized Object remove(Object o) {
 		Object[] keys = keySet().toArray();
 		Coordinate c = (Coordinate) o;
 		for (int i = 0; i < keys.length; i++) {
@@ -29,7 +29,7 @@ public class MyHashMap<K, V> extends HashMap {
 		return null;
 	}
 	
-	public boolean containsKey(Object o) {
+	public synchronized boolean containsKey(Object o) {
 		Object[] keys = keySet().toArray();
 		Coordinate c = (Coordinate) o;
 		for (int i = 0; i < keys.length; i++) {
