@@ -13,6 +13,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+import view.data.Globals;
 
 /**
  * This is a very simple Implementation of the MapRenderer. It works fine for
@@ -127,14 +128,23 @@ public class SimpleMapRenderer implements MapRenderer {
 	 * specified index
 	 */
 	private Vector2f getTileCoordinates(byte index, int corner) {
-		//get the lower 3 bits in posX0 -> these determine the relative position in the row (0 means first, 1 second...)
-		byte posX0 = (byte) (index & 0x3);
-		//divide index by 4 to get the relative row position 
-		byte posY0 = (byte) (index / 4);
+		//divide index by 7 to get the relative row position 
+		byte posY = (byte) (index / 7);
+		//get the column of the tile by subtracting the columns of the row index times 7 from the index 
+		byte posX = (byte) (index - posY * 7);
+		//get the relative size of one pixel in x or y direction, respectively.
+		float pixX = 1 / (float) Globals.TILE_TEXTURE_X_SIZE;
+		float pixY = 1 / (float) Globals.TILE_TEXTURE_Y_SIZE;
+		//compute the relative size of one tile for x and y, respectively 
+		float dx = pixX * Globals.TILE_SIZE;
+		float dy = pixY * Globals.TILE_SIZE;
+		//variable for storing a modulo that is used in several places throughout the code
+		int cMod = corner % 3;
 		//Computation of the texture coordinates by determining if there must be length units added by checking what corner is requested (the magic code below).
+		//Additionally, the additional offset caused by texture borders is calculated.
 		//CAUTION: TOUCH AT OWN RISK!
-		float x = posX0 * 1f / 4f + 1f / 4f * ((((corner % 3) & 0x1) << 1 | (corner % 3) & 0x2) >> 1);
-		float y = posY0 * 1f / 8f + 1f / 8f * ((corner & 0x2) >> 1);
+		float x = dx * posX + posX * pixX * 2 + dx * (((cMod & 0x1) << 1 | cMod & 0x2) >> 1) + pixX;
+		float y = dy * posY + posY * pixY * 2 + dy * ((corner & 0x2) >> 1) + pixY;
 		return new Vector2f(x, y);
 	}
 }
