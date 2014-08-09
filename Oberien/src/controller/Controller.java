@@ -480,6 +480,9 @@ public class Controller {
 				if (model instanceof BuildingModel) {
 					new BuildRangeThread(null, state, c, ((BuildingModel)model).getBuildrange(), new MyHashMap<Coordinate, Integer>(), true).start();
 				}
+				if (model instanceof Base) {
+					new BuildRangeThread(null, state, c, ((Base)model).getBuildrange(), new MyHashMap<Coordinate, Integer>(), true).start();
+				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
 					state.addPlayerModel(model);
 					state.addPlayerModelPosition(c);
