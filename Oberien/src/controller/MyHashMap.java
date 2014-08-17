@@ -1,16 +1,19 @@
 package controller;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import model.map.Coordinate;
 
-public class MyHashMap<K, V> extends ConcurrentHashMap {
+public class MyHashMap<K, V> extends ConcurrentHashMap implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	public synchronized V get(Object o) {
 		Object[] keys = keySet().toArray();
-		Coordinate c = (Coordinate) o;
+		K k = (K) o;
 		for (int i = 0; i < keys.length; i++) {
-			Coordinate key = (Coordinate) keys[i];
-			if (key.equals(c)) {
+			K key = (K) keys[i];
+			if (key.equals(k)) {
 				return (V)super.get(keys[i]);
 			}
 		}
@@ -19,10 +22,10 @@ public class MyHashMap<K, V> extends ConcurrentHashMap {
 	
 	public synchronized Object remove(Object o) {
 		Object[] keys = keySet().toArray();
-		Coordinate c = (Coordinate) o;
+		K k = (K) o;
 		for (int i = 0; i < keys.length; i++) {
-			Coordinate key = (Coordinate) keys[i];
-			if (key.equals(c)) {
+			K key = (K) keys[i];
+			if (key.equals(k)) {
 				return super.remove(keys[i]);
 			}
 		}
@@ -31,10 +34,10 @@ public class MyHashMap<K, V> extends ConcurrentHashMap {
 	
 	public synchronized boolean containsKey(Object o) {
 		Object[] keys = keySet().toArray();
-		Coordinate c = (Coordinate) o;
+		K k = (K) o;
 		for (int i = 0; i < keys.length; i++) {
-			Coordinate key = (Coordinate) keys[i];
-			if (key.equals(c)) {
+			K key = (K) keys[i];
+			if (key.equals(k)) {
 				return true;
 			}
 		}

@@ -1,8 +1,12 @@
 package model.map;
 
+import java.io.Serializable;
+
 import model.Layer;
 
-public class Coordinate implements Comparable<Coordinate> {
+public class Coordinate implements Comparable<Coordinate>, Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private int x;
 	private int y;
 	private Layer layer;

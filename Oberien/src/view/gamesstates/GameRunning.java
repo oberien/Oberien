@@ -327,7 +327,7 @@ public class GameRunning extends BasicGameState {
 			dmgCoord2 = null;
 		}
 
-		//TODO here just testing purpose
+		//TODO create an ingame button to end turn
 		if (endTurn) {
 			mapcoord = null;
 			unitMoving = null;

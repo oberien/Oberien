@@ -102,108 +102,7 @@ public class MapEditor extends JFrame implements MouseListener, MouseMotionListe
 	}
 	
 	public MapEditor(int width, int height, String n) {
-		super();
-		changed = true;
-		//set all needed basic values
-		this.w = width;
-		this.h = height;
-		this.name = n;
-		setTitle("Map Editor - " + name);
-		
-		setJMenuBar(createJMenuBar());
-		
-		//west contains buttons to choose the field to use
-		JPanel west = new JPanel();
-		west.setLayout(new BoxLayout(west, BoxLayout.Y_AXIS));
-		fields = new JButton[256];
-		for (int i = 0; i < 256; i++) {
-			Field f = fieldList.get(i);
-			if (f == null) {
-				break;
-			}
-			fields[i] = new JButton(f.getName());
-			fields[i].setIcon(new ImageIcon(f.getImage()));
-			fields[i].addMouseListener(new ButtonMouseListener((byte)i));
-			fields[i].setActionCommand(i + "");
-			west.add(fields[i]);
-		}
-		fields[rightField].setForeground(Color.RED);
-		fields[leftField].setForeground(Color.BLUE);
-		add(new JScrollPane(west), BorderLayout.WEST);
-		
-		//center contains the map with images
-		JPanel center = new JPanel();
-		center.setLayout(new GridLayout(h, w));
-		center.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				if (choosePosOf != 0) {
-					for (int i = chooseStartX; i <= chooseActX; i++) {
-						for (int j = chooseStartY; j <= chooseActY; j++) {
-							fieldPanel[i][j].removeFG();
-						}
-					}
-					chooseActX = chooseStartX + e.getX()/fieldPanel[0][0].getWidth();
-					chooseActY = chooseStartY + e.getY()/fieldPanel[0][0].getHeight();
-					for (int i = chooseStartX; i <= chooseActX; i++) {
-						for (int j = chooseStartY; j <= chooseActY; j++) {
-							fieldPanel[i][j].drawFG(TeamColors.get(choosePosOf-1));
-						}
-					}
-					repaint();
-				}
-			}
-		});
-		center.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				PicturePanel p = (PicturePanel)e.getSource();
-				chooseStartX = p.getXcoord();
-				chooseStartY = p.getYcoord();
-				chooseActX = chooseStartX;
-				chooseActY = chooseStartY;
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (choosePosOf > startPosX1.size()) {
-					startPosX1.add(chooseStartX);
-					startPosY1.add(chooseStartY);
-					startPosX2.add(chooseActX);
-					startPosY2.add(chooseActY);
-				} else {
-					startPosX1.remove(choosePosOf-1);
-					startPosY1.remove(choosePosOf-1);
-					startPosX2.remove(choosePosOf-1);
-					startPosY2.remove(choosePosOf-1);
-					startPosX1.add(choosePosOf-1, chooseStartX);
-					startPosY1.add(choosePosOf-1, chooseStartY);
-					startPosX2.add(choosePosOf-1, chooseActX);
-					startPosY2.add(choosePosOf-1, chooseActY);
-				}
-				choosePosOf = 0;
-			}
-		});
-		fieldPanel = new PicturePanel[w][h];
-		for (int i = 0; i < h; i++) {
-			for (int j = 0; j < w; j++) {
-				fieldPanel[j][i] = new PicturePanel(i, j);
-				fieldPanel[j][i].setSize(new Dimension(50, 50));
-				fieldPanel[j][i].setPreferredSize(new Dimension(50, 50));
-				fieldPanel[j][i].setBackgroundImage(fieldList.get(0).getImage(), (byte)0);
-				fieldPanel[j][i].addMouseListener(this);
-				center.add(fieldPanel[j][i]);
-			}
-		}
-		add(new MyJScrollPane(center), BorderLayout.CENTER);
-		
-		//size, location, closeoperation, display
-		pack();
-		if (getSize().width > Toolkit.getDefaultToolkit().getScreenSize().width ||
-				getSize().height > Toolkit.getDefaultToolkit().getScreenSize().height) {
-			setExtendedState(Frame.MAXIMIZED_BOTH);
-		}
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		addWindowListener(this);
-		setVisible(true);
+		this(new Map(n, width, height, null, null, null, null));
 	}
 	
 	public MapEditor(Map m) {
@@ -232,6 +131,7 @@ public class MapEditor extends JFrame implements MouseListener, MouseMotionListe
 			fields[i] = new JButton(f.getName());
 			fields[i].setIcon(new ImageIcon(f.getImage()));
 			fields[i].addMouseListener(new ButtonMouseListener((byte)i));
+			fields[i].setActionCommand(i + "");
 			west.add(fields[i]);
 		}
 		fields[rightField].setForeground(Color.RED);
@@ -248,14 +148,18 @@ public class MapEditor extends JFrame implements MouseListener, MouseMotionListe
 				if (choosePosOf != 0) {
 					for (int i = chooseStartX; i <= chooseActX; i++) {
 						for (int j = chooseStartY; j <= chooseActY; j++) {
-							fieldPanel[i][j].removeFG();
+							if (i < fieldPanel.length && j < fieldPanel[0].length) {
+								fieldPanel[i][j].removeFG();
+							}
 						}
 					}
 					chooseActX = chooseStartX + e.getX()/fieldPanel[0][0].getWidth();
 					chooseActY = chooseStartY + e.getY()/fieldPanel[0][0].getHeight();
 					for (int i = chooseStartX; i <= chooseActX; i++) {
 						for (int j = chooseStartY; j <= chooseActY; j++) {
-							fieldPanel[i][j].drawFG(TeamColors.get(choosePosOf-1));
+							if (i < fieldPanel.length && j < fieldPanel[0].length) {
+								fieldPanel[i][j].drawFG(TeamColors.get(choosePosOf-1));
+							}
 						}
 					}
 					repaint();
@@ -269,6 +173,8 @@ public class MapEditor extends JFrame implements MouseListener, MouseMotionListe
 				chooseStartY = p.getYcoord();
 				chooseActX = chooseStartX;
 				chooseActY = chooseStartY;
+				fieldPanel[chooseStartX][chooseStartY].drawFG(TeamColors.get(choosePosOf-1));
+				repaint();
 			}
 			public void mouseReleased(MouseEvent e) {
 				if (choosePosOf > startPosX1.size()) {
@@ -358,7 +264,7 @@ public class MapEditor extends JFrame implements MouseListener, MouseMotionListe
 		JMenuItem open = new JMenuItem("Open");
 		open.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FileDialog d = new FileDialog(new Frame(),"Text laden...",FileDialog.LOAD);
+				FileDialog d = new FileDialog(new Frame(),"Open",FileDialog.LOAD);
 				d.setVisible(true);
 				String file = d.getDirectory();
 				file += d.getFile();

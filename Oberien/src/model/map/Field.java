@@ -28,8 +28,20 @@ public class Field {
 		this.attackrange = attackrange;
 		this.attackplus = attackplus;
 		
+		StringBuilder field;
+		if (i == 0) {
+			field = new StringBuilder("000");
+		} else {
+			int digits = (int)Math.log10((double)i);
+			field = new StringBuilder();
+			for (int j = 2-digits; j > 0; j--) {
+				field.append("0");
+			}
+			field.append(i);
+		}
+		
 		try {
-			image = ImageIO.read(new File("res/imgs/tiles/" + i + ".png"));
+			image = ImageIO.read(new File("res/imgs/tiles/" + field.toString() + ".png"));
 		} catch (IOException e) {e.printStackTrace();}
 	}
 	

@@ -3,16 +3,18 @@ package controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 
+import util.SerializableState;
 import controller.ranges.BuildRangeThread;
 import controller.ranges.DirectAttackRangeThread;
+import controller.ranges.FowToPolygonThread;
 import controller.ranges.FullAttackRangeThread;
 import controller.ranges.MoveRangeThread;
 import controller.ranges.ViewRangeThread;
-
+import controller.wincondition.WinCondition;
 import model.map.Coordinate;
-import model.map.FieldList;
+import model.map.Map;
+import model.map.MapList;
 import model.unit.*;
 import model.building.base.Base;
 import model.building.resourceCollector.ResourceCollector;
@@ -27,10 +29,39 @@ public class Controller {
 	public static final int BUILDRANGE = 4;
 	
 	private State state;
+	private WinCondition wc; //oops, I've got to go to the toilet
 
-	public Controller(State state) {
-		this.state = state;
+	public Controller(Map map, Player[] players, WinCondition wc) {
+		state = new State(map, players);
 		state.setSight(getSight());
+		this.wc = wc;
+	}
+	
+	public Controller(SerializableState s) {
+		wc = s.getWinCondition();
+		state = new State(MapList.getInstance().getMap(s.getMapName()), s.getPlayers());
+		state.setCurrentPlayerIndex(s.getCurrentPlayerIndex());
+		state.setRound(s.getRound());
+		state.setModels(s.getModels());
+		state.setViewranges(s.getViewranges());
+		state.setMoveranges(s.getMoveranges());
+		state.setFullAttackranges(s.getFullAttackranges());
+		state.setDirectAttackranges(s.getDirectAttackranges());
+		state.setBuildranges(s.getBuildranges());
+		reinitiateState();
+	}
+	
+	public State getState() {
+		return state;
+	}
+	
+	public SerializableState getSerializableState() {
+		SerializableState s = new SerializableState(state.getMap().getName(), wc,
+				state.getPlayers(), state.getCurrentPlayerIndex(), state.getRound(),
+				state.getModels(), state.getViewranges(), state.getMoveranges(), 
+				state.getFullAttckranges(), state.getDirectAttackranges(),
+				state.getBuildranges());
+		return s;
 	}
 
 	/**
@@ -91,13 +122,13 @@ public class Controller {
 	 * </ul>
 	 */
 	public int attack(Coordinate attacker, Coordinate defender) {
-		Model m = state.getModel(attacker);
-		if (!(m instanceof AttackingModel)) {
+		Model atk = state.getModel(attacker);
+		if (!(atk instanceof AttackingModel)) {
 			return -1;
 		}
-		AttackingModel am = (AttackingModel) m;
-		Unit au = (Unit)m;
-		if (m.isActionDone() || m.getTimeToBuild() != 0) {
+		AttackingModel am = (AttackingModel) atk;
+		Unit au = (Unit)atk;
+		if (atk.isActionDone() || atk.getTimeToBuild() != 0) {
 			return -2;
 		}
 		boolean attackerMissed = false;
@@ -127,11 +158,11 @@ public class Controller {
 					if (am.getStrongAgainst() == def.getType()) {
 						damage *= 2;
 					}
-					m.setDirection(getDirectionOf(attacker, defender));
-					m.setActionDone(true);
+					atk.setDirection(getDirectionOf(attacker, defender));
+					atk.setActionDone(true);
 					survived = def.damage(damage);
 					if (!survived) {
-						m.levelUp();
+						atk.levelUp();
 						//if died unit isn't built yet all builders are removed from it
 						if (def.getTimeToBuild() != 0) {
 							Model[] builders = state.getPlayerModels();
@@ -141,7 +172,10 @@ public class Controller {
 								}
 							}
 						}
+						Player ap = atk.getPlayer();
+						Player dp = def.getPlayer();
 						removeModel(defender);
+						hasWonLost(ap, dp);
 						return 2;
 					}
 				} else {
@@ -173,14 +207,17 @@ public class Controller {
 						}
 						//damage
 						damage = dm.getDamage();
-						if (dm.getStrongAgainst() == m.getType()) {
+						if (dm.getStrongAgainst() == atk.getType()) {
 							damage *= 2;
 						}
 						def.setDirection(getDirectionOf(defender, attacker));
-						survived = m.damage(damage);
+						survived = atk.damage(damage);
 						if (!survived) {
 							def.levelUp();
+							Player ap = atk.getPlayer();
+							Player dp = def.getPlayer();
 							removeModel(attacker);
+							hasWonLost(dp, ap);
 						}
 						if (attackerMissed) {
 							return 4;
@@ -221,9 +258,8 @@ public class Controller {
 	public void addModel(int x, int y, String name) {
 		Model m = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Coordinate c = new Coordinate(x, y, m.getDefaultLayer());
-		System.out.println(c);
 		m.decreaseTimeToBuild(m.getTimeToBuild());
-		System.out.println(addModel(c, m));
+		addModel(c, m);
 	}
 
 	/**
@@ -306,7 +342,7 @@ public class Controller {
 		}
 		
 		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
-		HashMap<Model, Coordinate[]> viewrange = state.getViewranges();
+		MyHashMap<Model, Coordinate[]> viewrange = state.getViewranges();
 		Object[] keys = viewrange.keySet().toArray();
 		for (Object o : keys) {
 			Model m = (Model) o;
@@ -322,10 +358,8 @@ public class Controller {
 		retur = ret.toArray(retur);
 		return retur;
 	}
-
-	public int getRound() {
-		return state.getRound();
-	}
+	
+	
 
 	public void endTurn() {
 		//START finish up current player
@@ -363,25 +397,9 @@ public class Controller {
 		//END
 		
 		//START reinitiate State
-		ArrayList<Model> playerModelList = new ArrayList<Model>();
-		ArrayList<Coordinate> playerModelPositionList = new ArrayList<Coordinate>();
-		ArrayList<Coordinate> allyModelPositionList = new ArrayList<Coordinate>();
-		MyHashMap<Coordinate, Model> modelMap = state.getModels();
-		Object[] keys = modelMap.keySet().toArray();
-		for (Object o : keys) {
-			Coordinate c = (Coordinate) o;
-			Model m = modelMap.get(c);
-			if (m.getPlayer().equals(state.getCurrentPlayer())) {
-				playerModelList.add(m);
-				playerModelPositionList.add(c);
-			}
-			if (m.getPlayer().getTeam() == state.getCurrentPlayer().getTeam()) {
-				allyModelPositionList.add(c);
-			}
-		}
-		ArrayList<Coordinate> modelPositionsInSightList = new ArrayList<Coordinate>(Arrays.asList(state.getModelPositionsInArea(state.getSight())));
-		state.reinitiate(playerModelList, playerModelPositionList, allyModelPositionList, modelPositionsInSightList);
-		state.setSight(getSight());
+		reinitiateState();
+//		new FowToPolygonThread(null, state, null, null).start();
+		
 		//END
 		
 		//START calculate new player's stats
@@ -420,6 +438,32 @@ public class Controller {
 		//END
 	}
 	
+	private void reinitiateState() {
+		MyHashMap<Coordinate, Model> modelMap = state.getModels();
+		
+		ArrayList<Model> playerModelList = new ArrayList<Model>();
+		ArrayList<Coordinate> playerModelPositionList = new ArrayList<Coordinate>();
+		ArrayList<Coordinate> allyModelPositionList = new ArrayList<Coordinate>();
+		Object[] keys = modelMap.keySet().toArray();
+		for (Object o : keys) {
+			Coordinate c = (Coordinate) o;
+			Model m = modelMap.get(c);
+			if (m.getPlayer().equals(state.getCurrentPlayer())) {
+				playerModelList.add(m);
+				playerModelPositionList.add(c);
+			}
+			if (m.getPlayer().getTeam() == state.getCurrentPlayer().getTeam()) {
+				allyModelPositionList.add(c);
+			}
+		}
+		state.setPlayerModels(playerModelList);
+		state.setPlayerModelPositions(playerModelPositionList);
+		state.setAllyModelPositions(allyModelPositionList);
+		state.setSight(getSight());
+		ArrayList<Coordinate> modelPositionsInSightList = new ArrayList<Coordinate>(Arrays.asList(state.getModelPositionsInArea(state.getSight())));
+		state.setModelPositionsInSight(modelPositionsInSightList);
+	}
+	
 	private boolean updateModel(final Coordinate from, final Coordinate to) {
 		if (state.getModels().containsKey(to)) {
 			return false;
@@ -448,6 +492,7 @@ public class Controller {
 					state.updateAllyModelPosition(from, to);
 				}
 				state.setSight(getSight());
+//				new FowToPolygonThread(null, state, null, null).start();
 				Coordinate[] sight = state.getSight();
 				for (int i = 0; i < sight.length; i++) {
 					if (sight[i].equals(to)) {
@@ -498,6 +543,7 @@ public class Controller {
 					}
 				}
 				state.setSight(getSight());
+//				new FowToPolygonThread(null, state, null, null).start();
 			}
 		}.start();
 		return true;
@@ -507,6 +553,7 @@ public class Controller {
 		new Thread() {
 			public void run() {
 				Model model = state.getModel(c);
+				state.removeModel(c);
 				state.removeViewrange(model);
 				if (model instanceof Unit) {
 					state.removeMoverange(model);
@@ -532,8 +579,8 @@ public class Controller {
 						break;
 					}
 				}
-				state.removeModel(c);
 				state.setSight(getSight());
+//				new FowToPolygonThread(null, state, null, null).start();
 			}
 		}.start();
 	}
@@ -580,5 +627,38 @@ public class Controller {
 		dx = Math.abs(dx);
 		dy = Math.abs(dy);
 		return dx + dy;
+	}
+	
+	private void hasWonLost(Player attacker, Player defender) {
+		if (wc.hasLost(state, defender)) {
+			if (wc.hasWon(state, attacker)) {
+				playerWon(attacker);
+			} else {
+				playerLost(defender);
+			}
+		}
+	}
+	
+	private void playerWon(Player player) {
+		System.out.println("Player won: " + player);
+		//TODO add interface to VIEW
+	}
+	
+	private void playerLost(Player player) {
+		System.out.println("Player lost: " + player);
+		removePlayer(player);
+		endTurn();
+		//TODO add interface to VIEW
+	}
+	
+	private void removePlayer(Player player) {
+		MyHashMap<Coordinate, Model> models = state.getModels();
+		Object[] keys = models.keySet().toArray();
+		state.removePlayer(player);
+		for (Object o : keys) {
+			if (models.get(o).getPlayer().equals(player)) {
+				removeModel((Coordinate)o);
+			}
+		}
 	}
 }

@@ -3,6 +3,8 @@ package controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import util.SerializableState;
+
 import model.Model;
 import model.Player;
 import model.map.Coordinate;
@@ -10,17 +12,17 @@ import model.map.Map;
 
 public class State {
 	private final Map map;
-	private final Player[] players;
+	private Player[] players;
 	
 	private int currentPlayerIndex;
 	private int round;
 	
 	private MyHashMap<Coordinate, Model> models;
-	private HashMap<Model, Coordinate[]> viewrange;
-	private HashMap<Model, Coordinate[]> moverange;
-	private HashMap<Model, Coordinate[]> fullAttackrange;
-	private HashMap<Model, Coordinate[]> directAttackrange;
-	private HashMap<Model, Coordinate[]> buildrange;
+	private MyHashMap<Model, Coordinate[]> viewranges;
+	private MyHashMap<Model, Coordinate[]> moveranges;
+	private MyHashMap<Model, Coordinate[]> fullAttackranges;
+	private MyHashMap<Model, Coordinate[]> directAttackranges;
+	private MyHashMap<Model, Coordinate[]> buildranges;
 	
 	private ArrayList<Model> playerModelList;
 	private Model[] playerModels;
@@ -38,29 +40,15 @@ public class State {
 		this.players = players;
 		
 		models = new MyHashMap<Coordinate, Model>();
-		viewrange = new HashMap<Model, Coordinate[]>();
-		moverange = new HashMap<Model, Coordinate[]>();
-		fullAttackrange = new HashMap<Model, Coordinate[]>();
-		directAttackrange = new HashMap<Model, Coordinate[]>();
-		buildrange = new HashMap<Model, Coordinate[]>();
+		viewranges = new MyHashMap<Model, Coordinate[]>();
+		moveranges = new MyHashMap<Model, Coordinate[]>();
+		fullAttackranges = new MyHashMap<Model, Coordinate[]>();
+		directAttackranges = new MyHashMap<Model, Coordinate[]>();
+		buildranges = new MyHashMap<Model, Coordinate[]>();
 		playerModelList = new ArrayList<Model>();
 		playerModelPositionList = new ArrayList<Coordinate>();
 		allyModelPositionList = new ArrayList<Coordinate>();
 		modelPositionsInSightList = new ArrayList<Coordinate>();
-	}
-	
-	public void reinitiate(ArrayList<Model> playerModelList,
-			ArrayList<Coordinate> playerModelPositionList,
-			ArrayList<Coordinate> allyModelPositionList,
-			ArrayList<Coordinate> modelPositionsInSightList) {
-		this.playerModelList = playerModelList;
-		playerModels = null;
-		this.playerModelPositionList = playerModelPositionList;
-		playerModelPositions = null;
-		this.allyModelPositionList = allyModelPositionList;
-		allyModelPositions = null;
-		this.modelPositionsInSightList = modelPositionsInSightList;
-		modelPositionsInSight = null;
 	}
 	
 	public Map getMap() {
@@ -70,10 +58,25 @@ public class State {
 	public Player[] getPlayers() {
 		return players;
 	}
+	
+	public void removePlayer(Player player) {
+		Player[] playersNew = new Player[players.length-1];
+		int i = 0;
+		for (Player p : players) {
+			if (!p.equals(player)) {
+				playersNew[i] = p;
+				i++;
+			}
+		}
+		players = playersNew;
+	}
 
 
 	public int getRound() {
 		return round;
+	}
+	public void setRound(int round) {
+		this.round = round;
 	}
 	public void increaseRound() {
 		round++;
@@ -117,17 +120,19 @@ public class State {
 		return retur;
 	}
 
-
+	
+	public MyHashMap<Coordinate, Model> getModels() {
+		return models;
+	}
+	public void setModels(MyHashMap<Coordinate, Model> models) {
+		this.models = models;
+	}
 	/**
-	 *
 	 * @param c Coordinate of field
 	 * @return Model on the field of c
 	 */
 	public Model getModel(Coordinate c) {
 		return models.get(c);
-	}
-	public MyHashMap<Coordinate, Model> getModels() {
-		return models;
 	}
 	public void updateModel(Coordinate from, Coordinate to) {
 		Model m = getModel(from);
@@ -142,79 +147,104 @@ public class State {
 	}
 
 	
-	public HashMap<Model, Coordinate[]> getViewranges() {
-		return viewrange;
+	public MyHashMap<Model, Coordinate[]> getViewranges() {
+		return viewranges;
+	}
+	public void setViewranges(MyHashMap<Model, Coordinate[]> viewranges) {
+		this.viewranges = viewranges;
 	}
 	public Coordinate[] getViewrange(Coordinate c) {
-		return viewrange.get(getModel(c));
+		return viewranges.get(getModel(c));
 	}
 	public void updateViewrange(Model model, Coordinate[] neu) {
-		viewrange.remove(model);
-		viewrange.put(model, neu);
+		viewranges.remove(model);
+		viewranges.put(model, neu);
 	}
 	public void addViewrange(Model model, Coordinate[] neu) {
-		viewrange.put(model, neu);
+		viewranges.put(model, neu);
 	}
 	public void removeViewrange(Model model) {
-		viewrange.remove(model);
+		viewranges.remove(model);
 	}
-
+	
+	public MyHashMap<Model, Coordinate[]> getMoveranges() {
+		return moveranges;
+	}
+	public void setMoveranges(MyHashMap<Model, Coordinate[]> moveranges) {
+		this.moveranges = moveranges;
+	}
 	public Coordinate[] getMoverange(Coordinate c) {
-		return moverange.get(getModel(c));
+		return moveranges.get(getModel(c));
 	}
 	public void updateMoverange(Model model, Coordinate[] neu) {
-		moverange.remove(model);
-		moverange.put(model, neu);
+		moveranges.remove(model);
+		moveranges.put(model, neu);
 	}
 	public void addMoverange(Model model, Coordinate[] neu) {
-		moverange.put(model, neu);
+		moveranges.put(model, neu);
 	}
 	public void removeMoverange(Model model) {
-		moverange.remove(model);
+		moveranges.remove(model);
 	}
-
+	
+	public MyHashMap<Model, Coordinate[]> getFullAttckranges() {
+		return fullAttackranges;
+	}
+	public void setFullAttackranges(MyHashMap<Model, Coordinate[]> fullAttackranges) {
+		this.fullAttackranges = fullAttackranges;
+	}
 	public Coordinate[] getFullAttackrange(Coordinate c) {
-		return fullAttackrange.get(getModel(c));
+		return fullAttackranges.get(getModel(c));
 	}
 	public void updateFullAttackrange(Model model, Coordinate[] neu) {
-		fullAttackrange.remove(model);
-		fullAttackrange.put(model, neu);
+		fullAttackranges.remove(model);
+		fullAttackranges.put(model, neu);
 	}
 	public void addFullAttackrange(Model model, Coordinate[] neu) {
-		fullAttackrange.put(model, neu);
+		fullAttackranges.put(model, neu);
 	}
 	public void removeFullAttackrange(Model model) {
-		fullAttackrange.remove(model);
+		fullAttackranges.remove(model);
 	}
 
-
+	public MyHashMap<Model, Coordinate[]> getDirectAttackranges() {
+		return directAttackranges;
+	}
+	public void setDirectAttackranges(MyHashMap<Model, Coordinate[]> directAttackranges) {
+		this.directAttackranges = directAttackranges;
+	}
 	public Coordinate[] getDirectAttackrange(Coordinate c) {
-		return directAttackrange.get(getModel(c));
+		return directAttackranges.get(getModel(c));
 	}
 	public void updateDirectAttackrange(Model model, Coordinate[] neu) {
-		directAttackrange.remove(model);
-		directAttackrange.put(model, neu);
+		directAttackranges.remove(model);
+		directAttackranges.put(model, neu);
 	}
 	public void addDirectAttackrange(Model model, Coordinate[] neu) {
-		directAttackrange.put(model, neu);
+		directAttackranges.put(model, neu);
 	}
 	public void removeDirectAttackrange(Model model) {
-		directAttackrange.remove(model);
+		directAttackranges.remove(model);
 	}
 
-
+	public MyHashMap<Model, Coordinate[]> getBuildranges() {
+		return buildranges;
+	}
+	public void setBuildranges(MyHashMap<Model, Coordinate[]> buildranges) {
+		this.buildranges = buildranges;
+	}
 	public Coordinate[] getBuildrange(Coordinate c) {
-		return buildrange.get(getModel(c));
+		return buildranges.get(getModel(c));
 	}
 	public void updateBuildrange(Model model, Coordinate[] neu) {
-		buildrange.remove(model);
-		buildrange.put(model, neu);
+		buildranges.remove(model);
+		buildranges.put(model, neu);
 	}
 	public void addBuildrange(Model model, Coordinate[] neu) {
-		buildrange.put(model, neu);
+		buildranges.put(model, neu);
 	}
 	public void removeBuildrange(Model model) {
-		buildrange.remove(model);
+		buildranges.remove(model);
 	}
 
 
@@ -224,6 +254,10 @@ public class State {
 			playerModels = playerModelList.toArray(playerModels);
 		}
 		return playerModels;
+	}
+	public void setPlayerModels(ArrayList<Model> playerModelList) {
+		this.playerModelList = playerModelList;
+		playerModels = null;
 	}
 	public void addPlayerModel(Model model) {
 		playerModelList.add(model);
@@ -241,6 +275,10 @@ public class State {
 			playerModelPositions = playerModelList.toArray(playerModelPositions);
 		}
 		return playerModelPositions;
+	}
+	public void setPlayerModelPositions(ArrayList<Coordinate> playerModelPositionList) {
+		this.playerModelPositionList = playerModelPositionList;
+		playerModelPositions = null;
 	}
 	public void updatePlayerModelPosition(Coordinate from, Coordinate to) {
 		playerModelPositionList.remove(from);
@@ -263,6 +301,10 @@ public class State {
 		}
 		return allyModelPositions;
 	}
+	public void setAllyModelPositions(ArrayList<Coordinate> allyModelPositionList) {
+		this.allyModelPositionList = allyModelPositionList;
+		allyModelPositions = null;
+	}
 	public void updateAllyModelPosition(Coordinate from, Coordinate to) {
 		allyModelPositionList.remove(from);
 		allyModelPositionList.add(to);
@@ -283,6 +325,10 @@ public class State {
 			modelPositionsInSight = modelPositionsInSightList.toArray(modelPositionsInSight);
 		}
 		return modelPositionsInSight;
+	}
+	public void setModelPositionsInSight(ArrayList<Coordinate> modelPositionsInSightList) {
+		this.modelPositionsInSightList = modelPositionsInSightList;
+		modelPositionsInSight = null;
 	}
 	public void updateModelPositionInSight(Coordinate from, Coordinate to) {
 		modelPositionsInSightList.remove(from);

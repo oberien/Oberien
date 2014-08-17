@@ -18,9 +18,12 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import controller.Controller;
 import controller.State;
+import controller.wincondition.Conquest;
 
 import java.util.Random;
+
 import org.newdawn.slick.Image;
+
 import view.data.StartData;
 import view.event.*;
 import view.menu.MainMenu;
@@ -83,9 +86,9 @@ public class Menu extends BasicGameState {
 		
 		if (currentMenu.getModeSwitch()) {
 			//TODO create Controller in teamselection
-			State state = new State(MapList.getInstance().getCurrentMap(), new Player[]{new Player("Player 1", Color.red, 0), new Player("Player 2", Color.green, 1)});
-			sd.setController(new Controller(state));
-			sd.setState(state);
+			Controller controller = new Controller(MapList.getInstance().getCurrentMap(), new Player[]{new Player("Player 1", Color.red, 0), new Player("Player 2", Color.green, 1)}, new Conquest());
+			sd.setController(controller);
+			sd.setState(controller.getState());
 			sbg.enterState(getID() + 1);
 		}
 		if (currentMenu.switchMenu()) {

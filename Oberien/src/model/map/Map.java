@@ -48,8 +48,8 @@ public class Map {
 	
 	public Coordinate[] getStartAreaOfTeam(int i) {
 		ArrayList<Coordinate> c = new ArrayList<Coordinate>();
-		for (int x = startPosX1[i]; x < startPosX2[i]; x++) {
-			for (int y = startPosY1[i]; y < startPosY2[i]; y++) {
+		for (int x = startPosX1[i]; x <= startPosX2[i]; x++) {
+			for (int y = startPosY1[i]; y <= startPosY2[i]; y++) {
 				c.add(new Coordinate(x, y, Layer.Ground));
 			}
 		}
