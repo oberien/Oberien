@@ -95,11 +95,11 @@ public class GameStarting extends BasicGameState {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			Nifty nifty = new Nifty(new LwjglRenderDevice(),
+			Nifty nifty = new Nifty(new LwjglRenderDevice(true),
 					new NullSoundDevice(),
 					inSys,
 					new TimeProvider());
-			nifty.fromXml("xml/main.xml", "start");
+			nifty.fromXml("res/xml/main.xml", "start");
 			nifty.gotoScreen("start");
 			nifty.loadStyleFile("nifty-default-styles.xml");
 			nifty.loadControlFile("nifty-default-controls.xml");
