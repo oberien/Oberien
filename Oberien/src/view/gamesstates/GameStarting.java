@@ -4,6 +4,11 @@
  */
 package view.gamesstates;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.nulldevice.NullSoundDevice;
+import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.tools.TimeProvider;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
@@ -24,14 +29,15 @@ import view.data.StartData;
 import view.data.UIElements;
 
 public class GameStarting extends BasicGameState {
+
 	private Font f;
 	private UnicodeFont uf;
 	private StartData sd;
 	private UIElements ui;
 	private Panel panel;
-	
+
 	private int count = 0;
-	
+
 	public GameStarting(StartData sd) {
 		this.sd = sd;
 	}
@@ -56,13 +62,13 @@ public class GameStarting extends BasicGameState {
 		uf.getEffects().add(new ColorEffect(java.awt.Color.white));
 		uf.addAsciiGlyphs();
 		uf.loadGlyphs();
-		
+
 		ui = new UIElements();
 		ui.loadLogo();
-		
+
 		Image logo = ui.getLogo();
 		panel = new Panel(0, 0, gc.getWidth(), gc.getHeight());
-		panel.setBackgroundImage(logo, gc.getWidth()/2 - logo.getWidth()/2, gc.getHeight()/2 - logo.getHeight()/2);
+		panel.setBackgroundImage(logo, gc.getWidth() / 2 - logo.getWidth() / 2, gc.getHeight() / 2 - logo.getHeight() / 2);
 	}
 
 	@Override
@@ -80,12 +86,28 @@ public class GameStarting extends BasicGameState {
 			ui.loadSettings();
 		} else if (count == 3) {
 			ui.loadStartGame();
-		} else if( count == 4) {
+		} else if (count == 4) {
 			ui.loadButton();
+		} else if (count == 5) {
+			LwjglInputSystem inSys = new LwjglInputSystem();
+			try {
+				inSys.startup();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			Nifty nifty = new Nifty(new LwjglRenderDevice(),
+					new NullSoundDevice(),
+					inSys,
+					new TimeProvider());
+			nifty.fromXml("xml/main.xml", "start");
+			nifty.gotoScreen("start");
+			nifty.loadStyleFile("nifty-default-styles.xml");
+			nifty.loadControlFile("nifty-default-controls.xml");
+			sd.setNifty(nifty);
 		} else {
 			sd.setUI(ui);
 			sbg.getState(getID() + 1).init(gc, sbg);
-			sbg.enterState(getID() + 1);			
+			sbg.enterState(getID() + 1);
 		}
 		count++;
 	}

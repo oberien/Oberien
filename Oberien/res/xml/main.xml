@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://
+www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://niftygui.
+sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+	
+	<screen id="start" controller="view.gui.controllers.StartScreenController">
+		<layer id="background" childLayout="vertical">
+			<image filename="res/imgs/ui/bg02.png"/>
+		</layer>
+		<layer id="foreground" childLayout="vertical">
+			<panel id="headlinePanel" align="center" valign="center" childLayout="center" visibleToMouse="false">
+				<text id="headline" wrap="true" font="res/fonts/128/airstrikecond.fnt" color="#ffff" text="Oberien"/>
+			</panel>
+			<panel id="startPanel" align="center" valign="center" childLayout="center" height="25%" visibleToMouse="true">
+				<image filename="res/imgs/ui/button.png" childLayout="center">
+					<text id="start" wrap="true" font="res/fonts/32/airstrikecond.fnt" color="#ffff" text="Start"/>
+				</image>
+			</panel>
+			<panel id="settingsPanel" align="center" valign="center" height="40%" childLayout="center" visibleToMouse="true">
+				<image filename="res/imgs/ui/button.png" childLayout="center">
+					<text id="settings" wrap="true" font="res/fonts/32/airstrikecond.fnt" color ="#ffff" text="Settings"/>
+				</image>
+			</panel>
+		</layer>
+		<layer id="exitLayer" childLayout="horizontal">
+			<panel id="exitPanel" align="left" valign="top" childLayout="vertical" visibleToMouse="true">
+				<image filename="res/imgs/ui/button.png" align="left" valign="bottom" childLayout="center">
+					<text id="exit" wrap="true" font="res/fonts/32/airstrikecond.fnt" color="#ffff" text="Exit"/>
+				</image>
+			</panel>
+		</layer>
+	</screen>
+	
+	<screen id="settings">
+	</screen>
+	
+	<screen id="mapChooser">
+	</screen>
+</nifty>

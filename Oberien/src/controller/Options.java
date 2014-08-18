@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Options {
-	/**
-	 * indicates wheather the map is buffered (faster, high RAM) or not (slower, low RAM)
-	 */
-	public static boolean bufferMap = false;
+//	/**
+//	 * indicates wheather the map is buffered (faster, high RAM) or not (slower, low RAM)
+//	 */
+//	public static boolean bufferMap = false;
 	/**
 	 * indicates whether vertical synchronisation is activated
 	 */
@@ -39,7 +39,12 @@ public class Options {
 	 * indicates the number of frames per second to be displayed<br>
 	 * -1 = max FPS
 	 */
-	public static int fps = 200;
+	public static int fps = -1;
+	
+	/**
+	 * Whether nifty is enabled or not. For testing purposes only.
+	 */
+	public static boolean nifty = true;
 	
 	public static void save() {
 		try {
@@ -49,7 +54,7 @@ public class Options {
 				f.createNewFile();
 			}
 			Properties properties = new Properties();
-			properties.setProperty("bufferMap", bufferMap + "");
+//			properties.setProperty("bufferMap", bufferMap + "");
 			properties.setProperty("vsync", vsync + "");
 			properties.setProperty("screenMode", screenMode + "");
 			properties.setProperty("onlyUpdateWhenVisible", onlyUpdateWhenVisible + "");
@@ -65,7 +70,7 @@ public class Options {
 		try {
 			Properties properties = new Properties();
 			properties.load(new FileInputStream("cfg/bounds.properties"));
-			bufferMap = Boolean.parseBoolean(properties.getProperty("bufferMap"));
+//			bufferMap = Boolean.parseBoolean(properties.getProperty("bufferMap"));
 			vsync = Boolean.parseBoolean(properties.getProperty("vsync"));
 			screenMode = Integer.parseInt(properties.getProperty("screenMode"));
 			onlyUpdateWhenVisible = Boolean.parseBoolean(properties.getProperty("onlyUpdateWhenVisible"));

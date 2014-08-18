@@ -6,6 +6,7 @@ import org.newdawn.slick.Image;
 
 import controller.Controller;
 import controller.State;
+import de.lessvoid.nifty.Nifty;
 
 import model.map.Map;
 import view.renderer.*;
@@ -14,7 +15,7 @@ public class StartData {
 	private Controller controller;
 	private State state;
 	private Map map;
-	private Image[] tiles;
+	private Image tiles;
 	private Image[][] units;
 	private MapRenderer mr;
 	private FoWRenderer fowr;
@@ -24,6 +25,24 @@ public class StartData {
 	private DamageRenderer dr;
 	private Font font;
 	private UIElements ui;
+	private GridRenderer gr;
+	private Nifty nifty;
+
+	public Nifty getNifty() {
+		return nifty;
+	}
+
+	public void setNifty(Nifty nifty) {
+		this.nifty = nifty;
+	}
+
+	public GridRenderer getGr() {
+		return gr;
+	}
+
+	public void setGr(GridRenderer gr) {
+		this.gr = gr;
+	}
 
 	public HUDRenderer getHudr() {
 		return hudr;
@@ -41,11 +60,11 @@ public class StartData {
 		this.ur = ur;
 	}
 
-	public Image[] getTiles() {
+	public Image getTiles() {
 		return tiles;
 	}
 
-	public void setTiles(Image[] tiles) {
+	public void setTiles(Image tiles) {
 		this.tiles = tiles;
 	}
 

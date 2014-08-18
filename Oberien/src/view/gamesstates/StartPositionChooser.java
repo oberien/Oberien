@@ -24,11 +24,13 @@ import controller.State;
 import view.data.StartData;
 import view.eventhandler.MouseEvents;
 import view.renderer.FoWRenderer;
+import view.renderer.GridRenderer;
 import view.renderer.MapRenderer;
 import view.renderer.UnitRenderer;
 
 public class StartPositionChooser extends BasicGameState {
-	private StartData sd;
+
+	private final StartData sd;
 	private Controller controller;
 	private State state;
 	private MapRenderer mr;
@@ -36,9 +38,10 @@ public class StartPositionChooser extends BasicGameState {
 	private MouseEvents me;
 	private UnitRenderer ur;
 	private FoWRenderer fowr;
-	
-	private int basex=-1, basey=-1;
-	
+	private GridRenderer gr;
+
+	private int basex = -1, basey = -1;
+
 	private int screenWidth;
 	private int screenHeight;
 	private boolean scaleUp;
@@ -53,11 +56,11 @@ public class StartPositionChooser extends BasicGameState {
 	private float scale = 1;
 	private float camX = 0;
 	private float camY = 0;
-	
+
 	public StartPositionChooser(StartData sd) {
 		this.sd = sd;
 	}
-	
+
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		if (MapList.getInstance().getCurrentMap() != null) {
@@ -69,7 +72,8 @@ public class StartPositionChooser extends BasicGameState {
 			me.init();
 			ur = sd.getUr();
 			fowr = sd.getFowr();
-			
+			gr = sd.getGr();
+
 			screenWidth = gc.getScreenWidth();
 			screenHeight = gc.getScreenHeight();
 		}
@@ -84,6 +88,7 @@ public class StartPositionChooser extends BasicGameState {
 		mr.draw(g);
 		fowr.draw(g, state.getSight());
 		ur.draw(g, state, null, null, 0, state.getCurrentPlayer().getColor());
+		gr.draw();
 	}
 
 	@Override
@@ -94,7 +99,7 @@ public class StartPositionChooser extends BasicGameState {
 			float mouseMapX = mouseX / scale + camX;
 			float mouseMapY = mouseY / scale + camY;
 			if (scaleUp) {
-				scale += 0.003*delta;
+				scale += 0.003 * delta;
 			} else if (mw > 0) {
 				scale += 0.1;
 			}
@@ -104,7 +109,7 @@ public class StartPositionChooser extends BasicGameState {
 			camX += gc.getScreenWidth() / 2 / scale - gc.getScreenWidth() / 2;
 			camY += gc.getScreenHeight() / 2 / scale - gc.getScreenHeight() / 2;
 			if (scaleDown) {
-				scale -= 0.003*delta;
+				scale -= 0.003 * delta;
 			} else if (mw < 0) {
 				scale -= 0.1;
 			}
@@ -134,7 +139,7 @@ public class StartPositionChooser extends BasicGameState {
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			gc.exit();
 		}
-		
+
 		if (me.isMousePressed(0)) {
 			Point p = me.getMousePos();
 			int mapx = (int) (camX + p.getX() / scale);
@@ -142,15 +147,15 @@ public class StartPositionChooser extends BasicGameState {
 			if (basex != -1) {
 				controller.removeModel(new Coordinate(basex, basey, Layer.Ground));
 			}
-			basex = mapx/32;
-			basey = mapy/32;
+			basex = mapx / 32;
+			basey = mapy / 32;
 			if (!Arrays.asList(map.getStartAreaOfTeam(state.getCurrentPlayer().getTeam())).contains(new Coordinate(basex, basey, Layer.Ground))) {
 				basex = -1;
 				basey = -1;
 			}
 			controller.addModel(basex, basey, "Base");
 		}
-		
+
 		if (endTurn) {
 			endTurn = false;
 			if (basex != -1 && basey != -1) {
@@ -158,7 +163,7 @@ public class StartPositionChooser extends BasicGameState {
 				basex = -1;
 				basey = -1;
 				if (controller.getRound() == 1) {
-					sbg.getState(4).init(gc, sbg);
+					sbg.getState(getID() + 1).init(gc, sbg);
 					sbg.enterState(getID() + 1);
 				}
 			}
@@ -169,7 +174,7 @@ public class StartPositionChooser extends BasicGameState {
 	public int getID() {
 		return 3;
 	}
-	
+
 	@Override
 	public void keyPressed(int key, char c) {
 //		System.out.println("Pressed: " + key + " " + c);
