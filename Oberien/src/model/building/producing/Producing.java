@@ -16,11 +16,11 @@ public class Producing extends Building implements BuildingModel {
 	
 	public Producing(String name, Type type, int id, Player player,
 			int costMoney, int costEnergy, int costPopulation, 
-			int maxLife, int defense, int viewrange,
+			int maxLife, int defense, int viewRange,
 			Type builds, int buildSpeed, int buildRange, Layer defaultLayer) {
 		super(name, type, id, player, 
 				costMoney, costEnergy, costPopulation,
-				maxLife, defense, viewrange, defaultLayer);
+				maxLife, defense, viewRange, defaultLayer);
 		this.builds = builds;
 		this.buildSpeed = buildSpeed;
 		this.buildRange = buildRange;

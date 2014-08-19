@@ -10,23 +10,23 @@ public class Field {
 	String name;
 	int evade;
 	int strike;
-	int movespeed;
-	int viewrange;
-	int viewplus;
-	int attackrange;
-	int attackplus;
+	int moveSpeed;
+	int viewRange;
+	int viewPlus;
+	int attackRange;
+	int attackPlus;
 	
 	Image image;
 	
-	public Field(String name, int evade, int strike, int movespeed, int viewrange, int viewplus, int attackrange, int attackplus, int i) {
+	public Field(String name, int evade, int strike, int moveSpeed, int viewRange, int viewPlus, int attackRange, int attackPlus, int i) {
 		this.name = name;
 		this.evade = evade;
 		this.strike = strike;
-		this.movespeed = movespeed;
-		this.viewrange = viewrange;
-		this.viewplus = viewplus;
-		this.attackrange = attackrange;
-		this.attackplus = attackplus;
+		this.moveSpeed = moveSpeed;
+		this.viewRange = viewRange;
+		this.viewPlus = viewPlus;
+		this.attackRange = attackRange;
+		this.attackPlus = attackPlus;
 		
 		StringBuilder field;
 		if (i == 0) {
@@ -57,24 +57,24 @@ public class Field {
 		return strike;
 	}
 	
-	public int getMovespeed() {
-		return movespeed;
+	public int getMoveSpeed() {
+		return moveSpeed;
 	}
 	
-	public int getViewrange() {
-		return viewrange;
+	public int getViewRange() {
+		return viewRange;
 	}
 	
-	public int getViewplus() {
-		return viewplus;
+	public int getViewPlus() {
+		return viewPlus;
 	}
 	
-	public int getAttackrange() {
-		return attackrange;
+	public int getAttackRange() {
+		return attackRange;
 	}
 	
-	public int getAttackplus() {
-		return attackplus;
+	public int getAttackPlus() {
+		return attackPlus;
 	}
 	
 	public Image getImage() {

@@ -8,21 +8,21 @@ import model.unit.Unit;
 public class Robot extends Unit implements AttackingModel {
 	private int damage;
 	private int strike;
-	private int attackrange;
+	private int attackRange;
 	private Type strongAgainst;
 	
 	public Robot(String name, Type type, int id, Player player,
 			int costMoney, int costEnergy, int costPopulation, 
-			int maxLife, int defense, int evade, int viewrange, 
+			int maxLife, int defense, int evade, int viewRange, 
 			int movespeed, boolean moveGround, boolean moveWater, boolean moveAir, boolean moveUnderground, boolean moveUnderwater, Layer defaultLayer,
-			int damage, int strike, int attackrange, Type strongAgainst) {
+			int damage, int strike, int attackRange, Type strongAgainst) {
 		super(name, type, id, player, 
 				costMoney, costEnergy, costPopulation, 
-				maxLife, defense, evade, viewrange, 
+				maxLife, defense, evade, viewRange, 
 				movespeed, moveGround, moveWater, moveAir, moveUnderground, moveUnderwater, defaultLayer);
 		this.damage = damage;
 		this.strike = strike;
-		this.attackrange = attackrange;
+		this.attackRange = attackRange;
 		this.strongAgainst = strongAgainst;
 	}
 

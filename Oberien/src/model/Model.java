@@ -17,7 +17,7 @@ public class Model implements Serializable{
 	private int life;
 	private int maxLife;
 	private int defense;
-	private int viewrange;
+	private int viewRange;
 	private int timeToBuild;
 	
 	private int direction;
@@ -29,7 +29,7 @@ public class Model implements Serializable{
 	
 	public Model(String name, Type type, int id, Player player,
 			int costMoney, int costEnergy, int costPopulation, 
-			int maxLife, int defense, int viewrange, Layer defaultLayer) {
+			int maxLife, int defense, int viewRange, Layer defaultLayer) {
 		this.name = name;
 		this.type = type;
 		this.id = id;
@@ -40,7 +40,7 @@ public class Model implements Serializable{
 		this.life = 0;
 		this.maxLife = maxLife;
 		this.defense = defense;
-		this.viewrange = viewrange;
+		this.viewRange = viewRange;
 		this.timeToBuild = costMoney;
 		this.defaultLayer = defaultLayer;
 		this.direction = 1;
@@ -87,8 +87,8 @@ public class Model implements Serializable{
 		return defense;
 	}
 
-	public int getViewrange() {
-		return viewrange;
+	public int getViewRange() {
+		return viewRange;
 	}
 
 	public int getTimeToBuild() {

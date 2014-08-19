@@ -18,11 +18,11 @@ public class Storage extends Building implements StoringModel {
 	
 	public Storage(String name, Type type, int id, Player player,
 			int costMoney, int costEnergy, int costPopulation, 
-			int maxLife, int defense, int viewrange, Layer defaultLayer,
+			int maxLife, int defense, int viewRange, Layer defaultLayer,
 			int storagePlus, int populationStoragePlus, int canStore) {
 		super(name, type, id, player, 
 				costMoney, costEnergy, costPopulation, 
-				maxLife, defense, viewrange, defaultLayer);
+				maxLife, defense, viewRange, defaultLayer);
 		this.storagePlus = storagePlus;
 		this.populationStoragePlus = populationStoragePlus;
 		this.canStore = canStore;

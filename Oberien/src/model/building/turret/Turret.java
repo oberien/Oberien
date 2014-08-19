@@ -9,19 +9,19 @@ import model.building.Building;
 public class Turret extends Building implements AttackingModel {
 	private int damage;
 	private int strike;
-	private int attackrange;
+	private int attackRange;
 	private Type strongAgainst;
 	
 	public Turret (String name, Type type, int id, Player player,
 			int costMoney, int costEnergy, int costPopulation, 
-			int maxLife, int defense, int viewrange, Layer defaultLayer,
-			int damage, int strike, int attackrange, Type strongAgainst) {
+			int maxLife, int defense, int viewRange, Layer defaultLayer,
+			int damage, int strike, int attackRange, Type strongAgainst) {
 		super(name, type, id, player, 
 				costMoney, costEnergy, costPopulation, 
-				maxLife, defense, viewrange, defaultLayer);
+				maxLife, defense, viewRange, defaultLayer);
 		this.damage = damage;
 		this.strike = strike;
-		this.attackrange = attackrange;
+		this.attackRange = attackRange;
 		this.strongAgainst = strongAgainst;
 	}
 
@@ -37,7 +37,7 @@ public class Turret extends Building implements AttackingModel {
 
 	@Override
 	public int getAttackRange() {
-		return attackrange;
+		return attackRange;
 	}
 
 	@Override
