@@ -36,7 +36,7 @@ public class Turret extends Building implements AttackingModel {
 	}
 
 	@Override
-	public int getAttackrange() {
+	public int getAttackRange() {
 		return attackrange;
 	}
 
