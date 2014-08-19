@@ -67,7 +67,7 @@ public class MoveRangeThread extends Thread {
 						continue;
 					}
 					if (u.canPass(b)) {
-						move -= FieldList.getInstance().get(b).getMovespeed();
+						move -= FieldList.getInstance().get(b).getMoveSpeed();
 						if (move >= 0 && (!fields.containsKey(act) || fields.get(act) < move)) {
 							if (move > 0) {
 								new MoveRangeThread(thisThread, state, act, model, move, fields, add).start();

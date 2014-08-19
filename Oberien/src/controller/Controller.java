@@ -13,6 +13,8 @@ import controller.ranges.MoveRangeThread;
 import controller.ranges.ViewRangeThread;
 import controller.wincondition.WinCondition;
 import model.map.Coordinate;
+import model.map.Field;
+import model.map.FieldList;
 import model.map.Map;
 import model.map.MapList;
 import model.unit.*;
@@ -410,25 +412,16 @@ public class Controller {
 			for (Model m : models) {
 				if (m.getTimeToBuild() == 0) {
 					//normal buildings
-					if (m instanceof ResourceCollector) {
-						ResourceCollector rc = (ResourceCollector) m;
-						state.getCurrentPlayer().addMoney(rc.getProducingMoney());
-						state.getCurrentPlayer().addEnergy(rc.getProducingEnergy());
-						state.getCurrentPlayer().addPopulation(rc.getProducingPopulation());
+					if (m instanceof ProducingModel) {
+						ProducingModel pm = (ProducingModel) m;
+						state.getCurrentPlayer().addMoney(pm.getProducingMoney());
+						state.getCurrentPlayer().addEnergy(pm.getProducingEnergy());
+						state.getCurrentPlayer().addPopulation(pm.getProducingPopulation());
 					}
-					if (m instanceof Storage) {
-						Storage s = (Storage) m;
-						storage += s.getStoragePlus();
-						populationStorage += s.getPopulationStoragePlus();
-					}
-					//BASE
-					if (m instanceof Base) {
-						Base b = (Base) m;
-						state.getCurrentPlayer().addMoney(b.getProducingMoney());
-						state.getCurrentPlayer().addEnergy(b.getProducingEnergy());
-						state.getCurrentPlayer().addPopulation(b.getProducingPopulation());
-						storage += b.getStoragePlus();
-						populationStorage += b.getPopulationStoragePlus();
+					if (m instanceof StoringModel) {
+						StoringModel sm = (StoringModel) m;
+						storage += sm.getStoragePlus();
+						populationStorage += sm.getPopulationStoragePlus();
 					}
 				}
 			}
@@ -472,18 +465,20 @@ public class Controller {
 			public void run() {
 				Model model = state.getModel(from);
 				state.updateModel(from, to);
-				new ViewRangeThread(null, state, to, model.getViewrange(), new MyHashMap<Coordinate, Integer>(), false).start();
+				Field actField = FieldList.getInstance().get(state.getMap().get(to.getX(), to.getY()));
+				
+				new ViewRangeThread(null, state, to, model.getViewRange() + actField.getViewPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
 				if (model instanceof Unit) {
 					new MoveRangeThread(null, state, to, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), false).start();
 				}
 				if (model instanceof AttackingModel) {
-					new DirectAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackrange(), new MyHashMap<Coordinate, Integer>(), false).start();
+					new DirectAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
 					if (model instanceof Unit) {
-						new FullAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackrange(), new MyHashMap<Coordinate, Integer>(), false).start();
+						new FullAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
 					}
 				} 
 				if (model instanceof BuildingModel) {
-					new BuildRangeThread(null, state, to, ((BuildingModel)model).getBuildrange(), new MyHashMap<Coordinate, Integer>(), false).start();
+					new BuildRangeThread(null, state, to, ((BuildingModel)model).getBuildRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
 				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
 					state.updatePlayerModelPosition(from, to);
@@ -512,21 +507,20 @@ public class Controller {
 		new Thread() {
 			public void run() {
 				state.addModel(c, model);
-				new ViewRangeThread(null, state, c, model.getViewrange(), new MyHashMap<Coordinate, Integer>(), true).start();
+				Field actField = FieldList.getInstance().get(state.getMap().get(c.getX(), c.getY()));
+				
+				new ViewRangeThread(null, state, c, model.getViewRange() + actField.getViewPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
 				if (model instanceof Unit) {
 					new MoveRangeThread(null, state, c, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), true).start();
 				}
 				if (model instanceof AttackingModel) {
-					new DirectAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackrange(), new MyHashMap<Coordinate, Integer>(), true).start();
+					new DirectAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
 					if (model instanceof Unit) {
-						new FullAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackrange(), new MyHashMap<Coordinate, Integer>(), true).start();
+						new FullAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
 					}
 				} 
 				if (model instanceof BuildingModel) {
-					new BuildRangeThread(null, state, c, ((BuildingModel)model).getBuildrange(), new MyHashMap<Coordinate, Integer>(), true).start();
-				}
-				if (model instanceof Base) {
-					new BuildRangeThread(null, state, c, ((Base)model).getBuildrange(), new MyHashMap<Coordinate, Integer>(), true).start();
+					new BuildRangeThread(null, state, c, ((BuildingModel)model).getBuildRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
 				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
 					state.addPlayerModel(model);

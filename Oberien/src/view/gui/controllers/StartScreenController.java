@@ -7,10 +7,12 @@
 package view.gui.controllers;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class StartScreenController implements ScreenController{
+public class StartScreenController implements ScreenController {
 
 	@Override
 	public void bind(Nifty nifty, Screen screen) {
@@ -22,5 +24,15 @@ public class StartScreenController implements ScreenController{
 
 	@Override
 	public void onEndScreen() {
+	}
+	
+	public void buttonClicked() {
+		System.out.println("buttonClicked()");
+	}
+	
+	@NiftyEventSubscriber(id="addPlayer")
+	public void onClick(String id, NiftyMousePrimaryClickedEvent event) {
+	System.out.println("element with id [" + id + "] clicked at [" + event.getMouseX() +
+	", " + event.getMouseY() + "]");
 	}
 }

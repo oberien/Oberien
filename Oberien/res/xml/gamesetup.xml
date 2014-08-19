@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://
+www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://niftygui.
+sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+
+	<useStyles filename="nifty-default-styles.xml" />
+	<useControls filename="nifty-default-controls.xml" />
+	
+	<screen id="gameSetup" controller="view.gui.controllers.StartScreenController">
+		<layer id="background" childLayout="vertical">
+			<image filename="res/imgs/ui/bg02.png"/>
+		</layer>
+		<layer id="foreground" childLayout="horizontal">
+			<panel id="players" align="left" valign="top" childLayout="vertical" width="20%" height="100%">
+				<text id="playerLabel" wrap="false" font="res/fonts/128/airstrikecond.fnt" controller="view.eventhandler.gamesetup.AddPlayerButton" color="#f00f" text="Players" visibleToMouse="true">
+					<interact onClick="buttonClicked()"/>
+				</text>
+				<control id="player1" name="textfield" text="Player1"/>
+				<control id="addPlayer" name="button" label="Add new Player" visibleToMouse="true"/>
+			</panel>
+		</layer>
+	</screen>
+</nifty>

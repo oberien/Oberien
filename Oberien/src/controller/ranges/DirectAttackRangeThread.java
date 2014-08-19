@@ -57,7 +57,7 @@ public class DirectAttackRangeThread extends Thread {
 						decreaseThreadsLeft();
 						continue;
 					}
-					attack -= FieldList.getInstance().get(b).getAttackrange();
+					attack -= FieldList.getInstance().get(b).getActionRange();
 					if (attack >= 0 && (!fields.containsKey(act) || fields.get(act) < attack)) {
 						if (attack > 0) {
 							new DirectAttackRangeThread(thisThread, state, act, attack, fields, add).start();

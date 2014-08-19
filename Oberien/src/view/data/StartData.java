@@ -1,14 +1,17 @@
 package view.data;
 
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.newdawn.slick.Image;
 
 import controller.Controller;
 import controller.State;
 import de.lessvoid.nifty.Nifty;
-
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import model.map.Map;
+import view.gui.event.MouseEvent;
 import view.renderer.*;
 
 public class StartData {
@@ -26,7 +29,11 @@ public class StartData {
 	private Font font;
 	private UIElements ui;
 	private GridRenderer gr;
+	
 	private Nifty nifty;
+	//nifty eventhandling
+	private List<MouseEvent> mouseEvents;
+	private List<KeyboardInputEvent> keyEvents;
 
 	public Nifty getNifty() {
 		return nifty;
@@ -146,5 +153,21 @@ public class StartData {
 	
 	public void setUI(UIElements ui) {
 		this.ui = ui;
+	}
+
+	public List<MouseEvent> getMouseEvents() {
+		return mouseEvents;
+	}
+
+	public void setMouseEvents(List<MouseEvent> mouseEvents) {
+		this.mouseEvents = mouseEvents;
+	}
+
+	public List<KeyboardInputEvent> getKeyEvents() {
+		return keyEvents;
+	}
+
+	public void setKeyEvents(List<KeyboardInputEvent> keyEvents) {
+		this.keyEvents = keyEvents;
 	}
 }

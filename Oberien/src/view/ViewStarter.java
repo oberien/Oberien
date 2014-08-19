@@ -22,9 +22,9 @@ public class ViewStarter {
 			game.setFullscreen(true);
 		} else if (Options.screenMode == 1) {
 			game.setFullscreen(false);
-		}
-		if (Options.screenMode == 2) {
-			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+			if (Options.screenMode == 2) {
+				System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+			}
 		}
 		game.setVSync(Options.vsync);
 		game.setUpdateOnlyWhenVisible(Options.onlyUpdateWhenVisible);

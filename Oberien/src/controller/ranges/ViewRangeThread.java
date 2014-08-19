@@ -57,7 +57,7 @@ public class ViewRangeThread extends Thread {
 						decreaseThreadsLeft();
 						continue;
 					}
-					view -= FieldList.getInstance().get(b).getViewrange();
+					view -= FieldList.getInstance().get(b).getViewRange();
 					if (view >= 0 && (!fields.containsKey(act) || fields.get(act) < view)) {
 						if (view > 0) {
 							new ViewRangeThread(thisThread, state, act, view, fields, add).start();

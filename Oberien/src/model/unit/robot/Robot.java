@@ -38,7 +38,7 @@ public class Robot extends Unit implements AttackingModel {
 
 	@Override
 	public int getAttackRange() {
-		return attackrange;
+		return attackRange;
 	}
 
 	@Override

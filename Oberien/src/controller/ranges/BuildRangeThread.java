@@ -57,7 +57,7 @@ public class BuildRangeThread extends Thread {
 						decreaseThreadsLeft();
 						continue;
 					}
-					build -= FieldList.getInstance().get(b).getAttackrange();
+					build -= FieldList.getInstance().get(b).getActionRange();
 					if (build >= 0 && (!fields.containsKey(act) || fields.get(act) < build)) {
 						if (build > 0) {
 							new BuildRangeThread(thisThread, state, act, build, fields, add).start();

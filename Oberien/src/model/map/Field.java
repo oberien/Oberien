@@ -13,8 +13,8 @@ public class Field {
 	int moveSpeed;
 	int viewRange;
 	int viewPlus;
-	int attackRange;
-	int attackPlus;
+	int actionRange;
+	int actionPlus;
 	
 	Image image;
 	
@@ -25,8 +25,8 @@ public class Field {
 		this.moveSpeed = moveSpeed;
 		this.viewRange = viewRange;
 		this.viewPlus = viewPlus;
-		this.attackRange = attackRange;
-		this.attackPlus = attackPlus;
+		this.actionRange = attackRange;
+		this.actionPlus = attackPlus;
 		
 		StringBuilder field;
 		if (i == 0) {
@@ -69,12 +69,12 @@ public class Field {
 		return viewPlus;
 	}
 	
-	public int getAttackRange() {
-		return attackRange;
+	public int getActionRange() {
+		return actionRange;
 	}
 	
-	public int getAttackPlus() {
-		return attackPlus;
+	public int getActionPlus() {
+		return actionPlus;
 	}
 	
 	public Image getImage() {

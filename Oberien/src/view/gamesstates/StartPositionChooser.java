@@ -162,7 +162,7 @@ public class StartPositionChooser extends BasicGameState {
 				controller.endTurn();
 				basex = -1;
 				basey = -1;
-				if (controller.getRound() == 1) {
+				if (state.getRound() == 1) {
 					sbg.getState(getID() + 1).init(gc, sbg);
 					sbg.enterState(getID() + 1);
 				}

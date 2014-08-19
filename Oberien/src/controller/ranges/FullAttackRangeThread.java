@@ -80,7 +80,7 @@ public class FullAttackRangeThread extends Thread {
 						decreaseThreadsLeft();
 						continue;
 					}
-					attack -= FieldList.getInstance().get(b).getAttackrange();
+					attack -= FieldList.getInstance().get(b).getActionRange();
 					if (attack >= 0 && (!fields.containsKey(act) || fields.get(act) < attack)) {
 						if (attack > 0) {
 							new FullAttackRangeThread(thisThread, state, act, attack, fields, add).start();

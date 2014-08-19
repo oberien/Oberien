@@ -65,7 +65,6 @@ public class GameLoading extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		loading = new String[18];
 		f = sd.getFont();
-		System.out.println();
 		f = f.deriveFont(Font.PLAIN, gc.getScreenHeight() / loading.length - 5);
 		UnicodeFont uf = new UnicodeFont(f);
 		uf.getEffects().add(new ColorEffect(java.awt.Color.white));
