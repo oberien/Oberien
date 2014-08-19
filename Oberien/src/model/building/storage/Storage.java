@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import model.Layer;
 import model.Model;
 import model.Player;
+import model.StoragingModel;
 import model.Type;
 import model.building.Building;
 
-public class Storage extends Building {
+public class Storage extends Building implements StoragingModel {
 
 	private int storagePlus;
 	private int populationStoragePlus;
@@ -28,18 +29,22 @@ public class Storage extends Building {
 		this.stored = new ArrayList<Model>();
 	}
 	
+	@Override
 	public int getStoragePlus() {
 		return storagePlus;
 	}
 	
+	@Override
 	public int getPopulationStoragePlus() {
 		return populationStoragePlus;
 	}
 	
+	@Override
 	public int getCanStore() {
 		return canStore;
 	}
 	
+	@Override
 	public Model[] getStored() {
 		Model[] ret = new Model[stored.size()];
 		ret = stored.toArray(ret);

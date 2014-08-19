@@ -11,7 +11,7 @@ public class Strider extends Robot {
 				20, 10, 0,
 				50, 2, 7, 5,
 				10, true, false, false, false, false, Layer.Ground,
-				95, 10, 1, null);
+				95, 100, 1, null);
 	}
 
 }

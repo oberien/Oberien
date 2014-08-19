@@ -10,6 +10,6 @@ public class GatlingGun extends Turret {
 		super("Gatling Gun", Type.Turret, 352, player, 
 				50, 50, 0, 
 				100, 5, 7, Layer.Ground,
-				100, 10, 3, Type.Infantry);
+				100, 90, 3, Type.Infantry);
 	}
 }

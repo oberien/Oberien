@@ -11,7 +11,7 @@ public class Soldier extends Infantry {
 				10, 1, 1, 
 				50, 5, 10, 5,
 				5, true, false, false, false, false, Layer.Ground,
-				90, 0, 1, Type.Infantry);
+				90, 100, 1, Type.Infantry);
 	}
 
 }

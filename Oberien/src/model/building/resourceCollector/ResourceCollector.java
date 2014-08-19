@@ -2,10 +2,11 @@ package model.building.resourceCollector;
 
 import model.Layer;
 import model.Player;
+import model.ProducingModel;
 import model.Type;
 import model.building.Building;
 
-public class ResourceCollector extends Building {
+public class ResourceCollector extends Building implements ProducingModel {
 	private int producingMoney;
 	private int producingEnergy;
 	private int producingPopulation;
@@ -21,14 +22,17 @@ public class ResourceCollector extends Building {
 		this.producingPopulation = producingPopulation;
 	}
 	
+	@Override
 	public int getProducingMoney() {
 		return producingMoney;
 	}
 
+	@Override
 	public int getProducingEnergy() {
 		return producingEnergy;
 	}
 
+	@Override
 	public int getProducingPopulation() {
 		return producingPopulation;
 	}

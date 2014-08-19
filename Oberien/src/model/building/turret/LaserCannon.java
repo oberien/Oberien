@@ -10,6 +10,6 @@ public class LaserCannon extends Turret {
 		super("Laser Cannon", Type.Turret, 353, player, 
 				75, 75, 0,
 				75, 5, 7, Layer.Ground,
-				95, 15, 3, Type.Robot);
+				95, 99, 3, Type.Robot);
 	}
 }

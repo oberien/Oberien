@@ -11,7 +11,7 @@ public class Leopard5 extends Tank {
 				50, 20, 5,
 				250, 5, 50, 7,
 				7, true, false, false, false, false, Layer.Ground,
-				85, 0, 3, Type.Tank);
+				85, 90, 3, Type.Tank);
 	}
 
 }

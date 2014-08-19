@@ -3,7 +3,7 @@ package model;
 public interface BuildingModel {
 	public Type getBuilds();
 	public int getBuildSpeed();
-	public int getBuildrange();
+	public int getBuildRange();
 	public Model getCurrentBuilding();
 	public void setCurrentBuilding(Model m);
 }

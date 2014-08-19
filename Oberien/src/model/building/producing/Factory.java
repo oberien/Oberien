@@ -3,7 +3,6 @@ package model.building.producing;
 import model.Layer;
 import model.Player;
 import model.Type;
-import model.building.Producing;
 
 public class Factory extends Producing {
 

@@ -11,7 +11,7 @@ public class HeavyAssaultWalker extends Infantry {
 				150, 25, 1, 
 				500, 5, 10, 3, 
 				3, true, false, false, false, false, Layer.Ground,
-				70, 10, 1, null);
+				70, 100, 1, null);
 	}
 
 }

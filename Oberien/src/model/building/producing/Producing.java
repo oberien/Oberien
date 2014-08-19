@@ -1,10 +1,11 @@
-package model.building;
+package model.building.producing;
 
 import model.BuildingModel;
 import model.Layer;
 import model.Model;
 import model.Player;
 import model.Type;
+import model.building.Building;
 
 public class Producing extends Building implements BuildingModel {
 	private Type builds;
@@ -37,7 +38,7 @@ public class Producing extends Building implements BuildingModel {
 	}
 
 	@Override
-	public int getBuildrange() {
+	public int getBuildRange() {
 		return buildRange;
 	}
 

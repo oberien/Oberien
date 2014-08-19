@@ -11,7 +11,7 @@ public class Sharpshooter extends Infantry {
 				100, 35, 1, 
 				50, 1, 2, 5,
 				1, true, false, false, false, false, Layer.Ground,
-				100, 5, 5, Type.Infantry);
+				100, 100, 5, Type.Infantry);
 		
 	}
 

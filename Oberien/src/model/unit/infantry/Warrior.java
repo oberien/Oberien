@@ -11,6 +11,6 @@ public class Warrior extends Infantry {
 				250, 20, 1,
 				250, 8, 5, 3, 
 				2, true, false, false, false, false, Layer.Ground, 
-				80, 2, 2, Type.Robot);
+				80, 98, 2, Type.Robot);
 	}
 }

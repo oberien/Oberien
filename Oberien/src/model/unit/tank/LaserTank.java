@@ -11,7 +11,7 @@ public class LaserTank extends Tank {
 				25, 50, 3,
 				150, 5, 20, 7,
 				7, true, false, false, false, false, Layer.Ground,
-				95, 0, 2, Type.Robot);
+				95, 99, 2, Type.Robot);
 	}
 
 }
