@@ -6,12 +6,12 @@ import model.BuildingModel;
 import model.Layer;
 import model.Model;
 import model.ProducingModel;
-import model.StoragingModel;
+import model.StoringModel;
 import model.Type;
 import model.Player;
 import model.building.producing.Producing;
 
-public class Base extends Model implements BuildingModel, ProducingModel, StoragingModel {
+public class Base extends Model implements BuildingModel, ProducingModel, StoringModel {
 	private Type builds;
 	private int buildSpeed;
 	private int buildRange;

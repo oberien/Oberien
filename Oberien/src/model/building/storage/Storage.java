@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import model.Layer;
 import model.Model;
 import model.Player;
-import model.StoragingModel;
+import model.StoringModel;
 import model.Type;
 import model.building.Building;
 
-public class Storage extends Building implements StoragingModel {
+public class Storage extends Building implements StoringModel {
 
 	private int storagePlus;
 	private int populationStoragePlus;

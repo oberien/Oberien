@@ -1,6 +1,6 @@
 package model;
 
-public interface StoragingModel {
+public interface StoringModel {
 	public int getStoragePlus();
 	public int getPopulationStoragePlus();
 	public int getCanStore();
