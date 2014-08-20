@@ -8,7 +8,8 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
@@ -103,7 +104,7 @@ public class GameStarting extends BasicGameState {
 //			} catch (Exception ex) {
 //				ex.printStackTrace();
 //			}
-			Nifty nifty = new Nifty(new LwjglRenderDevice(), new NullSoundDevice(), new InputSystem() {
+			Nifty nifty = new Nifty(new BatchRenderDevice(LwjglBatchRenderBackendFactory.create()), new NullSoundDevice(), new InputSystem() {
 				public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
 					for (MouseEvent event : sd.getMouseEvents()) {
 						event.processMouseEvents(inputEventConsumer);

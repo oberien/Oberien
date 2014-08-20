@@ -17,7 +17,8 @@ sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 				<text id="headline" wrap="true" font="res/fonts/128/airstrikecond.fnt" color="#ffff" text="Oberien"/>
 			</panel>
 			<panel id="startPanel" align="center" valign="center" childLayout="center" height="25%" visibleToMouse="true">
-				<image filename="res/imgs/ui/button.png" childLayout="center">
+				<image filename="res/imgs/ui/button.png" childLayout="center" controller="view.gui.controllers.StartButtonController">
+					<interact onClick="clicked()"/>
 					<text id="start" wrap="true" font="res/fonts/32/airstrikecond.fnt" color="#ffff" text="Start"/>
 				</image>
 			</panel>
