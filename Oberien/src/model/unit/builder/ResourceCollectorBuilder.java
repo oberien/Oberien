@@ -1,8 +1,8 @@
 package model.unit.builder;
 
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class ResourceCollectorBuilder extends Builder {
 

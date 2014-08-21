@@ -2,9 +2,9 @@ package model.building.turret;
 
 import model.AttackingModel;
 import model.Layer;
-import model.Player;
 import model.Type;
 import model.building.Building;
+import model.player.Player;
 
 public class Turret extends Building implements AttackingModel {
 	private int damage;

@@ -1,8 +1,8 @@
 package model.unit.robot;
 
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class AnnoyBot extends Robot {
 

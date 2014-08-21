@@ -1,10 +1,10 @@
 package model.building.resourceCollector;
 
 import model.Layer;
-import model.Player;
 import model.ProducingModel;
 import model.Type;
 import model.building.Building;
+import model.player.Player;
 
 public class ResourceCollector extends Building implements ProducingModel {
 	private int producingMoney;

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import model.TeamColors;
 import model.map.*;
+import model.player.PlayerColors;
 
 public class MapEditor extends JFrame implements MouseListener, MouseMotionListener, WindowListener {
 	/**
@@ -158,7 +158,7 @@ public class MapEditor extends JFrame implements MouseListener, MouseMotionListe
 					for (int i = chooseStartX; i <= chooseActX; i++) {
 						for (int j = chooseStartY; j <= chooseActY; j++) {
 							if (i < fieldPanel.length && j < fieldPanel[0].length) {
-								fieldPanel[i][j].drawFG(TeamColors.get(choosePosOf-1));
+								fieldPanel[i][j].drawFG(PlayerColors.get(choosePosOf-1));
 							}
 						}
 					}
@@ -173,7 +173,7 @@ public class MapEditor extends JFrame implements MouseListener, MouseMotionListe
 				chooseStartY = p.getYcoord();
 				chooseActX = chooseStartX;
 				chooseActY = chooseStartY;
-				fieldPanel[chooseStartX][chooseStartY].drawFG(TeamColors.get(choosePosOf-1));
+				fieldPanel[chooseStartX][chooseStartY].drawFG(PlayerColors.get(choosePosOf-1));
 				repaint();
 			}
 			public void mouseReleased(MouseEvent e) {
@@ -220,7 +220,7 @@ public class MapEditor extends JFrame implements MouseListener, MouseMotionListe
 				startPosY2.add(m.getStartPosY2()[i]);
 				for (int x = startPosX1.get(i); x <= startPosX2.get(i); x++) {
 					for (int y = startPosY1.get(i); y <= startPosY2.get(i); y++) {
-						fieldPanel[x][y].drawFG(TeamColors.get(i));
+						fieldPanel[x][y].drawFG(PlayerColors.get(i));
 					}
 				}
 			}

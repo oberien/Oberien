@@ -1,6 +1,6 @@
 package controller.wincondition;
 
-import model.Player;
+import model.player.Player;
 import controller.State;
 
 public interface WinCondition {

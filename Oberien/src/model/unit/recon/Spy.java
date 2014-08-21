@@ -1,8 +1,8 @@
 package model.unit.recon;
 
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class Spy extends Recon {
 

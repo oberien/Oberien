@@ -5,9 +5,10 @@
 package view.huds;
 
 import controller.State;
+
 import java.awt.Font;
 
-import model.Player;
+import model.player.Player;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;

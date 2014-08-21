@@ -1,8 +1,8 @@
 package model.building.resourceCollector;
 
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class Windmill extends ResourceCollector {
 

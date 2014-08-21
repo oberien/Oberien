@@ -3,9 +3,9 @@ package model.building.producing;
 import model.BuildingModel;
 import model.Layer;
 import model.Model;
-import model.Player;
 import model.Type;
 import model.building.Building;
+import model.player.Player;
 
 public class Producing extends Building implements BuildingModel {
 	private Type builds;

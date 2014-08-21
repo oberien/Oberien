@@ -3,8 +3,8 @@ package model.unit.builder;
 import model.BuildingModel;
 import model.Layer;
 import model.Model;
-import model.Player;
 import model.Type;
+import model.player.Player;
 import model.unit.Unit;
 
 public class Builder extends Unit implements BuildingModel {

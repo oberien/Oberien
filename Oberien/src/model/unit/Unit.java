@@ -2,9 +2,9 @@ package model.unit;
 
 import model.Layer;
 import model.Model;
-import model.Player;
 import model.Type;
 import model.map.FieldList;
+import model.player.Player;
 
 public class Unit extends Model {
 	private boolean moveGround;

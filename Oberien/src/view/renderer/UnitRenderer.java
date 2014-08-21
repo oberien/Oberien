@@ -8,8 +8,8 @@ import java.awt.Font;
 
 import controller.State;
 import model.Model;
-import model.Player;
 import model.map.Coordinate;
+import model.player.Player;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;

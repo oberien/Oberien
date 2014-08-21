@@ -1,45 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://
 www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://niftygui.
 sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+
+	<useStyles filename="nifty-default-styles.xml" />
+	<useControls filename="nifty-default-controls.xml" />
 	
 	<screen id="start" controller="view.gui.controllers.StartScreenController">
 		<layer id="background" childLayout="vertical">
 			<image filename="res/imgs/ui/bg02.png"/>
 		</layer>
-		<layer id="foreground" childLayout="vertical">
-			<panel id="headlinePanel" align="center" valign="center" childLayout="center" visibleToMouse="false">
-				<text id="headline" wrap="true" font="res/fonts/128/airstrikecond.fnt" color="#ffff" text="Oberien"/>
+		<layer id="foreground" childLayout="vertical" height="100%">
+			<panel id="oberienPanel" align="center" valign="center" childLayout="center" height="20%">
+				<text id="oberien" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#fff" text="Oberien" width="100%" height="20%"/>
 			</panel>
-			<panel id="startPanel" align="center" valign="center" childLayout="center" height="25%" visibleToMouse="true">
-				<image filename="res/imgs/ui/button.png" childLayout="center" controller="view.gui.controllers.StartButtonController">
-					<interact onClick="clicked()"/>
-					<text id="start" wrap="true" font="res/fonts/32/airstrikecond.fnt" color="#ffff" text="Start"/>
-				</image>
+			<panel id="gameSetupPanel" align="center" valign="center" childLayout="center" height="40%">
+				<control id="gameSetupButton" name="button" label="Game Setup" align="center" valign="center" width="10%" height="10%">
+					<interact onClick="gameSetup()"/>
+				</control>
 			</panel>
-			<panel id="settingsPanel" align="center" valign="center" height="40%" childLayout="center" visibleToMouse="true">
-				<image filename="res/imgs/ui/button.png" childLayout="center">
-					<text id="settings" wrap="true" font="res/fonts/32/airstrikecond.fnt" color ="#ffff" text="Settings"/>
-				</image>
+			<panel id="settingsPanel" align="center" valign="center" childLayout="center" height="40%">
+				<control id="settingsButton" name="button" label="Settings" align="center" valign="center" width="10%" height="10%">
+					<interact onClick="settings()"/>
+				</control>
 			</panel>
 		</layer>
 		<layer id="exitLayer" childLayout="horizontal">
-			<panel id="exitPanel" align="left" valign="top" childLayout="vertical" visibleToMouse="true">
-				<image filename="res/imgs/ui/button.png" align="left" valign="bottom" childLayout="center">
-					<text id="exit" wrap="true" font="res/fonts/32/airstrikecond.fnt" color="#ffff" text="Exit"/>
-				</image>
-			</panel>
+			<control id="exitButton" name="button" label="Exit" align="right" valign="top" width="5%" height="5%">
+				<interact onClick="exit()"/>
+			</control>
 		</layer>
-	</screen>
-	
-	<screen id="settings">
-	</screen>
-	
-	<screen id="mapChooser">
 	</screen>
 </nifty>

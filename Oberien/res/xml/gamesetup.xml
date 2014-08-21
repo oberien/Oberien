@@ -6,17 +6,38 @@ sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 	<useStyles filename="nifty-default-styles.xml" />
 	<useControls filename="nifty-default-controls.xml" />
 	
-	<screen id="gameSetup" controller="view.gui.controllers.StartScreenController">
+	<screen id="gameSetup" controller="view.gui.controllers.GameSetupScreenController">
 		<layer id="background" childLayout="vertical">
 			<image filename="res/imgs/ui/bg02.png"/>
 		</layer>
 		<layer id="foreground" childLayout="horizontal">
-			<panel id="players" align="left" valign="top" childLayout="vertical" width="20%" height="100%">
-				<text id="playerLabel" wrap="false" font="res/fonts/128/airstrikecond.fnt" controller="view.eventhandler.gamesetup.AddPlayerButton" color="#f00f" text="Players" visibleToMouse="true">
-					<interact onClick="buttonClicked()"/>
-				</text>
-				<control id="player1" name="textfield" text="Player1"/>
-				<control id="addPlayer" name="button" label="Add new Player" visibleToMouse="true"/>
+			<panel id="players" align="center" valign="top" childLayout="vertical" width="70%" height="100%">
+				<text id="playerLabel" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#f00f" text="Players" valign="center" height="10%"/>
+				<panel id="player0Panel" align="left" valign="top" childLayout="horizontal" width="100%">
+					<text id="player0Label" wrap="false" font="res/fonts/32/airstrikecond.fnt" color="#fff" text="Player:" align="left" valign="center" width="15%"/>
+					<control id="player0TextField" name="textfield" text="${ENV.USERNAME}" valign="center" width="60%"/>
+					<panel id="color0" backgroundColor="#f00" valign="center" width="5%" height="23px">
+						<effect>
+							<onHover name="border" color="#822f" post="true" />
+						</effect>
+						<interact onClick="changeColor(color0)"/>
+					</panel>
+					<control id="team0" name="button" label="Team 1" valign="center" width="10%">
+						<interact onClick="changeTeam(team0)"/>
+						<interact onClickRepeat="changeTeam(team0)"/>
+					</control>
+					<control id="remove0" name="button" label="Remove" valign="center" width="10%">
+						<interact onClick="remove(player1Panel)"/>
+					</control>
+				</panel>
+				<panel id="addButtons" align="left" valign="top" childLayout="horizontal" width="100%" height="5%">
+					<control id="addPlayer" name="button" label="Add new Player" valign="bottom" width="50%">
+						<interact onClick="addPlayer()"/>
+					</control>
+					<control id="addAI" name="button" label="Add AI" valign="bottom" width="50%">
+						<interact onClick="addAI()"/>
+					</control>
+				</panel>
 			</panel>
 		</layer>
 	</screen>

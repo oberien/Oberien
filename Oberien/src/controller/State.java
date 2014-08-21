@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import util.SerializableState;
-
 import model.Model;
-import model.Player;
 import model.map.Coordinate;
 import model.map.Map;
+import model.player.Player;
 
 public class State {
 	private final Map map;

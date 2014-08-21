@@ -17,10 +17,8 @@ import model.map.Field;
 import model.map.FieldList;
 import model.map.Map;
 import model.map.MapList;
+import model.player.Player;
 import model.unit.*;
-import model.building.base.Base;
-import model.building.resourceCollector.ResourceCollector;
-import model.building.storage.Storage;
 import model.*;
 
 public class Controller {

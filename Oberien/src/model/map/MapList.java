@@ -11,7 +11,16 @@ public class MapList {
 	private Map currentMap;
 	
 	private MapList() {
-		File[] files = new File("res/maps/").listFiles();
+		File[] files = new File("res/maps/").listFiles(new FileFilter() {
+
+			@Override
+			public boolean accept(File f) {
+				if (f.getName().toLowerCase().contains("."))
+					return false;
+				else
+					return true;
+			}
+		});
 		for (int i = 0; i < files.length; i++) {
 			Map map = MapIO.read(files[i]);
 			if (map.getStartPosX1().length == 0) {

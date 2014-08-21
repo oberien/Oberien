@@ -2,8 +2,8 @@ package model.building;
 
 import model.Layer;
 import model.Model;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class Building extends Model {
 

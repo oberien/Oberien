@@ -1,8 +1,8 @@
 package model.unit.robot;
 import model.AttackingModel;
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 import model.unit.Unit;
 
 public class Robot extends Unit implements AttackingModel {

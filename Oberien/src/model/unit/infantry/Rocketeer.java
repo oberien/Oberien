@@ -1,8 +1,8 @@
 package model.unit.infantry;
 
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class Rocketeer extends Infantry {
 

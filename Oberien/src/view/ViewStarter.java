@@ -3,6 +3,9 @@ package view;
 
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -16,6 +19,7 @@ public class ViewStarter {
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) throws SlickException {
+		Logger.getLogger("de.lessvoid").setLevel(Level.WARNING);
 		game = new AppGameContainer(new View());
 		game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), true);
 		if (Options.screenMode == 0) {

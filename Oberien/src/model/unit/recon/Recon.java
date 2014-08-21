@@ -2,8 +2,8 @@ package model.unit.recon;
 
 import model.AttackingModel;
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 import model.unit.Unit;
 
 public class Recon extends Unit implements AttackingModel {

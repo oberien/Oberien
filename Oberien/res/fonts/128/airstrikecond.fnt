@@ -1,4 +1,4 @@
-info face="Airstrike Condensed" size=128 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
+info face="Airstrike Condensed 128" size=128 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
 common lineHeight=128 base=107 scaleW=1024 scaleH=1024 pages=3 packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4
 page id=0 file="airstrikecond_0.png"
 page id=1 file="airstrikecond_1.png"

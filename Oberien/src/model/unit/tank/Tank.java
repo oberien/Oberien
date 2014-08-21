@@ -1,8 +1,8 @@
 package model.unit.tank;
 import model.AttackingModel;
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 import model.unit.Unit;
 
 public class Tank extends Unit implements AttackingModel {

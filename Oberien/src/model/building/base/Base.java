@@ -8,8 +8,8 @@ import model.Model;
 import model.ProducingModel;
 import model.StoringModel;
 import model.Type;
-import model.Player;
 import model.building.producing.Producing;
+import model.player.Player;
 
 public class Base extends Model implements BuildingModel, ProducingModel, StoringModel {
 	private Type builds;

@@ -46,6 +46,10 @@ public class Map {
 		return startPosY2;
 	}
 	
+	public int getTeamNumer() {
+		return startPosX1.length;
+	}
+	
 	public Coordinate[] getStartAreaOfTeam(int i) {
 		ArrayList<Coordinate> c = new ArrayList<Coordinate>();
 		for (int x = startPosX1[i]; x <= startPosX2[i]; x++) {
@@ -57,7 +61,7 @@ public class Map {
 		ret = c.toArray(ret);
 		return ret;
 	}
-
+	
 	public boolean add(byte b) {
 		if (actWidth > width || actHeight > height) {
 			return false;

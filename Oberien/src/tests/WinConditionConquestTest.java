@@ -1,10 +1,10 @@
 package tests;
 
 import model.Layer;
-import model.Player;
 import model.map.Coordinate;
 import model.map.Map;
 import model.map.MapList;
+import model.player.Player;
 
 import org.newdawn.slick.Color;
 

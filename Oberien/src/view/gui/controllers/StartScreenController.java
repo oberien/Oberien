@@ -13,9 +13,13 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 public class StartScreenController implements ScreenController {
-
+	Nifty nifty;
+	Screen screen;
+	
 	@Override
 	public void bind(Nifty nifty, Screen screen) {
+		this.nifty = nifty;
+		this.screen = screen;
 	}
 
 	@Override
@@ -26,13 +30,11 @@ public class StartScreenController implements ScreenController {
 	public void onEndScreen() {
 	}
 	
-	public void buttonClicked() {
-		System.out.println("buttonClicked()");
+	public void gameSetup() {
+		nifty.gotoScreen("gameSetup");
 	}
 	
-	@NiftyEventSubscriber(id="addPlayer")
-	public void onClick(String id, NiftyMousePrimaryClickedEvent event) {
-	System.out.println("element with id [" + id + "] clicked at [" + event.getMouseX() +
-	", " + event.getMouseY() + "]");
+	public void exit() {
+		System.exit(0);
 	}
 }

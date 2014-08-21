@@ -16,7 +16,7 @@ public class Field {
 	int actionRange;
 	int actionPlus;
 	
-	Image image;
+	private Image image;
 	
 	public Field(String name, int evade, int strike, int moveSpeed, int viewRange, int viewPlus, int attackRange, int attackPlus, int i) {
 		this.name = name;

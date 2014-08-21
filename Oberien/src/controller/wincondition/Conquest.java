@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import model.Model;
-import model.Player;
 import model.building.base.Base;
 import model.map.Coordinate;
+import model.player.Player;
 import controller.MyHashMap;
 import controller.State;
 

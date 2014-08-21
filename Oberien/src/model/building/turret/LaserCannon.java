@@ -1,8 +1,8 @@
 package model.building.turret;
 
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class LaserCannon extends Turret {
 

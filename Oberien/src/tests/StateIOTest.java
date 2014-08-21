@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
-import model.Player;
 import model.map.Map;
 import model.map.MapList;
+import model.player.Player;
 
 import org.newdawn.slick.Color;
 

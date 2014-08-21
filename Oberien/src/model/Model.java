@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 
+import model.player.Player;
+
 public class Model implements Serializable{
 	private static final long serialVersionUID = 1L;
 	

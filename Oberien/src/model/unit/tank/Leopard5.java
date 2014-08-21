@@ -1,8 +1,8 @@
 package model.unit.tank;
 
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class Leopard5 extends Tank {
 

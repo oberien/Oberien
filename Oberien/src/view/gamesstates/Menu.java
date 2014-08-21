@@ -8,9 +8,12 @@ import controller.Controller;
 import controller.Options;
 import controller.wincondition.Conquest;
 import de.lessvoid.nifty.Nifty;
+
 import java.util.Random;
-import model.Player;
+
 import model.map.MapList;
+import model.player.Player;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
@@ -21,6 +24,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 import view.data.StartData;
 import view.event.*;
 import view.menu.MainMenu;

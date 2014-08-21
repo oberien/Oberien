@@ -1,8 +1,8 @@
 package model.building.producing;
 
 import model.Layer;
-import model.Player;
 import model.Type;
+import model.player.Player;
 
 public class Barracks extends Producing {
 
