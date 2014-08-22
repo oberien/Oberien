@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+	<useStyles filename="res/xml/customStyles/customButtonStyle.xml" />
+	<useStyles filename="res/xml/customStyles/customButtonRedStyle.xml" />
+	<useStyles filename="res/xml/customStyles/customTextFieldStyle.xml" />
+</nifty-styles>

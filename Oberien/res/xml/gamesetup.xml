@@ -4,7 +4,10 @@ www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://niftygui.
 sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 
 	<useStyles filename="nifty-default-styles.xml" />
+	<useStyles filename="res/xml/customStyles/customStyles.xml" />
 	<useControls filename="nifty-default-controls.xml" />
+	<useControls filename="res/xml/customControls/customControls.xml" />
+	
 	
 	<screen id="gameSetup" controller="view.gui.controllers.GameSetupScreenController">
 		<layer id="background" childLayout="vertical">
@@ -14,20 +17,22 @@ sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 			<panel id="players" align="center" valign="top" childLayout="vertical" width="70%" height="100%">
 				<text id="playerLabel" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#f00f" text="Players" valign="center" height="10%"/>
 				<panel id="player0Panel" align="left" valign="top" childLayout="horizontal" width="100%">
-					<text id="player0Label" wrap="false" font="res/fonts/32/airstrikecond.fnt" color="#fff" text="Player:" align="left" valign="center" width="15%"/>
-					<control id="player0TextField" name="textfield" text="${ENV.USERNAME}" valign="center" width="60%"/>
-					<panel id="color0" backgroundColor="#f00" valign="center" width="5%" height="23px">
+					<panel id="player0LabelPanel" align="left" valign="center" childLayout="center" width="10%">
+						<text id="player0Label" wrap="false" font="res/fonts/32/airstrikecond.fnt" color="#fff" text="Player:" align="left" valign="center"/>
+					</panel>
+					<control id="player0TextField" name="textfield" text="${ENV.USERNAME}" valign="center" width="55%"/>
+					<panel id="color0" backgroundColor="#f00" valign="center" width="5%" height="32px">
 						<effect>
-							<onHover name="border" color="#822f" post="true" />
+							<onHover name="border" color="#228f" post="true" />
 						</effect>
 						<interact onClick="changeColor(color0)"/>
 					</panel>
-					<control id="team0" name="button" label="Team 1" valign="center" width="10%">
+					<control id="team0" name="button" label="Team 1" valign="center" width="15%">
 						<interact onClick="changeTeam(team0)"/>
 						<interact onClickRepeat="changeTeam(team0)"/>
 					</control>
-					<control id="remove0" name="button" label="Remove" valign="center" width="10%">
-						<interact onClick="remove(player1Panel)"/>
+					<control id="remove0" name="button" label="Remove" valign="center" width="15%">
+						<interact onClick="remove(player0Panel)"/>
 					</control>
 				</panel>
 				<panel id="addButtons" align="left" valign="top" childLayout="horizontal" width="100%" height="5%">
@@ -38,6 +43,18 @@ sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 						<interact onClick="addAI()"/>
 					</control>
 				</panel>
+				<panel id="resetButton" align="left" valign="top" childLayout="center" width="100%" height="20%">
+					<control id="resetPlayers" name="button" label="Reset Players" align="center" valign="center" width="20%">
+						<interact onClick="resetPlayers()"/>
+					</control>
+				</panel>
+			</panel>
+		</layer>
+		<layer id="returnLayer" childLayout="horizontal">
+			<panel id="returnPanel" childLayout="center" width="100%" height="100%">
+				<control id="returnButton" name="buttonRed" label="Main Menu" align="right" valign="top" width="10%" height="5%">
+					<interact onClick="mainMenu()"/>
+				</control>
 			</panel>
 		</layer>
 	</screen>

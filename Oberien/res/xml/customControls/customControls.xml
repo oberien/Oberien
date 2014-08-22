@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+	<useControls filename="res/xml/customControls/buttonRed.xml" />
+</nifty-controls>

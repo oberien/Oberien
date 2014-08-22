@@ -1,5 +1,7 @@
 package view.gui.controllers;
 
+import java.util.List;
+
 import model.player.PlayerColors;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -8,6 +10,7 @@ import de.lessvoid.nifty.builder.HoverEffectBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
@@ -15,6 +18,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
@@ -43,7 +47,19 @@ public class GameSetupScreenController implements ScreenController {
 	}
 	
 	public void addPlayer() {
-		final int index = playersPanel.getChildrenCount()-1;
+		addPlayerComponents("Player:", "player" + id + "TextField", "Player" + id);
+	}
+	
+	public void addAI() {
+		addPlayerComponents("AI:", "computer" + id + "TextField", "Computer" + id);
+	}
+	
+	public void addPlayerComponents(final String label, final String textFieldID, final String textFieldText) {
+		addPlayerComponents(label, textFieldID, textFieldText, playersPanel.getChildrenCount()-2 + "");
+	}
+	
+	public void addPlayerComponents(final String label, final String textFieldID, final String textFieldText, final String team) {
+		final int index = playersPanel.getChildrenCount()-2;
 		final String panelName = "player" + id + "Panel";
 		new PanelBuilder(panelName){{
 			alignLeft();
@@ -51,17 +67,24 @@ public class GameSetupScreenController implements ScreenController {
 			childLayoutHorizontal();
 			width("100%");
 			
-			text(new TextBuilder("player" + id + "Label"){{
-				wrap(false);
-				font("res/fonts/32/airstrikecond.fnt");
-				text("Player:");
+			panel(new PanelBuilder("player" + id + "LabelPanel") {{
 				alignLeft();
 				valignCenter();
-				width("15%");
+				childLayoutCenter();
+				width("10%");
+				text(new TextBuilder("player" + id + "Label"){{
+					wrap(false);
+					font("res/fonts/32/airstrikecond.fnt");
+					color("#fff");
+					text(label);
+					alignLeft();
+					valignCenter();
+				}});
 			}});
-			control(new TextFieldBuilder("player" + id + "TextField", "Player" + id){{
+			
+			control(new TextFieldBuilder(textFieldID, textFieldText){{
 				valignCenter();
-				width("60%");
+				width("55%");
 			}});
 			panel(new PanelBuilder("color" + id) {{
 				backgroundColor("#f00");
@@ -71,81 +94,42 @@ public class GameSetupScreenController implements ScreenController {
 				}});
 				interactOnClick("changeColor(" + getId() + ")");
 				valignCenter();
-				width("5%");
 				height("23px");
+				width("5%");
 			}});
 			control(new ButtonBuilder("team" + id) {{
-				label("Team " + (playersPanel.getChildrenCount()-1));
+				label("Team " + team);
 				interactOnClick("changeTeam(" + getId() + ")");
 				interactOnClickRepeat("changeTeam(" + getId() + ")");
 				valignCenter();
-				width("10%");
+				width("15%");
 			}});
 			control(new ButtonBuilder("remove" + id) {{
 				label("Remove");
 				interactOnClick("remove(" + panelName + ")");
 				valignCenter();
-				width("10%");
+				width("15%");
 			}});
 		}}.build(nifty, screen, playersPanel, index);
 		
 		id++;
 	}
 	
-	public void addAI() {
-		final int index = playersPanel.getChildrenCount()-1;
-		final String panelName = "player" + id + "Panel";
-		new PanelBuilder(panelName){{
-			alignLeft();
-			valignCenter();
-			childLayoutHorizontal();
-			width("100%");
-			height("23px");
-			
-			text(new TextBuilder("player" + id + "Label"){{
-				wrap(false);
-				font("res/fonts/32/airstrikecond.fnt");
-				text("AI:");
-				alignLeft();
-				valignCenter();
-				width("15%");
-			}});
-			control(new TextFieldBuilder("computer" + id + "TextField", "Computer" + id){{
-				valignCenter();
-				width("60%");
-			}});
-			panel(new PanelBuilder("color" + id) {{
-				backgroundColor("#f00");
-				onHoverEffect(new HoverEffectBuilder("border") {{
-					effectParameter("color", "#822");
-					post(true);
-				}});
-				interactOnClick("changeColor(" + getId() + ")");
-				valignCenter();
-				width("5%");
-			}});
-			control(new ButtonBuilder("team" + id) {{
-				label("Team " + (playersPanel.getChildrenCount()-1));
-				interactOnClick("changeTeam(" + getId() + ")");
-				interactOnClickRepeat("changeTeam(" + getId() + ")");
-				valignCenter();
-				width("10%");
-			}});
-			control(new ButtonBuilder("remove" + id) {{
-				label("Remove");
-				interactOnClick("remove(" + panelName + ")");
-				valignCenter();
-				width("10%");
-			}});
-		}}.build(nifty, screen, playersPanel, index);
+	public void resetPlayers() {
+		int removableChildren = playersPanel.getChildrenCount()-3;
+		List<Element> children = playersPanel.getChildren();
+		for (int i = 1; i <= removableChildren; i++) {
+			children.get(i).markForRemoval();
+		}
 		
-		id++;
+		id = 1;
+		addPlayerComponents("Player:", "player0TextField", System.getenv("USERNAME"), "1");
 	}
 	
 	public void changeTeam(String id) {
 		Button b = screen.findNiftyControl(id, Button.class);
 		int team = Integer.parseInt(b.getText().substring(5));
-		if (team == playersPanel.getChildrenCount()-2) {
+		if (team == playersPanel.getChildrenCount()-3) {
 			team = 1;
 		} else {
 			team++;
@@ -156,13 +140,14 @@ public class GameSetupScreenController implements ScreenController {
 	public void changeColor(String id) {
 		Element e = screen.findElementById(id);
 		java.awt.Color col = PlayerColors.get(3);
-		System.out.println(e.getElementType().getAttributes().getAsColor("backgroundColor"));
 		e.getRenderer(PanelRenderer.class).setBackgroundColor(new Color((float)col.getRed(), (float)col.getGreen(), (float)col.getBlue(), (float)col.getAlpha()));
-//		e.getElementType().applyAttributes(new Attributes("id=\"color1\"", "backgroundColor=\"" + new Color((float)col.getRed(), (float)col.getGreen(), (float)col.getBlue(), (float)col.getAlpha()).getColorString() + "\"", "width=\"5%\""));
-		System.out.println(e.getElementType().getAttributes().getAsColor("backgroundColor"));
 	}
 	
 	public void remove(String id) {
 		screen.findElementById(id).markForRemoval();
+	}
+	
+	public void mainMenu() {
+		nifty.gotoScreen("start");
 	}
 }
