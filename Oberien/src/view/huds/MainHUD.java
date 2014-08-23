@@ -4,8 +4,6 @@
  */
 package view.huds;
 
-import controller.State;
-
 import java.awt.Font;
 
 import model.player.Player;
@@ -16,6 +14,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
+
+import controller.State;
 
 public class MainHUD implements HUD {
 	

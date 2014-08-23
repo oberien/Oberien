@@ -4,14 +4,14 @@
  */
 package view.renderer;
 
-import controller.State;
-import model.Layer;
 import model.Model;
 import model.map.Coordinate;
 import model.unit.Unit;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+
+import controller.State;
 
 public class GroundRenderer {
 

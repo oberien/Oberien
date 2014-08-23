@@ -4,17 +4,15 @@
 	<!-- +++++++++++++++++++++++++++++++++++++ -->
 	<!-- style for the button background panel -->
 	<!-- +++++++++++++++++++++++++++++++++++++ -->
-	<style id="nifty-button-red#panel">
+	<style id="nifty-button-red-thin-border#panel">
 		<attributes padding="-2px,3px,3px,8px" inset="10px" width="100px" height="42px" childLayout="center" visibleToMouse="true"/>
 		<effect>
-			<onActive name="border" color="#f00f" post="true" inset="4px"/>
-			<onActive name="border" color="#f00f" post="true" inset="5px"/>
-			<onActive name="border" color="#f00f" post="true" inset="6px"/>
-			<onActive name="border" color="#f00f" post="true" inset="7px"/>
-			<onActive name="border" color="#f00f" post="true" inset="8px"/>
-			<onActive name="colorBar" color="#f009" post="true" inset="3px"/>
+			<onActive name="border" color="#b00f" post="true" inset="4px"/>
+			<onActive name="border" color="#b00f" post="true" inset="5px"/>
+			<onActive name="border" color="#b00f" post="true" inset="6px"/>
+			<onActive name="colorBar" color="#d016" post="true" inset="3px"/>
 			<onHover name="border" color="#822f" post="true" inset="3px"/>
-			<onClick name="colorBar" color="#f004" post="true" inset="3px"/>
+			<onClick name="colorBar" color="#d017" post="true" inset="3px"/>
 			<onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150"/>
 			<onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150"/>
 		</effect>
@@ -23,7 +21,7 @@
 	<!-- +++++++++++++++++++++++++++++++++++++ -->
 	<!-- style for the button text -->
 	<!-- +++++++++++++++++++++++++++++++++++++ -->
-	<style id="nifty-button-red#text" >
+	<style id="nifty-button-red-thin-border#text" >
 		<attributes font="res/fonts/32/raven.fnt" color="#fff" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="false"/>
 		<effect>
 			<onEnabled name="textColorAnimated" startColor="#8886" endColor="#eeef" post="false" length="150"/>

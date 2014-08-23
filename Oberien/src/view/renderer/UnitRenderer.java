@@ -6,7 +6,6 @@ package view.renderer;
 
 import java.awt.Font;
 
-import controller.State;
 import model.Model;
 import model.map.Coordinate;
 import model.player.Player;
@@ -17,6 +16,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+
+import controller.State;
 
 public class UnitRenderer {
 	private Coordinate[] pos;

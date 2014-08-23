@@ -1,6 +1,7 @@
 package model.map;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -15,10 +16,10 @@ public class MapList {
 
 			@Override
 			public boolean accept(File f) {
-				if (f.getName().toLowerCase().contains("."))
-					return false;
-				else
+				if (f.getName().toLowerCase().endsWith(".map"))
 					return true;
+				else
+					return false;
 			}
 		});
 		for (int i = 0; i < files.length; i++) {

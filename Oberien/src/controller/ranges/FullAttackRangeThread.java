@@ -1,7 +1,6 @@
 package controller.ranges;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import model.Layer;

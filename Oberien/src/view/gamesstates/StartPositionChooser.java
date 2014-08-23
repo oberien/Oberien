@@ -17,16 +17,15 @@ import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import controller.Options;
-import controller.Controller;
-import controller.State;
-
 import view.data.StartData;
 import view.eventhandler.MouseEvents;
 import view.renderer.FoWRenderer;
 import view.renderer.GridRenderer;
 import view.renderer.MapRenderer;
 import view.renderer.UnitRenderer;
+import controller.Controller;
+import controller.Options;
+import controller.State;
 
 public class StartPositionChooser extends BasicGameState {
 

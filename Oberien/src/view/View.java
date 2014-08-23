@@ -5,25 +5,22 @@
 package view;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import controller.Options;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.renderer.lwjgl.input.LwjglKeyboardInputEventCreator;
 import view.data.StartData;
-import view.gamesstates.GameRunning;
 import view.gamesstates.GameLoading;
+import view.gamesstates.GameRunning;
 import view.gamesstates.GameStarting;
 import view.gamesstates.Menu;
 import view.gamesstates.NiftyMenu;
-import view.gui.event.MouseEvent;
 import view.gamesstates.StartPositionChooser;
+import view.gui.event.MouseEvent;
+import controller.Options;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.renderer.lwjgl.input.LwjglKeyboardInputEventCreator;
 
 public class View extends StateBasedGame {
 	private StartData sd;

@@ -1,7 +1,7 @@
-info face="Raven Sans NBP" size=64 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
+info face="Raven Sans NBP 64" size=64 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
 common lineHeight=64 base=56 scaleW=512 scaleH=512 pages=2 packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4
-page id=0 file="raven64_0.png"
-page id=1 file="raven64_1.png"
+page id=0 file="raven_0.png"
+page id=1 file="raven_1.png"
 chars count=488
 char id=32   x=47    y=54    width=3     height=1     xoffset=-1    yoffset=63    xadvance=12    page=0  chnl=15
 char id=33   x=503   y=221   width=6     height=36    xoffset=-1    yoffset=20    xadvance=14    page=0  chnl=15

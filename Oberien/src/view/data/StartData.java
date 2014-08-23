@@ -1,18 +1,24 @@
 package view.data;
 
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
+
+import model.map.Map;
 
 import org.newdawn.slick.Image;
 
+import view.gui.event.MouseEvent;
+import view.renderer.ActionGroundRenderer;
+import view.renderer.DamageRenderer;
+import view.renderer.FoWRenderer;
+import view.renderer.GridRenderer;
+import view.renderer.HUDRenderer;
+import view.renderer.MapRenderer;
+import view.renderer.UnitRenderer;
 import controller.Controller;
 import controller.State;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import model.map.Map;
-import view.gui.event.MouseEvent;
-import view.renderer.*;
 
 public class StartData {
 	private Controller controller;

@@ -5,17 +5,19 @@
 package view.menu;
 
 import java.awt.Font;
+
 import model.map.MapList;
-import org.newdawn.slick.Color;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+
+import view.components.Button;
 import view.data.StartData;
 import view.event.ActionEvent;
 import view.event.ActionListener;
-import view.components.Button;
 
 public class MapChooser extends MenuTempl implements ActionListener{
 	private UnicodeFont uf, hf;

@@ -1,20 +1,14 @@
 package tests;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import model.map.MapIO;
 import model.map.MapList;
 
-public class TestMain {
+public class MapMain {
 	public static void main(String[] args) {
 		String[] mapNames = MapList.getInstance().getMapNames();
 		for (String s : mapNames) {
-			MapIO.write(MapList.getInstance().getMap(s), true);
+//			MapIO.write(MapList.getInstance().getMap(s), true);
+			System.out.println(s);
 		}
 		
 //		for (int i = 0; i < 19; i++) {

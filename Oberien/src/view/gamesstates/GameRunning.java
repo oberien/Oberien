@@ -4,17 +4,14 @@
  */
 package view.gamesstates;
 
-import controller.Options;
-import controller.Controller;
-import controller.State;
-
 import java.util.Arrays;
+
 import model.Layer;
 import model.Model;
-import model.unit.Unit;
 import model.map.Coordinate;
 import model.map.Map;
 import model.map.MapList;
+import model.unit.Unit;
 import model.unit.builder.Builder;
 
 import org.lwjgl.input.Keyboard;
@@ -30,7 +27,15 @@ import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
 import view.eventhandler.MouseEvents;
 import view.music.MusicManager;
-import view.renderer.*;
+import view.renderer.ActionGroundRenderer;
+import view.renderer.DamageRenderer;
+import view.renderer.FoWRenderer;
+import view.renderer.HUDRenderer;
+import view.renderer.MapRenderer;
+import view.renderer.UnitRenderer;
+import controller.Controller;
+import controller.Options;
+import controller.State;
 
 public class GameRunning extends BasicGameState {
 	private StartData sd;

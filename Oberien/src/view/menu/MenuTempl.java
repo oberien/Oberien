@@ -4,7 +4,7 @@
  */
 package view.menu;
 
-import view.components.*;
+import view.components.Panel;
 
 public abstract class MenuTempl extends Panel {
 	

@@ -4,19 +4,20 @@
  */
 package view.renderer;
 
-import controller.State;
-
 import java.awt.Font;
-import model.Model;
-import org.newdawn.slick.GameContainer;
 
+import model.Model;
+
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.StateBasedGame;
+
 import view.huds.BuildHUD;
 import view.huds.MainHUD;
+import controller.State;
 
 public class HUDRenderer {
 	

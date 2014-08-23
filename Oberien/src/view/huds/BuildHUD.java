@@ -4,10 +4,10 @@
  */
 package view.huds;
 
-import controller.Controller;
+import model.BuildingModel;
 import model.Model;
 import model.ModelList;
-import model.BuildingModel;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

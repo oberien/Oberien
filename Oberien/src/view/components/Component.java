@@ -1,6 +1,7 @@
 package view.components;
 
 import java.util.ArrayList;
+
 import org.newdawn.slick.Graphics;
 
 import view.event.MouseEvent;

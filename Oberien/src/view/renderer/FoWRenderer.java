@@ -4,10 +4,8 @@
  */
 package view.renderer;
 
-import controller.Controller;
-import model.Layer;
-import model.Model;
 import model.map.Coordinate;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 

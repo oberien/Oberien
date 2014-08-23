@@ -2,15 +2,13 @@ package controller.ranges;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import model.Layer;
 import model.map.Coordinate;
-import model.map.FieldList;
 import model.map.Map;
-import controller.MyHashMap;
-import org.newdawn.slick.geom.Vector2f;
+
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Vector2f;
 
 import view.data.Globals;
 

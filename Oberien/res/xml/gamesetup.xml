@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://
-www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://niftygui.
-sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
 
 	<useStyles filename="nifty-default-styles.xml" />
 	<useStyles filename="res/xml/customStyles/customStyles.xml" />
@@ -14,16 +12,23 @@ sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 			<image filename="res/imgs/ui/bg02.png"/>
 		</layer>
 		<layer id="foreground" childLayout="horizontal">
-			<panel id="players" align="center" valign="top" childLayout="vertical" width="70%" height="100%">
-				<text id="playerLabel" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#f00f" text="Players" valign="center" height="10%"/>
+			<panel id="players" childLayout="vertical" padding="3px" width="70%" height="100%">
+				<panel id="playerLabelPanel" width="100%" height="12%" childLayout="center">
+					<text id="playerLabel" wrap="false" font="res/fonts/128/raven.fnt" color="#f00f" text="Players"/>
+				</panel>
 				<panel id="player0Panel" align="left" valign="top" childLayout="horizontal" width="100%">
 					<panel id="player0LabelPanel" align="left" valign="center" childLayout="center" width="10%">
-						<text id="player0Label" wrap="false" font="res/fonts/32/airstrikecond.fnt" color="#fff" text="Player:" align="left" valign="center"/>
+						<text id="player0Label" wrap="false" font="res/fonts/32/raven.fnt" color="#ffff" text="Player:" align="left" valign="center"/>
 					</panel>
 					<control id="player0TextField" name="textfield" text="${ENV.USERNAME}" valign="center" width="55%"/>
-					<panel id="color0" backgroundColor="#f00" valign="center" width="5%" height="32px">
+					<panel id="color0" backgroundColor="#f00f" valign="center" width="5%" height="36px">
 						<effect>
-							<onHover name="border" color="#228f" post="true" />
+							<onActive name="border" color="#111f" post="true" inset="1px" />
+							<onActive name="border" color="#222f" post="true" inset="2px" />
+							<onActive name="border" color="#333f" post="true" inset="3px" />
+							<onActive name="border" color="#444f" post="true" inset="4px" />
+							<onActive name="border" color="#555f" post="true" inset="5px" />
+							<onHover name="border" color="#000f" post="true" />
 						</effect>
 						<interact onClick="changeColor(color0)"/>
 					</panel>
@@ -31,22 +36,36 @@ sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
 						<interact onClick="changeTeam(team0)"/>
 						<interact onClickRepeat="changeTeam(team0)"/>
 					</control>
-					<control id="remove0" name="button" label="Remove" valign="center" width="15%">
+					<control id="remove0" name="buttonRedThinBorder" label="Remove" valign="center" width="15%">
 						<interact onClick="remove(player0Panel)"/>
 					</control>
 				</panel>
 				<panel id="addButtons" align="left" valign="top" childLayout="horizontal" width="100%" height="5%">
-					<control id="addPlayer" name="button" label="Add new Player" valign="bottom" width="50%">
+					<panel id="fillPanelButtons" valign="bottom" width="10%" />
+					<control id="addPlayer" name="button" label="Add new Player" valign="bottom" width="45%">
 						<interact onClick="addPlayer()"/>
 					</control>
-					<control id="addAI" name="button" label="Add AI" valign="bottom" width="50%">
+					<control id="addAI" name="button" label="Add AI  (Computer)" valign="bottom" width="45%">
 						<interact onClick="addAI()"/>
 					</control>
 				</panel>
 				<panel id="resetButton" align="left" valign="top" childLayout="center" width="100%" height="20%">
-					<control id="resetPlayers" name="button" label="Reset Players" align="center" valign="center" width="20%">
+					<control id="resetPlayers" name="buttonRedThinBorder" label="Reset Players" align="center" valign="center" width="20%">
 						<interact onClick="resetPlayers()"/>
 					</control>
+				</panel>
+			</panel>
+			<panel id="maps" childLayout="vertical" padding="3px" width="30%" height="100%">
+				<panel id="mapsLabelPanel" childLayout="center" width="100%" height="12%">
+					<text id="mapsLabel" wrap="false" font="res/fonts/128/raven.fnt" color="#f00f" text="Map" />
+				</panel>
+				<panel id="mapNameLabelPanel" childLayout="center" width="100%" height="6%">
+					<text id="mapNameLabel" wrap="false" font="res/fonts/64/raven.fnt" color="#000f" text="Tera Rising" />
+				</panel>
+				<panel id="map" childLayout="center" width="100%" height="53%">
+					<image filename="res/imgs/maps/Tera Rising.png" width="90%" height="90%">
+						
+					</image>
 				</panel>
 			</panel>
 		</layer>

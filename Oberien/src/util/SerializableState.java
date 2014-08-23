@@ -2,11 +2,11 @@ package util;
 
 import java.io.Serializable;
 
-import controller.MyHashMap;
-import controller.wincondition.WinCondition;
 import model.Model;
 import model.map.Coordinate;
 import model.player.Player;
+import controller.MyHashMap;
+import controller.wincondition.WinCondition;
 
 public class SerializableState implements Serializable {
 	private static final long serialVersionUID = 1L;

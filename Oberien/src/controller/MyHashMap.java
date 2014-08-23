@@ -3,8 +3,6 @@ package controller;
 import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 
-import model.map.Coordinate;
-
 public class MyHashMap<K, V> extends ConcurrentHashMap implements Serializable {
 	private static final long serialVersionUID = 1L;
 

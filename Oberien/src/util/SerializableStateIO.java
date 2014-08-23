@@ -9,8 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Observable;
 
-import util.SerializableState;
-
 public class SerializableStateIO extends Observable implements Runnable {	
 	private boolean read, write;
 	

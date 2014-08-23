@@ -4,13 +4,17 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import model.player.PlayerColors;
-import view.data.Globals;
 
 public class MapIO {
 	
@@ -18,7 +22,8 @@ public class MapIO {
 		Map newMap = null;
 		try {
 			DataInputStream dis = new DataInputStream(new FileInputStream(f));
-			String name = f.getName();
+			String fileName = f.getName();
+			String name = fileName.substring(0, fileName.length()-4);
 			int version = dis.readInt();
 			if (version == 2) {
 				int width = dis.readInt();
@@ -54,7 +59,7 @@ public class MapIO {
 	public static boolean write(Map map, boolean overwrite) {
 		//save map
 		try {
-			File file = new File("res/maps/" + map.getName());
+			File file = new File("res/maps/" + map.getName() + ".map");
 			if (file.exists() && !overwrite) {
 				int selection = JOptionPane.showConfirmDialog(null, "Do you want to overwrite your map?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (selection != 0) {

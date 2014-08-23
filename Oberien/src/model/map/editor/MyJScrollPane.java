@@ -1,8 +1,11 @@
 package model.map.editor;
 
-import java.awt.event.*;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 public class MyJScrollPane extends JScrollPane {
 	public MyJScrollPane(JComponent c) {

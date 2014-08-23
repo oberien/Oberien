@@ -17,15 +17,6 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import controller.Options;
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.nulldevice.NullSoundDevice;
-import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
-import de.lessvoid.nifty.tools.TimeProvider;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import view.components.Label;
 import view.components.Panel;
 import view.data.StartData;
@@ -36,6 +27,7 @@ import view.renderer.GridRenderer;
 import view.renderer.HUDRenderer;
 import view.renderer.SimpleMapRenderer;
 import view.renderer.UnitRenderer;
+import controller.Options;
 
 public class GameLoading extends BasicGameState {
 

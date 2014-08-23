@@ -4,18 +4,11 @@
  */
 package view.gamesstates;
 
-import controller.Controller;
-import controller.Options;
-import controller.wincondition.Conquest;
-import de.lessvoid.nifty.Nifty;
-
 import java.util.Random;
 
 import model.map.MapList;
 import model.player.Player;
 
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -26,10 +19,14 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import view.data.StartData;
-import view.event.*;
+import view.event.MouseEvent;
 import view.menu.MainMenu;
 import view.menu.MapChooser;
 import view.menu.MenuTempl;
+import controller.Controller;
+import controller.Options;
+import controller.wincondition.Conquest;
+import de.lessvoid.nifty.Nifty;
 
 public class Menu extends BasicGameState {
 

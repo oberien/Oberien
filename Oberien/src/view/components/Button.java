@@ -9,7 +9,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.UnicodeFont;
 
-import view.event.*;
+import view.event.ActionEvent;
+import view.event.MouseEvent;
+import view.event.MouseListener;
 
 public class Button extends AbstractButton implements MouseListener {
 	private int bwidth, bheight, bheight2, bwidth2;

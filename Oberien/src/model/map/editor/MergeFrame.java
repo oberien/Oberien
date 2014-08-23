@@ -1,13 +1,24 @@
 package model.map.editor;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import model.map.Map;
 import model.map.MapIO;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
 
 //TODO get team start positions out of all different maps
 

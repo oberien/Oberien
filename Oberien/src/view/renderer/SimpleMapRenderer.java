@@ -6,6 +6,7 @@ package view.renderer;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -13,6 +14,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
+
 import view.data.Globals;
 
 /**

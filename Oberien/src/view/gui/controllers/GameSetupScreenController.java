@@ -4,21 +4,13 @@ import java.util.List;
 
 import model.player.PlayerColors;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.HoverEffectBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
-import de.lessvoid.nifty.elements.render.ElementRenderer;
-import de.lessvoid.nifty.elements.render.PanelRenderer;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
@@ -47,11 +39,11 @@ public class GameSetupScreenController implements ScreenController {
 	}
 	
 	public void addPlayer() {
-		addPlayerComponents("Player:", "player" + id + "TextField", "Player" + id);
+		addPlayerComponents("Player:", "player" + id + "TextField", "Player " + id);
 	}
 	
 	public void addAI() {
-		addPlayerComponents("AI:", "computer" + id + "TextField", "Computer" + id);
+		addPlayerComponents("AI:", "computer" + id + "TextField", "Computer " + id);
 	}
 	
 	public void addPlayerComponents(final String label, final String textFieldID, final String textFieldText) {
@@ -63,7 +55,7 @@ public class GameSetupScreenController implements ScreenController {
 		final String panelName = "player" + id + "Panel";
 		new PanelBuilder(panelName){{
 			alignLeft();
-			valignCenter();
+			valignTop();
 			childLayoutHorizontal();
 			width("100%");
 			
@@ -74,8 +66,8 @@ public class GameSetupScreenController implements ScreenController {
 				width("10%");
 				text(new TextBuilder("player" + id + "Label"){{
 					wrap(false);
-					font("res/fonts/32/airstrikecond.fnt");
-					color("#fff");
+					font("res/fonts/32/raven.fnt");
+					color("#ffff");
 					text(label);
 					alignLeft();
 					valignCenter();
@@ -87,14 +79,14 @@ public class GameSetupScreenController implements ScreenController {
 				width("55%");
 			}});
 			panel(new PanelBuilder("color" + id) {{
-				backgroundColor("#f00");
+				backgroundColor("#f00f");
 				onHoverEffect(new HoverEffectBuilder("border") {{
 					effectParameter("color", "#822");
 					post(true);
 				}});
 				interactOnClick("changeColor(" + getId() + ")");
 				valignCenter();
-				height("23px");
+				height("32px");
 				width("5%");
 			}});
 			control(new ButtonBuilder("team" + id) {{
@@ -105,6 +97,7 @@ public class GameSetupScreenController implements ScreenController {
 				width("15%");
 			}});
 			control(new ButtonBuilder("remove" + id) {{
+				name("buttonRedThinBorder");
 				label("Remove");
 				interactOnClick("remove(" + panelName + ")");
 				valignCenter();
@@ -139,8 +132,21 @@ public class GameSetupScreenController implements ScreenController {
 	
 	public void changeColor(String id) {
 		Element e = screen.findElementById(id);
-		java.awt.Color col = PlayerColors.get(3);
-		e.getRenderer(PanelRenderer.class).setBackgroundColor(new Color((float)col.getRed(), (float)col.getGreen(), (float)col.getBlue(), (float)col.getAlpha()));
+		Attributes att = e.getElementType().getAttributes();
+		Color colorNifty = new Color(att.get("backgroundColor"));
+		java.awt.Color colorAwt = new java.awt.Color(colorNifty.getRed(), colorNifty.getGreen(), colorNifty.getBlue(), colorNifty.getAlpha());
+		colorAwt = PlayerColors.getNext(colorAwt);
+		float[] f = colorAwt.getRGBComponents(null);
+		colorNifty = new Color(f[0], f[1], f[2], f[3]);
+		att.set("backgroundColor", colorNifty.getColorString());
+		Screen currentScreen = nifty.getCurrentScreen();
+		att = e.getElementType().getAttributes();
+		e.initializeFromAttributes(currentScreen, att, nifty.getRenderEngine());
+		currentScreen.layoutLayers();
+		
+		
+//		java.awt.Color col = PlayerColors.get(3);
+//		e.getRenderer(PanelRenderer.class).setBackgroundColor(new Color((float)col.getRed(), (float)col.getGreen(), (float)col.getBlue(), (float)col.getAlpha()));
 	}
 	
 	public void remove(String id) {

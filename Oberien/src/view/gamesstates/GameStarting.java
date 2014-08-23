@@ -4,16 +4,6 @@
  */
 package view.gamesstates;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyInputConsumer;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.nulldevice.NullSoundDevice;
-import de.lessvoid.nifty.render.batch.BatchRenderDevice;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;
-import de.lessvoid.nifty.spi.input.InputSystem;
-import de.lessvoid.nifty.tools.TimeProvider;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
@@ -34,6 +24,15 @@ import view.components.Panel;
 import view.data.StartData;
 import view.data.UIElements;
 import view.gui.event.MouseEvent;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyInputConsumer;
+import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
+import de.lessvoid.nifty.nulldevice.NullSoundDevice;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;
+import de.lessvoid.nifty.spi.input.InputSystem;
+import de.lessvoid.nifty.tools.TimeProvider;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 public class GameStarting extends BasicGameState {
 
