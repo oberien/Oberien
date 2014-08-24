@@ -46,6 +46,11 @@ public class Options {
 	 */
 	public static boolean nifty = true;
 	
+	/**
+	 * Volume of music and sound, and the overall volume. Not implemented yet. 
+	 */
+	public static int masterVolume = 100, musicVolume = 100, soundVolume = 100;
+	
 	public static void save() {
 		try {
 			File f = new File("cfg/settings.properties");
@@ -60,6 +65,9 @@ public class Options {
 			properties.setProperty("onlyUpdateWhenVisible", onlyUpdateWhenVisible + "");
 			properties.setProperty("antiAliasing", antiAliasing + "");
 			properties.setProperty("loadingSpeed", loadingSpeed + "");
+			properties.setProperty("masterVolume", masterVolume + "");
+			properties.setProperty("musicVolume", musicVolume + "");
+			properties.setProperty("soundVolume", soundVolume + "");
 			properties.store(new FileOutputStream("cfg/settings.properties"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -76,6 +84,9 @@ public class Options {
 			onlyUpdateWhenVisible = Boolean.parseBoolean(properties.getProperty("onlyUpdateWhenVisible"));
 			antiAliasing = Boolean.parseBoolean(properties.getProperty("antiAliaising"));
 			loadingSpeed = Double.parseDouble(properties.getProperty("loadingSpeed"));
+			masterVolume = Integer.parseInt(properties.getProperty("masterVolume"));
+			musicVolume = Integer.parseInt(properties.getProperty("musicVolume"));
+			soundVolume = Integer.parseInt(properties.getProperty("soundVolume"));
 		} catch (FileNotFoundException e) {
 			save();
 		} catch (IOException e) {e.printStackTrace();}

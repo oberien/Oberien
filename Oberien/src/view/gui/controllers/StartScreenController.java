@@ -32,6 +32,10 @@ public class StartScreenController implements ScreenController {
 		nifty.gotoScreen("gameSetup");
 	}
 	
+	public void settings() {
+		nifty.gotoScreen("settings");
+	}
+	
 	public void exit() {
 		System.exit(0);
 	}
