@@ -23,7 +23,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import controller.Options;
 import view.components.Panel;
 import view.data.StartData;
-import view.data.UIElements;
 import view.gui.event.MouseEvent;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyInputConsumer;
@@ -40,7 +39,6 @@ public class GameStarting extends BasicGameState {
 	private Font f;
 	private UnicodeFont uf;
 	private StartData sd;
-	private UIElements ui;
 	private Panel panel;
 
 	private int count = 0;
@@ -83,8 +81,6 @@ public class GameStarting extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
 		if (count == 0) {
-			Options.load();
-		} else if (count == 1) {
 			Nifty nifty = new Nifty(new BatchRenderDevice(LwjglBatchRenderBackendFactory.create()), new NullSoundDevice(), new InputSystem() {
 				public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
 					for (MouseEvent event : sd.getMouseEvents()) {
@@ -112,10 +108,9 @@ public class GameStarting extends BasicGameState {
 			}, new TimeProvider());
 			nifty.fromXml("res/xml/main.xml", "start");
 			nifty.addXml("res/xml/gamesetup.xml");
-//			nifty.setDebugOptionPanelColors(true);
+	//			nifty.setDebugOptionPanelColors(true);
 			sd.setNifty(nifty);
 		} else {
-			sd.setUI(ui);
 			sbg.getState(getID() + 1).init(gc, sbg);
 			sbg.enterState(getID() + 1);
 		}

@@ -12,13 +12,9 @@ import org.newdawn.slick.SlickException;
 
 public class Options {
 	/**
-	 * AppGameContainer the settings have to be applied to
+	 * AppGameContainer the settings are applied to
 	 */
 	private static AppGameContainer game;
-//	/**
-//	 * indicates wheather the map is buffered (faster, high RAM) or not (slower, low RAM)
-//	 */
-//	public static boolean bufferMap = false;
 	/**
 	 * indicates whether vertical synchronisation is activated
 	 */
@@ -62,7 +58,7 @@ public class Options {
 			throw new IllegalStateException("AppGameContainer in Options not initialized. Please use Options.init(AppGameContainer) first.");
 		}
 		//TODO: add width/height option
-//		game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), true);
+		game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), true);
 		if (Options.screenMode == 0) {
 			game.setFullscreen(true);
 		} else if (Options.screenMode == 1) {
@@ -84,16 +80,16 @@ public class Options {
 		try {
 			File f = new File("cfg/settings.properties");
 			if (!f.exists()) {
-				f.mkdirs();
+				new File("cfg").mkdirs();
 				f.createNewFile();
 			}
 			Properties properties = new Properties();
-//			properties.setProperty("bufferMap", bufferMap + "");
 			properties.setProperty("vsync", vsync + "");
 			properties.setProperty("screenMode", screenMode + "");
 			properties.setProperty("onlyUpdateWhenVisible", onlyUpdateWhenVisible + "");
 			properties.setProperty("antiAliasing", antiAliasing + "");
 			properties.setProperty("loadingSpeed", loadingSpeed + "");
+			properties.setProperty("fps", fps + "");
 			properties.setProperty("masterVolume", masterVolume + "");
 			properties.setProperty("musicVolume", musicVolume + "");
 			properties.setProperty("soundVolume", soundVolume + "");
@@ -107,12 +103,12 @@ public class Options {
 		try {
 			Properties properties = new Properties();
 			properties.load(new FileInputStream("cfg/bounds.properties"));
-//			bufferMap = Boolean.parseBoolean(properties.getProperty("bufferMap"));
 			vsync = Boolean.parseBoolean(properties.getProperty("vsync"));
 			screenMode = Integer.parseInt(properties.getProperty("screenMode"));
 			onlyUpdateWhenVisible = Boolean.parseBoolean(properties.getProperty("onlyUpdateWhenVisible"));
 			antiAliasing = Boolean.parseBoolean(properties.getProperty("antiAliaising"));
 			loadingSpeed = Double.parseDouble(properties.getProperty("loadingSpeed"));
+			fps = Integer.parseInt(properties.getProperty("fps"));
 			masterVolume = Integer.parseInt(properties.getProperty("masterVolume"));
 			musicVolume = Integer.parseInt(properties.getProperty("musicVolume"));
 			soundVolume = Integer.parseInt(properties.getProperty("soundVolume"));

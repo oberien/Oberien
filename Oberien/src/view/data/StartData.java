@@ -33,7 +33,6 @@ public class StartData {
 	private UnitRenderer ur;
 	private DamageRenderer dr;
 	private Font font;
-	private UIElements ui;
 	private GridRenderer gr;
 	
 	private Nifty nifty;
@@ -151,14 +150,6 @@ public class StartData {
 
 	public void setAgr(ActionGroundRenderer agr) {
 		this.agr = agr;
-	}
-	
-	public UIElements getUI() {
-		return ui;
-	}
-	
-	public void setUI(UIElements ui) {
-		this.ui = ui;
 	}
 
 	public List<MouseEvent> getMouseEvents() {

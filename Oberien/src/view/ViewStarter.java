@@ -22,6 +22,8 @@ public class ViewStarter {
 		Logger.getLogger("de.lessvoid").setLevel(Level.WARNING);
 		game = new AppGameContainer(new View());
 		Options.initOptions(game);
+		Options.load();
+		Options.applySettings();
 		game.start();
 	}
 	
