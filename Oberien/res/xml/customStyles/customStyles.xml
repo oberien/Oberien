@@ -3,5 +3,8 @@
 	<useStyles filename="res/xml/customStyles/customButtonStyle.xml" />
 	<useStyles filename="res/xml/customStyles/customButtonRedStyle.xml" />
 	<useStyles filename="res/xml/customStyles/customButtonRedThinBorderStyle.xml" />
+	<useStyles filename="res/xml/customStyles/customButtonGreenStyle.xml" />
 	<useStyles filename="res/xml/customStyles/customTextFieldStyle.xml" />
+	<useStyles filename="res/xml/customStyles/customScrollPanelStyle.xml" />
+	<useStyles filename="res/xml/customStyles/customScrollBarStyle.xml" />
 </nifty-styles>

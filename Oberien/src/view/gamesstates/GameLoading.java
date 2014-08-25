@@ -126,7 +126,7 @@ public class GameLoading extends BasicGameState {
 			currentPart++;
 		} else if (currentPart == 1) {
 			boolean nextPart = false;
-			int j = counter + (int) Math.ceil(units.length * units[0].length * Options.loadingSpeed);
+			int j = counter + (int) Math.ceil(units.length * units[0].length * Options.getLoadingSpeed());
 			for (int x = counter; x < j; x++) {
 				int i = counter / 4;
 				int d = counter % 4;

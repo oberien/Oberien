@@ -14,7 +14,6 @@ import view.data.StartData;
 import view.gamesstates.GameLoading;
 import view.gamesstates.GameRunning;
 import view.gamesstates.GameStarting;
-import view.gamesstates.Menu;
 import view.gamesstates.NiftyMenu;
 import view.gamesstates.StartPositionChooser;
 import view.gui.event.MouseEvent;
@@ -25,6 +24,27 @@ import de.lessvoid.nifty.renderer.lwjgl.input.LwjglKeyboardInputEventCreator;
 public class View extends StateBasedGame {
 	private StartData sd;
 	private LwjglKeyboardInputEventCreator inputEventCreator = new LwjglKeyboardInputEventCreator();
+//	private boolean forwardToNifty;
+	/**
+	 * mouse x.
+	 */
+	private int mouseX;
+
+	/**
+	 * mouse y.
+	 */
+	private int mouseY;
+	
+	/**
+	 * mouse button
+	 */
+	private int mouseButton;
+	
+	/**
+	 * mouse down.
+	 */
+	private boolean mouseDown;
+	
 
 	public View() {
 		super("Oberien");
@@ -37,52 +57,31 @@ public class View extends StateBasedGame {
 		sd.setKeyEvents(new ArrayList<KeyboardInputEvent>());
 		
 		this.addState(new GameStarting(sd));
-		if (Options.nifty) {
-			this.addState(new NiftyMenu(sd));
-		} else {
-			this.addState(new Menu(sd));
-		}
+		this.addState(new NiftyMenu(sd));
 		this.addState(new GameLoading(sd));
 		this.addState(new StartPositionChooser(sd));
 		this.addState(new GameRunning(sd));
 	}
-
-	/**
-	 * mouse x.
-	 */
-	protected int mouseX;
-
-	/**
-	 * mouse y.
-	 */
-	protected int mouseY;
-
-	/**
-	 * mouse down.
-	 */
-	protected boolean mouseDown;
-
+	
 	/**
 	 * 
 	 * @param mouseX
 	 * @param mouseY
 	 * @param mouseDown
 	 */
-	private void forwardMouseEventToNifty(final int mouseX, final int mouseY,
-			final boolean mouseDown) {
-		// FIXME: add support for more mouse buttons (this assumes left mouse
-		// button click currently)
-		sd.getMouseEvents().add(new MouseEvent(mouseX, mouseY, mouseDown, 0));
+	private void forwardMouseEventToNifty(final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final boolean mouseDown) {
+//		if (forwardToNifty) {
+			sd.getMouseEvents().add(new MouseEvent(mouseX, mouseY, mouseWheel, mouseButton, mouseDown));
+//		}
 	}
-
+	
 	/**
 	 * @see org.newdawn.slick.InputListener#mouseMoved(int, int, int, int)
 	 */
-	public void mouseMoved(final int oldx, final int oldy, final int newx,
-			final int newy) {
+	public void mouseMoved(final int oldx, final int oldy, final int newx, final int newy) {
 		mouseX = newx;
 		mouseY = newy;
-		forwardMouseEventToNifty(mouseX, mouseY, mouseDown);
+		forwardMouseEventToNifty(mouseX, mouseY, 0, mouseButton, mouseDown);
 	}
 
 	/**
@@ -91,8 +90,9 @@ public class View extends StateBasedGame {
 	public void mousePressed(final int button, final int x, final int y) {
 		mouseX = x;
 		mouseY = y;
+		mouseButton = button;
 		mouseDown = true;
-		forwardMouseEventToNifty(mouseX, mouseY, mouseDown);
+		forwardMouseEventToNifty(mouseX, mouseY, 0, mouseButton, mouseDown);
 	}
 
 	/**
@@ -101,8 +101,9 @@ public class View extends StateBasedGame {
 	public void mouseReleased(final int button, final int x, final int y) {
 		mouseX = x;
 		mouseY = y;
+		mouseButton = button;
 		mouseDown = false;
-		forwardMouseEventToNifty(mouseX, mouseY, mouseDown);
+		forwardMouseEventToNifty(mouseX, mouseY, 0, button, mouseDown);
 	}
 
 	/**
@@ -118,5 +119,9 @@ public class View extends StateBasedGame {
 	public void keyReleased(final int key, final char c) {
 		sd.getKeyEvents().add(inputEventCreator.createEvent(key, c, false));
 	}
-
+	
+	@Override
+	public void mouseWheelMoved(int newValue) {
+		forwardMouseEventToNifty(mouseX, mouseY, newValue, 0, mouseDown);
+	}
 }

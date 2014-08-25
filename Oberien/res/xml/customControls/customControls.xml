@@ -2,4 +2,5 @@
 <nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
 	<useControls filename="res/xml/customControls/buttonRed.xml" />
 	<useControls filename="res/xml/customControls/buttonRedThinBorder.xml" />
+	<useControls filename="res/xml/customControls/buttonGreen.xml" />
 </nifty-controls>

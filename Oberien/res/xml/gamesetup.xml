@@ -16,30 +16,34 @@
 				<panel id="playerLabelPanel" width="100%" height="12%" childLayout="center">
 					<text id="playerLabel" wrap="false" font="res/fonts/128/raven.fnt" color="#f00f" text="Players"/>
 				</panel>
-				<panel id="player0Panel" align="left" valign="top" childLayout="horizontal" width="100%">
-					<panel id="player0LabelPanel" align="left" valign="center" childLayout="center" width="10%">
-						<text id="player0Label" wrap="false" font="res/fonts/32/raven.fnt" color="#ffff" text="Player:" align="left" valign="center"/>
+				<control id="playerScrollPanel" name="scrollPanel" horizontal="false" align="left" valign="top" padding="5px" style="">
+					<panel id="playerScrollPanelPanel" align="left" valign="top" childLayout="vertical" padding="5px" width="100%">
+						<panel id="player0Panel" align="left" valign="top" childLayout="horizontal" width="100%">
+							<panel id="player0LabelPanel" align="left" valign="center" childLayout="center" width="10%">
+								<text id="player0Label" wrap="false" font="res/fonts/32/raven.fnt" color="#ffff" text="Player:" align="left" valign="center"/>
+							</panel>
+							<control id="player0TextField" name="textfield" text="${ENV.USERNAME}" valign="center" width="55%"/>
+							<panel id="color0" backgroundColor="#f00f" valign="center" width="5%" height="36px">
+								<effect>
+									<onActive name="border" color="#111f" post="true" inset="1px" />
+									<onActive name="border" color="#222f" post="true" inset="2px" />
+									<onActive name="border" color="#333f" post="true" inset="3px" />
+									<onActive name="border" color="#444f" post="true" inset="4px" />
+									<onActive name="border" color="#555f" post="true" inset="5px" />
+									<onHover name="border" color="#000f" post="true" />
+								</effect>
+								<interact onClick="changeColor(color0)"/>
+							</panel>
+							<control id="team0" name="button" label="Team 1" valign="center" width="15%">
+								<interact onClick="changeTeam(team0)"/>
+								<interact onClickRepeat="changeTeam(team0)"/>
+							</control>
+							<control id="remove0" name="buttonRedThinBorder" label="Remove" valign="center" width="15%">
+								<interact onClick="remove(player0Panel)"/>
+							</control>
+						</panel>
 					</panel>
-					<control id="player0TextField" name="textfield" text="${ENV.USERNAME}" valign="center" width="55%"/>
-					<panel id="color0" backgroundColor="#f00f" valign="center" width="5%" height="36px">
-						<effect>
-							<onActive name="border" color="#111f" post="true" inset="1px" />
-							<onActive name="border" color="#222f" post="true" inset="2px" />
-							<onActive name="border" color="#333f" post="true" inset="3px" />
-							<onActive name="border" color="#444f" post="true" inset="4px" />
-							<onActive name="border" color="#555f" post="true" inset="5px" />
-							<onHover name="border" color="#000f" post="true" />
-						</effect>
-						<interact onClick="changeColor(color0)"/>
-					</panel>
-					<control id="team0" name="button" label="Team 1" valign="center" width="15%">
-						<interact onClick="changeTeam(team0)"/>
-						<interact onClickRepeat="changeTeam(team0)"/>
-					</control>
-					<control id="remove0" name="buttonRedThinBorder" label="Remove" valign="center" width="15%">
-						<interact onClick="remove(player0Panel)"/>
-					</control>
-				</panel>
+				</control>
 				<panel id="addButtons" align="left" valign="top" childLayout="horizontal" width="100%" height="5%">
 					<panel id="fillPanelButtons" valign="bottom" width="10%" />
 					<control id="addPlayer" name="button" label="Add new Player" valign="bottom" width="45%">
@@ -63,16 +67,26 @@
 					<text id="mapNameLabel" wrap="false" font="res/fonts/64/raven.fnt" color="#000f" text="Tera Rising" />
 				</panel>
 				<panel id="map" childLayout="center" width="100%" height="53%">
-					<image filename="res/imgs/maps/Tera Rising.png" width="90%" height="90%">
-						
+					<image id="mapImage" filename="res/imgs/maps/Tera Rising.png" width="90%" height="90%">
+						<interact onClick="chooseMap()"/>
 					</image>
 				</panel>
+				<control id="chooseMap" name="button" label="Choose Map" align="center" width="90%">
+					<interact onClick="chooseMap()"/>
+				</control>
 			</panel>
 		</layer>
 		<layer id="returnLayer" childLayout="horizontal">
 			<panel id="returnPanel" childLayout="center" width="100%" height="100%">
 				<control id="returnButton" name="buttonRed" label="Main Menu" align="right" valign="top" width="10%" height="5%">
 					<interact onClick="mainMenu()"/>
+				</control>
+			</panel>
+		</layer>
+		<layer id="startGameLayer" childLayout="horizontal">
+			<panel id="startGamePanel" childLayout="center" width="100%" height="100%" padding="20px">
+				<control id="startGameButton" name="buttonGreen" label="Start Game" align="right" valign="bottom" width="20%" height="10%">
+					<interact onClick="startGame()"/>
 				</control>
 			</panel>
 		</layer>

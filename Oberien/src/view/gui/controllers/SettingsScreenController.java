@@ -25,7 +25,7 @@ public class SettingsScreenController implements ScreenController {
 	private Screen screen;
 	private SliderControl masterControl, musicControl, soundControl;
 	private Element masterLabel, musicLabel, soundLabel;
-	private DropDown screenModeDropDown;
+	private DropDown<Element> screenModeDropDown;
 
 	@Override
 	public void bind(final Nifty nifty, final Screen screen) {

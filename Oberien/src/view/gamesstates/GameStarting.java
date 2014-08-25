@@ -20,6 +20,7 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import controller.Options;
 import view.components.Panel;
 import view.data.StartData;
 import view.data.UIElements;
@@ -69,10 +70,7 @@ public class GameStarting extends BasicGameState {
 		uf.addAsciiGlyphs();
 		uf.loadGlyphs();
 
-		ui = new UIElements();
-		ui.loadLogo();
-
-		Image logo = ui.getLogo();
+		Image logo = new Image("res/imgs/ui/logo.png");
 		panel = new Panel(0, 0, gc.getWidth(), gc.getHeight());
 		panel.setBackgroundImage(logo, gc.getWidth() / 2 - logo.getWidth() / 2, gc.getHeight() / 2 - logo.getHeight() / 2);
 	}
@@ -85,24 +83,8 @@ public class GameStarting extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
 		if (count == 0) {
-			ui.loadBackground();
+			Options.load();
 		} else if (count == 1) {
-			ui.loadExit();
-		} else if (count == 2) {
-			ui.loadSettings();
-		} else if (count == 3) {
-			ui.loadStartGame();
-		} else if (count == 4) {
-			ui.loadButton();
-		} else if (count == 5) {
-//			LwjglInputSystem inSys = new LwjglInputSystem();
-//			SlickInputSystem inputSys = new PlainSlickInputSystem();
-//			inputSys.setInput(gc.getInput());
-//			try {
-//				inSys.startup();
-//			} catch (Exception ex) {
-//				ex.printStackTrace();
-//			}
 			Nifty nifty = new Nifty(new BatchRenderDevice(LwjglBatchRenderBackendFactory.create()), new NullSoundDevice(), new InputSystem() {
 				public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
 					for (MouseEvent event : sd.getMouseEvents()) {
@@ -130,6 +112,7 @@ public class GameStarting extends BasicGameState {
 			}, new TimeProvider());
 			nifty.fromXml("res/xml/main.xml", "start");
 			nifty.addXml("res/xml/gamesetup.xml");
+//			nifty.setDebugOptionPanelColors(true);
 			sd.setNifty(nifty);
 		} else {
 			sd.setUI(ui);

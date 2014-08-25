@@ -225,8 +225,6 @@ public class MyNiftySlickGame extends StateBasedGame {
 	 */
 	private void forwardMouseEventToNifty(final int mouseX, final int mouseY,
 			final boolean mouseDown) {
-		// FIXME: add support for more mouse buttons (this assumes left mouse
-		// button click currently)
 		mouseEvents.add(new MouseEvent(mouseX, mouseY, mouseDown, 0));
 	}
 

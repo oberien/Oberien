@@ -63,6 +63,7 @@ public class StartPositionChooser extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		if (MapList.getInstance().getCurrentMap() != null) {
+			Options.applySettings();
 			controller = sd.getController();
 			state = sd.getState();
 			mr = sd.getMr();
@@ -80,7 +81,7 @@ public class StartPositionChooser extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.setAntiAlias(Options.antiAliasing);
+		g.setAntiAlias(Options.isAntiAliasing());
 		g.resetTransform();
 		g.translate(-camX * scale, -camY * scale);
 		g.scale(scale, scale);
@@ -176,7 +177,7 @@ public class StartPositionChooser extends BasicGameState {
 
 	@Override
 	public void keyPressed(int key, char c) {
-//		System.out.println("Pressed: " + key + " " + c);
+		System.out.println("Pressed: " + key + " " + c);
 		if (c == '+') {
 			scaleUp = true;
 		}
@@ -199,6 +200,7 @@ public class StartPositionChooser extends BasicGameState {
 
 	@Override
 	public void keyReleased(int key, char c) {
+		System.out.println("Released: " + key + " " + c);
 		if (c == '+') {
 			scaleUp = false;
 		}
@@ -224,6 +226,7 @@ public class StartPositionChooser extends BasicGameState {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		System.out.println("mouse moved from " + oldx + ":" + oldy + " to " + newx + ":" + newy);
 		mouseX = newx;
 		mouseY = newy;
 		if (newx < 3) {

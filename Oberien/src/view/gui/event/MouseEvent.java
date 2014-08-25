@@ -9,12 +9,12 @@ public class MouseEvent {
 	private int button;
 	private boolean buttonDown;
 	
-	public MouseEvent(final int mouseX, final int mouseY, final boolean mouseDown, final int mouseButton) {
+	public MouseEvent(final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final boolean mouseDown) {
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 		this.buttonDown = mouseDown;
 		this.button = mouseButton;
-		this.mouseWheel = 0;
+		this.mouseWheel = mouseWheel;
 	}
 	
 	public void processMouseEvents(final NiftyInputConsumer inputEventConsumer) {
