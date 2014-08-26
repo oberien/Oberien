@@ -1,5 +1,6 @@
 package controller;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.lwjgl.util.Dimension;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
@@ -19,16 +21,24 @@ public class Options {
 	 * indicates whether vertical synchronisation is activated
 	 */
 	private static boolean vsync = true;
+	private static boolean vsyncChanged = false;
 	/**
 	 * 0 = fullscreen <br>
 	 * 1 = windowed <br>
 	 * 2 = borderless <br>
 	 */
-	private static int screenMode = 1;
+	private static int screenMode = 0;
+	private static boolean screenModeChanged = false;
+	/**
+	 * width and height of the game
+	 */
+	private static Dimension resolution;
+	private static boolean resolutionChanged = false;
 	/**
 	 * indicates wheather the game is only rendered when it is visible or not
 	 */
 	private static boolean onlyUpdateWhenVisible = true;
+	private static boolean onlyUpdateWhenVisibleChanged = false;
 	/**
 	 * indicates wheather anti aliasing is enabled or not
 	 */
@@ -40,9 +50,15 @@ public class Options {
 	private static double loadingSpeed = 0.01;
 	/**
 	 * indicates the number of frames per second to be displayed<br>
-	 * -1 = max FPS
+	 * <= 0 => max FPS
 	 */
-	private static int fps = -1;
+	private static int fps = 0;
+	private static boolean fpsChanged = false;
+	/**
+	 * indicates whether to show the fps in the top left corner or not
+	 */
+	private static boolean showFps = true;
+	private static boolean showFpsChanged = false;
 	
 	/**
 	 * Volume of music and sound, and the overall volume. Not implemented yet. 
@@ -51,29 +67,44 @@ public class Options {
 	
 	public static void initOptions(AppGameContainer agc) {
 		game = agc;
+		resolution = new Dimension(game.getScreenWidth(), game.getScreenHeight());
 	}
 	
-	public static void applySettings() throws SlickException {
+	public static void applySettings() throws SlickException, IllegalStateException {
 		if (game == null) {
 			throw new IllegalStateException("AppGameContainer in Options not initialized. Please use Options.init(AppGameContainer) first.");
 		}
-		//TODO: add width/height option
-		game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), true);
-		if (Options.screenMode == 0) {
-			game.setFullscreen(true);
-		} else if (Options.screenMode == 1) {
-			game.setFullscreen(false);
-			if (Options.screenMode == 2) {
-				System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+		if (resolutionChanged) {
+			game.setDisplayMode(resolution.getWidth(), resolution.getHeight(), screenMode == 0);
+			resolutionChanged = false;
+		}
+		if (resolutionChanged || screenModeChanged) {
+			if (Options.screenMode == 0) {
+				game.setFullscreen(true);
+			} else if (Options.screenMode == 1) {
+				game.setFullscreen(false);
+				if (Options.screenMode == 2) {
+					System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+				}
 			}
+			screenModeChanged = false;
 		}
-		game.setVSync(Options.vsync);
-		game.setUpdateOnlyWhenVisible(Options.onlyUpdateWhenVisible);
-		if (Options.fps != -1) {
+		if (vsyncChanged) {
+			game.setVSync(vsync);
+			vsyncChanged = false;
+		}
+		if (onlyUpdateWhenVisibleChanged) {
+			game.setUpdateOnlyWhenVisible(Options.onlyUpdateWhenVisible);
+			onlyUpdateWhenVisibleChanged = false;
+		}
+		if (fpsChanged) {
 			game.setTargetFrameRate(Options.fps);
+			fpsChanged = false;
 		}
-		//TODO: add option for showing fps
-		game.setShowFPS(true);
+		if (showFpsChanged) {
+			game.setShowFPS(showFps);
+			showFpsChanged = false;
+		}
 	}
 	
 	public static void save() {
@@ -86,10 +117,12 @@ public class Options {
 			Properties properties = new Properties();
 			properties.setProperty("vsync", vsync + "");
 			properties.setProperty("screenMode", screenMode + "");
+			properties.setProperty("resolution", resolution.getWidth() + ":" + resolution.getHeight());
 			properties.setProperty("onlyUpdateWhenVisible", onlyUpdateWhenVisible + "");
 			properties.setProperty("antiAliasing", antiAliasing + "");
 			properties.setProperty("loadingSpeed", loadingSpeed + "");
 			properties.setProperty("fps", fps + "");
+			properties.setProperty("showFps", showFps + "");
 			properties.setProperty("masterVolume", masterVolume + "");
 			properties.setProperty("musicVolume", musicVolume + "");
 			properties.setProperty("soundVolume", soundVolume + "");
@@ -100,18 +133,30 @@ public class Options {
 	}
 	
 	public static void load() {
+		if (game == null) {
+			throw new IllegalStateException("AppGameContainer in Options not initialized. Please use Options.init(AppGameContainer) first.");
+		}
 		try {
 			Properties properties = new Properties();
-			properties.load(new FileInputStream("cfg/bounds.properties"));
-			vsync = Boolean.parseBoolean(properties.getProperty("vsync"));
-			screenMode = Integer.parseInt(properties.getProperty("screenMode"));
-			onlyUpdateWhenVisible = Boolean.parseBoolean(properties.getProperty("onlyUpdateWhenVisible"));
-			antiAliasing = Boolean.parseBoolean(properties.getProperty("antiAliaising"));
-			loadingSpeed = Double.parseDouble(properties.getProperty("loadingSpeed"));
-			fps = Integer.parseInt(properties.getProperty("fps"));
-			masterVolume = Integer.parseInt(properties.getProperty("masterVolume"));
-			musicVolume = Integer.parseInt(properties.getProperty("musicVolume"));
-			soundVolume = Integer.parseInt(properties.getProperty("soundVolume"));
+			properties.load(new FileInputStream("cfg/settings.properties"));
+			vsync = Boolean.parseBoolean(properties.getProperty("vsync", "true"));
+			screenMode = Integer.parseInt(properties.getProperty("screenMode", "0"));
+			String[] res = properties.getProperty("resolution", game.getScreenWidth() + ":" + game.getScreenHeight()).split(":");
+			resolution = new Dimension(Integer.parseInt(res[0]), Integer.parseInt(res[1]));
+			onlyUpdateWhenVisible = Boolean.parseBoolean(properties.getProperty("onlyUpdateWhenVisible", "true"));
+			antiAliasing = Boolean.parseBoolean(properties.getProperty("antiAliaising", "false"));
+			loadingSpeed = Double.parseDouble(properties.getProperty("loadingSpeed", "0.01"));
+			fps = Integer.parseInt(properties.getProperty("fps", "0"));
+			showFps = Boolean.parseBoolean(properties.getProperty("showFps", "true"));
+			masterVolume = Integer.parseInt(properties.getProperty("masterVolume", "100"));
+			musicVolume = Integer.parseInt(properties.getProperty("musicVolume", "100"));
+			soundVolume = Integer.parseInt(properties.getProperty("soundVolume", "100"));
+			vsyncChanged = true;
+			screenModeChanged = true;
+			resolutionChanged = true;
+			onlyUpdateWhenVisible = true;
+			fpsChanged = true;
+			showFpsChanged = true;
 		} catch (FileNotFoundException e) {
 			save();
 		} catch (IOException e) {e.printStackTrace();}
@@ -122,7 +167,12 @@ public class Options {
 	}
 
 	public static void setVsync(boolean vsync) {
-		Options.vsync = vsync;
+		if (Options.vsync == vsync) {
+			return;
+		} else {
+			Options.vsync = vsync;
+			Options.vsyncChanged = true;
+		}
 	}
 
 	public static int getScreenMode() {
@@ -130,7 +180,12 @@ public class Options {
 	}
 
 	public static void setScreenMode(int screenMode) {
-		Options.screenMode = screenMode;
+		if (Options.screenMode == screenMode) {
+			return;
+		} else {
+			Options.screenMode = screenMode;
+			screenModeChanged = true;
+		}
 	}
 
 	public static boolean isOnlyUpdateWhenVisible() {
@@ -138,7 +193,12 @@ public class Options {
 	}
 
 	public static void setOnlyUpdateWhenVisible(boolean onlyUpdateWhenVisible) {
-		Options.onlyUpdateWhenVisible = onlyUpdateWhenVisible;
+		if (Options.onlyUpdateWhenVisible == onlyUpdateWhenVisible) {
+			return;
+		} else {
+			Options.onlyUpdateWhenVisible = onlyUpdateWhenVisible;
+			onlyUpdateWhenVisibleChanged = true;
+		}
 	}
 
 	public static boolean isAntiAliasing() {
@@ -146,7 +206,11 @@ public class Options {
 	}
 
 	public static void setAntiAliasing(boolean antiAliasing) {
-		Options.antiAliasing = antiAliasing;
+		if (Options.antiAliasing == antiAliasing) {
+			return;
+		} else {
+			Options.antiAliasing = antiAliasing;
+		}
 	}
 
 	public static double getLoadingSpeed() {
@@ -154,7 +218,11 @@ public class Options {
 	}
 
 	public static void setLoadingSpeed(double loadingSpeed) {
-		Options.loadingSpeed = loadingSpeed;
+		if (Options.loadingSpeed == loadingSpeed) {
+			return;
+		} else {
+			Options.loadingSpeed = loadingSpeed;
+		}
 	}
 
 	public static int getFps() {
@@ -162,7 +230,12 @@ public class Options {
 	}
 
 	public static void setFps(int fps) {
-		Options.fps = fps;
+		if (Options.fps == fps) {
+			return;
+		} else {
+			Options.fps = fps;
+			fpsChanged = false;
+		}
 	}
 
 	public static int getMasterVolume() {
@@ -170,7 +243,11 @@ public class Options {
 	}
 
 	public static void setMasterVolume(int masterVolume) {
-		Options.masterVolume = masterVolume;
+		if (Options.masterVolume == masterVolume) {
+			return;
+		} else {
+			Options.masterVolume = masterVolume;
+		}
 	}
 
 	public static int getMusicVolume() {
@@ -178,7 +255,11 @@ public class Options {
 	}
 
 	public static void setMusicVolume(int musicVolume) {
-		Options.musicVolume = musicVolume;
+		if (Options.musicVolume == musicVolume) {
+			return;
+		} else {
+			Options.musicVolume = musicVolume;
+		}
 	}
 
 	public static int getSoundVolume() {
@@ -186,10 +267,36 @@ public class Options {
 	}
 
 	public static void setSoundVolume(int soundVolume) {
-		Options.soundVolume = soundVolume;
+		if (Options.soundVolume == soundVolume) {
+			return;
+		} else {
+			Options.soundVolume = soundVolume;
+		}
 	}
 
-	public static void setGame(AppGameContainer game) {
-		Options.game = game;
+	public static boolean isShowFps() {
+		return showFps;
+	}
+
+	public static void setShowFps(boolean showFps) {
+		if (Options.showFps == showFps) {
+			return;
+		} else {
+			Options.showFps = showFps;
+			showFpsChanged = true;
+		}
+	}
+
+	public static Dimension getResolution() {
+		return resolution;
+	}
+
+	public static void setResolution(Dimension resolution) {
+		if (Options.resolution.equals(resolution)) {
+			return;
+		} else {
+			Options.resolution = resolution;
+			resolutionChanged = true;
+		}
 	}
 }
