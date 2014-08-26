@@ -10,7 +10,7 @@
 		<layer id="background" childLayout="vertical">
 			<image filename="res/imgs/ui/bg02.png"/>
 		</layer>
-		<layer id="foreground" childLayout="vertical" height="100%">
+		<layer id="foreground" childLayout="vertical">
 			<panel id="oberienPanel" align="center" valign="center" childLayout="center" height="20%">
 				<text id="oberien" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#fff" text="Oberien" width="100%" height="20%"/>
 			</panel>
@@ -26,7 +26,7 @@
 			</panel>
 		</layer>
 		<layer id="exitLayer" childLayout="center">
-			<control id="exitButton" name="buttonRed" label="Exit" align="right" valign="top" width="5%" height="5%">
+			<control id="exitButton" name="buttonRed" label="Exit" align="right" valign="top">
 				<interact onClick="exit()"/>
 			</control>
 		</layer>
@@ -78,6 +78,16 @@
 					</panel>
 				</control>
 			</control>
+		</layer>
+		<layer id="returnLayer" childLayout="horizontal">
+			<panel id="returnPanel" childLayout="center" width="100%" height="100%">
+				<control id="returnButton" name="buttonRed" label="Main Menu" inset="10px,0px,0px,0px" align="right" valign="top" width="10%" height="5%"/>
+			</panel>
+		</layer>
+		<layer id="generalButtonLayer" childLayout="horizontal">
+			<panel id="generalButtonPanel" align="right" valign="bottom" childLayout="center" width="100%" height="100%">
+				<control id="applyButton" name="button" label="Apply" align="right" valign="bottom"/>
+			</panel>
 		</layer>
 	</screen>
 </nifty>

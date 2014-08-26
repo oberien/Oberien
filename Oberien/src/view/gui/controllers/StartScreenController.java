@@ -6,6 +6,7 @@
 
 package view.gui.controllers;
 
+import controller.Options;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -37,6 +38,8 @@ public class StartScreenController implements ScreenController {
 	}
 	
 	public void exit() {
+		Options.save();
+		//TODO: Add GameContainer.exit() instead of this
 		System.exit(0);
 	}
 }
