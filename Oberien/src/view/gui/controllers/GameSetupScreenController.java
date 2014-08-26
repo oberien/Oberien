@@ -333,7 +333,7 @@ public class GameSetupScreenController implements ScreenController {
 			java.awt.Color colorAwt = PlayerColors.get(i);
 			float[] f = colorAwt.getRGBComponents(null);
 			org.newdawn.slick.Color colorSlick = new org.newdawn.slick.Color(f[0], f[1], f[2], f[3]);
-			int team = Integer.parseInt(screen.findNiftyControl("team" + i, Button.class).getText().substring(5));
+			int team = Integer.parseInt(screen.findNiftyControl("team" + i, Button.class).getText().substring(5))-1;
 			players.add(new Player(name, colorSlick, team));
 		}
 		
