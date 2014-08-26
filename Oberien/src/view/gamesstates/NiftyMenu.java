@@ -36,7 +36,7 @@ public class NiftyMenu extends BasicGameState {
 
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		SlickCallable.enterSafeBlock();
-		nifty.render(false);
+		nifty.render(true);
 		SlickCallable.leaveSafeBlock();
 	}
 	

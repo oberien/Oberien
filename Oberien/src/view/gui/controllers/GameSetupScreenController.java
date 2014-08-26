@@ -242,7 +242,7 @@ public class GameSetupScreenController implements ScreenController {
 	public void resetPlayers() {
 		int removableChildren = playerScrollPanelPanel.getChildrenCount();
 		List<Element> children = playerScrollPanelPanel.getChildren();
-		for (int i = 1; i <= removableChildren; i++) {
+		for (int i = 0; i < removableChildren; i++) {
 			children.get(i).markForRemoval();
 		}
 		
