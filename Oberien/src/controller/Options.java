@@ -82,10 +82,13 @@ public class Options {
 			if (Options.screenMode == 0) {
 				game.setFullscreen(true);
 			} else if (Options.screenMode == 1) {
+				System.setProperty("org.lwjgl.opengl.Window.undecorated", "false");
+				game.setFullscreen(true);
 				game.setFullscreen(false);
-				if (Options.screenMode == 2) {
-					System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
-				}
+			} else if (Options.screenMode == 2) {
+				System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+				game.setFullscreen(true);
+				game.setFullscreen(false);
 			}
 			screenModeChanged = false;
 		}
