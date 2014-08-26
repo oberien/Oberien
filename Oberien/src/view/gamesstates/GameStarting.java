@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -30,6 +32,7 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;
+import de.lessvoid.nifty.slick2d.input.SlickSlickInputSystem;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
@@ -93,19 +96,21 @@ public class GameStarting extends BasicGameState {
 					}
 					sd.getKeyEvents().clear();
 				}
-				
+
+				@Override
 				public void setMousePosition(int x, int y) {
+					// TODO Auto-generated method stub
 					
 				}
-				
+
 				@Override
 				public void setResourceLoader(
 						NiftyResourceLoader niftyResourceLoader) {
 					// TODO Auto-generated method stub
 					
 				}
-				
 			}, new TimeProvider());
+//			Nifty nifty = new Nifty(new BatchRenderDevice(LwjglBatchRenderBackendFactory.create()), new NullSoundDevice(), new SlickSlickInputSystem(sbg), new TimeProvider());
 			nifty.fromXml("res/xml/main.xml", "start");
 			nifty.addXml("res/xml/gamesetup.xml");
 	//			nifty.setDebugOptionPanelColors(true);

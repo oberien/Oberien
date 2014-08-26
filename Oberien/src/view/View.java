@@ -79,6 +79,7 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#mouseMoved(int, int, int, int)
 	 */
 	public void mouseMoved(final int oldx, final int oldy, final int newx, final int newy) {
+		super.mouseMoved(oldx, oldy, newx, newy);
 		mouseX = newx;
 		mouseY = newy;
 		forwardMouseEventToNifty(mouseX, mouseY, 0, mouseButton, mouseDown);
@@ -88,6 +89,7 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#mousePressed(int, int, int)
 	 */
 	public void mousePressed(final int button, final int x, final int y) {
+		super.mousePressed(button, x, y);
 		mouseX = x;
 		mouseY = y;
 		mouseButton = button;
@@ -99,6 +101,7 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#mouseReleased(int, int, int)
 	 */
 	public void mouseReleased(final int button, final int x, final int y) {
+		super.mouseReleased(button, x, y);
 		mouseX = x;
 		mouseY = y;
 		mouseButton = button;
@@ -110,6 +113,7 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#keyPressed(int, char)
 	 */
 	public void keyPressed(final int key, final char c) {
+		super.keyPressed(key, c);
 		sd.getKeyEvents().add(inputEventCreator.createEvent(key, c, true));
 	}
 
@@ -117,11 +121,13 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#keyReleased(int, char)
 	 */
 	public void keyReleased(final int key, final char c) {
+		super.keyReleased(key, c);
 		sd.getKeyEvents().add(inputEventCreator.createEvent(key, c, false));
 	}
 	
 	@Override
 	public void mouseWheelMoved(int newValue) {
+		super.mouseWheelMoved(newValue);
 		forwardMouseEventToNifty(mouseX, mouseY, newValue, 0, mouseDown);
 	}
 }
