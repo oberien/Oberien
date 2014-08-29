@@ -6,6 +6,8 @@ public class PlayerColors {
 	private static Color[] col = new Color[]{
 		Color.BLUE,
 		Color.RED,
+		new Color(14, 69, 18),
+		new Color(153, 0, 204),
 		Color.GREEN,
 		Color.CYAN,
 		Color.MAGENTA,

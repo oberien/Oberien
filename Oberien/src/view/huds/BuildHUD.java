@@ -4,6 +4,7 @@
  */
 package view.huds;
 
+import logger.ErrorLogger;
 import model.BuildingModel;
 import model.Model;
 import model.ModelList;

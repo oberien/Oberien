@@ -14,6 +14,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import logger.ErrorLogger;
 import model.player.PlayerColors;
 
 public class MapIO {
@@ -48,7 +49,7 @@ public class MapIO {
 				JOptionPane.showMessageDialog(null, "Map \"" + name + "\" is an older version. Please convert it with the MapEditor." , "Old Map Version", JOptionPane.ERROR_MESSAGE);
 			}
 			dis.close();
-		} catch (IOException e) {e.printStackTrace();}
+		} catch (IOException e) {ErrorLogger.logger.severe(e.getMessage());}
 		return newMap;
 	}
 	
@@ -101,7 +102,7 @@ public class MapIO {
 				}
 			}
 			dos.close();
-		} catch (IOException e) {e.printStackTrace(); return false;}
+		} catch (IOException e) {ErrorLogger.logger.severe(e.getMessage()); return false;}
 		
 		//save map image
 		try {
@@ -129,7 +130,7 @@ public class MapIO {
 			}
 			ImageIO.write(bi, "png", new File("res/imgs/maps/" + map.getName() + ".png"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			ErrorLogger.logger.severe(e.getMessage());
 			return false;
 		}
 		

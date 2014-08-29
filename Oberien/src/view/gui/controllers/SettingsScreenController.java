@@ -8,6 +8,8 @@ package view.gui.controllers;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import logger.ErrorLogger;
+
 import org.lwjgl.util.Dimension;
 import org.newdawn.slick.SlickException;
 
@@ -146,8 +148,8 @@ public class SettingsScreenController implements ScreenController {
 	public void applyClicked(String id, ButtonClickedEvent ev) {
 		try {
 			Options.applySettings();
-		} catch (SlickException ex) {
-			Logger.getLogger(SettingsScreenController.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (SlickException e) {
+			ErrorLogger.logger.severe(e.getMessage());
 		}
 	}
 }

@@ -12,6 +12,10 @@ import java.util.logging.SimpleFormatter;
 public class GameLogger {
 	public static final Logger logger = Logger.getLogger(GameLogger.class.getName());
 	
+	{
+		init();
+	}
+	
 	public static void init() {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
@@ -27,7 +31,7 @@ public class GameLogger {
 			fh.setFormatter(new SimpleFormatter());
 			logger.addHandler(fh);
 			logger.setLevel(Level.ALL);
-		} catch (Exception e) {e.printStackTrace();}
+		} catch (Exception e) {ErrorLogger.logger.severe(e.getMessage());}
 	}
 	
 }

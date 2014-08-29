@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import logger.ErrorLogger;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -53,10 +55,10 @@ public class GameStarting extends BasicGameState {
 			f = Font.createFont(Font.TRUETYPE_FONT, new File("./res/fonts/digital_tech.ttf"));
 			sd.setFont(f);
 			f.deriveFont(Font.BOLD, 20);
-		} catch (FontFormatException ex) {
-			Logger.getLogger(GameStarting.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (FontFormatException e) {
+			ErrorLogger.logger.severe(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			ErrorLogger.logger.severe(e.getMessage());
 		}
 		uf = new UnicodeFont(f);
 		uf.getEffects().add(new ColorEffect(java.awt.Color.white));

@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import logger.ErrorLogger;
+
 import org.lwjgl.util.Dimension;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
@@ -131,7 +133,7 @@ public class Options {
 			properties.setProperty("soundVolume", soundVolume + "");
 			properties.store(new FileOutputStream("cfg/settings.properties"), null);
 		} catch (IOException e) {
-			e.printStackTrace();
+			ErrorLogger.logger.severe(e.getMessage());
 		}
 	}
 	
@@ -144,7 +146,7 @@ public class Options {
 			properties.load(new FileInputStream("cfg/settings.properties"));
 		} catch (FileNotFoundException e) {
 			save();
-		} catch (IOException e) {e.printStackTrace();}
+		} catch (IOException e) {ErrorLogger.logger.severe(e.getMessage());}
 			vsync = Boolean.parseBoolean(properties.getProperty("vsync", "true"));
 			screenMode = Integer.parseInt(properties.getProperty("screenMode", "0"));
 			String[] res = properties.getProperty("resolution", game.getScreenWidth() + "," + game.getScreenHeight()).split(",");

@@ -12,6 +12,10 @@ import java.util.logging.SimpleFormatter;
 public class ErrorLogger {
 	public static final Logger logger = Logger.getLogger(ErrorLogger.class.getName());
 	
+	{
+		init();
+	}
+	
 	public static void init() {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");

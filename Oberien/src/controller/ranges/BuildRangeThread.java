@@ -3,6 +3,7 @@ package controller.ranges;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import logger.ErrorLogger;
 import model.Layer;
 import model.map.Coordinate;
 import model.map.FieldList;
@@ -76,7 +77,7 @@ public class BuildRangeThread extends Thread {
 			synchronized (this) {
 				try {
 					this.wait();
-				} catch (InterruptedException e) {e.printStackTrace();}
+				} catch (InterruptedException e) {ErrorLogger.logger.severe(e.getMessage());}
 			}
 		}
 		

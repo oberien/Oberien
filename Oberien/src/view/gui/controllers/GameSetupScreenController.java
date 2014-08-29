@@ -3,6 +3,7 @@ package view.gui.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import logger.ErrorLogger;
 import model.map.MapList;
 import model.player.Player;
 import model.player.PlayerColors;
@@ -10,6 +11,7 @@ import view.gamesstates.NiftyMenu;
 import controller.Controller;
 import controller.wincondition.Conquest;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.HoverEffectBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -21,6 +23,9 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.scrollpanel.builder.ScrollPanelBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
+import de.lessvoid.nifty.effects.Effect;
+import de.lessvoid.nifty.effects.EffectEventId;
+import de.lessvoid.nifty.effects.impl.Border;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
@@ -179,7 +184,7 @@ public class GameSetupScreenController implements ScreenController {
 	public void addPlayerComponents(final String label, final String textFieldID, final String textFieldText, final String team) {
 		final int index = playerScrollPanelPanel.getChildrenCount();
 		final String panelName = "player" + id + "Panel";
-		new PanelBuilder(panelName){{
+		new PanelBuilder(panelName) {{
 			alignLeft();
 			valignTop();
 			childLayoutHorizontal();
@@ -200,20 +205,45 @@ public class GameSetupScreenController implements ScreenController {
 				}});
 			}});
 			
-			control(new TextFieldBuilder(textFieldID, textFieldText){{
+			control(new TextFieldBuilder(textFieldID, textFieldText) {{
 				valignCenter();
 				width("55%");
 			}});
 			panel(new PanelBuilder("color" + id) {{
 				backgroundColor("#f00f");
+				valignCenter();
+				width("5%");
+				height("36px");
+				onActiveEffect(new EffectBuilder("border") {{
+					effectParameter("color", "#111f");
+					effectParameter("inset", "1px");
+					post(true);
+				}});
+				onActiveEffect(new EffectBuilder("border") {{
+					effectParameter("color", "#222f");
+					effectParameter("inset", "2px");
+					post(true);
+				}});
+				onActiveEffect(new EffectBuilder("border") {{
+					effectParameter("color", "#333f");
+					effectParameter("inset", "3px");
+					post(true);
+				}});
+				onActiveEffect(new EffectBuilder("border") {{
+					effectParameter("color", "#444f");
+					effectParameter("inset", "4px");
+					post(true);
+				}});
+				onActiveEffect(new EffectBuilder("border") {{
+					effectParameter("color", "#555f");
+					effectParameter("inset", "5px");
+					post(true);
+				}});
 				onHoverEffect(new HoverEffectBuilder("border") {{
-					effectParameter("color", "#822");
+					effectParameter("color", "#000f");
 					post(true);
 				}});
 				interactOnClick("changeColor(" + getId() + ")");
-				valignCenter();
-				height("32px");
-				width("5%");
 			}});
 			control(new ButtonBuilder("team" + id) {{
 				label("Team " + team);
@@ -245,7 +275,7 @@ public class GameSetupScreenController implements ScreenController {
 				
 				try {
 					Thread.sleep(100);
-				} catch (InterruptedException e) {e.printStackTrace();}
+				} catch (InterruptedException e) {ErrorLogger.logger.severe(e.getMessage());}
 				
 				id = 0;
 				addPlayerComponents("Player:", "player0TextField", System.getenv("USERNAME"), "1");
@@ -267,21 +297,13 @@ public class GameSetupScreenController implements ScreenController {
 	
 	public void changeColor(String id) {
 		Element e = screen.findElementById(id);
-		Attributes att = e.getElementType().getAttributes();
-		Color colorNifty = new Color(att.get("backgroundColor"));
+		PanelRenderer pr = e.getRenderer(PanelRenderer.class);
+		Color colorNifty = pr.getBackgroundColor();
 		java.awt.Color colorAwt = new java.awt.Color(colorNifty.getRed(), colorNifty.getGreen(), colorNifty.getBlue(), colorNifty.getAlpha());
 		colorAwt = PlayerColors.getNext(colorAwt);
 		float[] f = colorAwt.getRGBComponents(null);
 		colorNifty = new Color(f[0], f[1], f[2], f[3]);
-		att.set("backgroundColor", colorNifty.getColorString());
-		Screen currentScreen = nifty.getCurrentScreen();
-		att = e.getElementType().getAttributes();
-		e.initializeFromAttributes(currentScreen, att, nifty.getRenderEngine());
-		currentScreen.layoutLayers();
-		
-		
-//		java.awt.Color col = PlayerColors.get(3);
-//		e.getRenderer(PanelRenderer.class).setBackgroundColor(new Color((float)col.getRed(), (float)col.getGreen(), (float)col.getBlue(), (float)col.getAlpha()));
+		pr.setBackgroundColor(colorNifty);
 	}
 	
 	public void remove(String id) {
@@ -333,11 +355,8 @@ public class GameSetupScreenController implements ScreenController {
 				System.err.println("AI not implemented yet. " + name + " excluded from Players.");
 				continue;
 			}
-			//TODO: get the color from PanelRenderer after void256 merged pull-request #273 into 1.4.1-SNAPSHOT
-			
-			java.awt.Color colorAwt = PlayerColors.get(i);
-			float[] f = colorAwt.getRGBComponents(null);
-			org.newdawn.slick.Color colorSlick = new org.newdawn.slick.Color(f[0], f[1], f[2], f[3]);
+			Color colorNifty = screen.findElementById("color" + i).getRenderer(PanelRenderer.class).getBackgroundColor();
+			org.newdawn.slick.Color colorSlick = new org.newdawn.slick.Color(colorNifty.getRed(), colorNifty.getGreen(), colorNifty.getBlue(), colorNifty.getAlpha());
 			int team = Integer.parseInt(screen.findNiftyControl("team" + i, Button.class).getText().substring(5))-1;
 			players.add(new Player(name, colorSlick, team));
 		}

@@ -3,6 +3,7 @@ package controller.ranges;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import logger.ErrorLogger;
 import model.Layer;
 import model.Model;
 import model.map.Coordinate;
@@ -89,7 +90,7 @@ public class MoveRangeThread extends Thread {
 			synchronized (this) {
 				try {
 					this.wait();
-				} catch (InterruptedException e) {e.printStackTrace();}
+				} catch (InterruptedException e) {ErrorLogger.logger.severe(e.getMessage());}
 			}
 		}
 		

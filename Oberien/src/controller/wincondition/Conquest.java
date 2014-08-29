@@ -3,6 +3,7 @@ package controller.wincondition;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import logger.ErrorLogger;
 import model.Model;
 import model.building.base.Base;
 import model.map.Coordinate;
@@ -42,8 +43,7 @@ public class Conquest implements WinCondition, Serializable {
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ErrorLogger.logger.severe(e.getMessage());
 		}
 		//get all required Variables for win-test
 		MyHashMap<Coordinate, Model> models = state.getModels();

@@ -6,6 +6,7 @@ package view.gamesstates;
 
 import java.awt.Font;
 
+import logger.ErrorLogger;
 import model.map.Map;
 
 import org.newdawn.slick.GameContainer;
@@ -248,7 +249,7 @@ public class GameLoading extends BasicGameState {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				ErrorLogger.logger.severe(e.getMessage());
 			}
 			sbg.enterState(getID() + 1);
 		}

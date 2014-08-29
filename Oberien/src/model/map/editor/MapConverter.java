@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import logger.ErrorLogger;
 import model.map.Map;
 import model.map.MapIO;
 
@@ -48,6 +49,6 @@ public class MapConverter {
 			dis.close();
 			MapIO.write(newMap);
 			JOptionPane.showMessageDialog(null, "Converting successful", "", JOptionPane.INFORMATION_MESSAGE);
-		} catch (IOException e) {e.printStackTrace();}
+		} catch (IOException e) {ErrorLogger.logger.severe(e.getMessage());}
 	}
 }

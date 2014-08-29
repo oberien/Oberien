@@ -23,7 +23,7 @@
 								<text id="player0Label" wrap="false" font="res/fonts/32/raven.fnt" color="#ffff" text="Player:" align="left" valign="center"/>
 							</panel>
 							<control id="player0TextField" name="textfield" text="${ENV.USERNAME}" valign="center" width="55%"/>
-							<panel id="color0" backgroundColor="#f00f" valign="center" width="5%" height="36px">
+							<panel id="color0" backgroundColor="#00ff" valign="center" width="5%" height="36px">
 								<effect>
 									<onActive name="border" color="#111f" post="true" inset="1px" />
 									<onActive name="border" color="#222f" post="true" inset="2px" />

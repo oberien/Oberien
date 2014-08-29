@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import logger.ErrorLogger;
+
 public class Field {
 	String name;
 	int evade;
@@ -42,7 +44,7 @@ public class Field {
 		
 		try {
 			image = ImageIO.read(new File("res/imgs/tiles/" + field.toString() + ".png"));
-		} catch (IOException e) {e.printStackTrace();}
+		} catch (IOException e) {ErrorLogger.logger.severe(e.getMessage());}
 	}
 	
 	public String getName() {

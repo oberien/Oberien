@@ -12,7 +12,11 @@ import java.util.logging.SimpleFormatter;
 public class TechLogger {
 	public static final Logger logger = Logger.getLogger(TechLogger.class.getName());
 	private static final Logger slickLogger = Logger.getLogger("org.newdawn");
-	private static final Logger niftyLogger = Logger.getLogger("de.lessvoid");
+	private static final Logger niftyLogger = Logger.getLogger("de.lessvoid.nifty");
+	
+	{
+		init();
+	}
 	
 	public static void init() {
 		try {
@@ -38,9 +42,9 @@ public class TechLogger {
 			logger.addHandler(fh);
 			logger.setLevel(Level.ALL);
 			slickLogger.addHandler(fh);
-			slickLogger.setLevel(Level.ALL);
+			slickLogger.setLevel(Level.INFO);
 			niftyLogger.addHandler(fh);
-			niftyLogger.setLevel(Level.ALL);
-		} catch (Exception e) {e.printStackTrace();}
+			niftyLogger.setLevel(Level.INFO);
+		} catch (Exception e) {ErrorLogger.logger.severe(e.getMessage());}
 	}
 }

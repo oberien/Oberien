@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Observable;
 
+import logger.ErrorLogger;
+
 public class SerializableStateIO extends Observable implements Runnable {	
 	private boolean read, write;
 	
@@ -65,9 +67,7 @@ public class SerializableStateIO extends Observable implements Runnable {
 	}
 	
 	private void printException(Exception e) {
-		System.err.println("Exception caught during read/write process: ");
-		e.printStackTrace();
-		System.err.println("\nTerminating read/write module.");
+		ErrorLogger.logger.severe("Exception caught during read/write process: \n" + e.getMessage() + "\nTerminating read/write module.");
 		cleanUp();
 	}
 	

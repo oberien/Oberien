@@ -3,6 +3,7 @@ package controller.ranges;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import logger.ErrorLogger;
 import model.Layer;
 import model.map.Coordinate;
 import model.map.Map;
@@ -105,7 +106,7 @@ public class FowToPolygonThread extends Thread {
 				try {
 					this.wait();
 					System.out.println(System.currentTimeMillis()-time);
-				} catch (InterruptedException e) {e.printStackTrace();}
+				} catch (InterruptedException e) {ErrorLogger.logger.severe(e.getMessage());}
 			}
 		}
 		
