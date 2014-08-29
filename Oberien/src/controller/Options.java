@@ -76,7 +76,6 @@ public class Options {
 		}
 		if (resolutionChanged) {
 			game.setDisplayMode(resolution.getWidth(), resolution.getHeight(), screenMode == 0);
-			resolutionChanged = false;
 		}
 		if (resolutionChanged || screenModeChanged) {
 			if (Options.screenMode == 0) {
@@ -91,6 +90,7 @@ public class Options {
 				game.setFullscreen(false);
 			}
 			screenModeChanged = false;
+			resolutionChanged = false;
 		}
 		if (vsyncChanged) {
 			game.setVSync(vsync);
@@ -139,9 +139,12 @@ public class Options {
 		if (game == null) {
 			throw new IllegalStateException("AppGameContainer in Options not initialized. Please use Options.init(AppGameContainer) first.");
 		}
-		try {
 			Properties properties = new Properties();
+		try {
 			properties.load(new FileInputStream("cfg/settings.properties"));
+		} catch (FileNotFoundException e) {
+			save();
+		} catch (IOException e) {e.printStackTrace();}
 			vsync = Boolean.parseBoolean(properties.getProperty("vsync", "true"));
 			screenMode = Integer.parseInt(properties.getProperty("screenMode", "0"));
 			String[] res = properties.getProperty("resolution", game.getScreenWidth() + "," + game.getScreenHeight()).split(",");
@@ -160,9 +163,6 @@ public class Options {
 			onlyUpdateWhenVisible = true;
 			fpsChanged = true;
 			showFpsChanged = true;
-		} catch (FileNotFoundException e) {
-			save();
-		} catch (IOException e) {e.printStackTrace();}
 	}
 
 	public static boolean isVsync() {
