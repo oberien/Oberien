@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import logger.GameLogger;
 import model.AttackingModel;
 import model.BuildingModel;
 import model.Model;
@@ -32,16 +33,31 @@ public class Controller {
 	public static final int DIRECT_ATTACKRANGE = 3;
 	public static final int BUILDRANGE = 4;
 	
+	public static final int MOVE = 0;
+	public static final int ATTACK = 1;
+	public static final int ADD_MODEL_TO_BUILD = 2;
+	
 	private State state;
 	private WinCondition wc; //oops, I've got to go to the toilet
-
+	
 	public Controller(Map map, Player[] players, WinCondition wc) {
+		GameLogger.logger.finest("Initializing Controller with:");
+		GameLogger.logger.finest("    Map: " + map.getName());
+		GameLogger.logger.finest("    Players: " + Arrays.toString(players));
+		GameLogger.logger.finest("    WinCondition: " + wc);
 		state = new State(map, players);
 		state.setSight(getSight());
 		this.wc = wc;
 	}
 	
 	public Controller(SerializableState s) {
+		GameLogger.logger.finest("Initializing Controller with SerializableState with:");
+		GameLogger.logger.finest("    Map: " + s.getMapName());
+		GameLogger.logger.finest("    Players: " + Arrays.toString(s.getPlayers()));
+		GameLogger.logger.finest("    WinCondition: " + wc);
+		GameLogger.logger.finest("    currentPlayerIndex: " + s.getCurrentPlayerIndex());
+		GameLogger.logger.finest("    round: " + s.getRound());
+		GameLogger.logger.finest("    models: " + s.getModels().toString());
 		wc = s.getWinCondition();
 		state = new State(MapList.getInstance().getMap(s.getMapName()), s.getPlayers());
 		state.setCurrentPlayerIndex(s.getCurrentPlayerIndex());
@@ -67,7 +83,23 @@ public class Controller {
 				state.getBuildranges());
 		return s;
 	}
-
+	
+	/**
+	 * does the given action on given models
+	 * @return the answer of the action or -1337 if the action couldn't be applied to the arguments
+	 */
+	public int doAction(int action, Coordinate... args) {
+		GameLogger.logger.finest("doAction " + action + Arrays.toString(args));
+		if (action == MOVE && args.length == 2) {
+			return move(args[0], args[1]);
+		} else if (action == ATTACK && args.length == 2) {
+			return attack(args[0], args[1]);
+		} else if (action == ADD_MODEL_TO_BUILD && args.length == 2) {
+			return addModelToBuild(args[0], args[1]);
+		}
+		return -1337;
+	}
+	
 	/**
 	 * Moves the Model on Coordinate old to Coordinate new
 	 *
@@ -82,7 +114,7 @@ public class Controller {
 	 * <li>1 when Model moved successfully</li>
 	 * </ul>
 	 */
-	public int move(Coordinate old, Coordinate neu) {
+	private int move(Coordinate old, Coordinate neu) {
 		Model m = state.getModel(old);
 		if (!(m instanceof Unit)) {
 			return -1;
@@ -125,7 +157,7 @@ public class Controller {
 	 * <li>5 when both the attacker and the defender missed</li>
 	 * </ul>
 	 */
-	public int attack(Coordinate attacker, Coordinate defender) {
+	private int attack(Coordinate attacker, Coordinate defender) {
 		Model atk = state.getModel(attacker);
 		if (!(atk instanceof AttackingModel)) {
 			return -1;
@@ -238,15 +270,9 @@ public class Controller {
 		return 0;
 	}
 
-	public void actionDone(Coordinate c) {
+	public void setActionDone(Coordinate c) {
+		GameLogger.logger.finest("setActionDone " + c);
 		state.getModel(c).setActionDone(true);
-	}
-
-	public void moved(Coordinate c) {
-		Model m = state.getModel(c);
-		if (m instanceof Unit) {
-			((Unit)m).setMoved(true);
-		}
 	}
 
 	/**
@@ -260,6 +286,7 @@ public class Controller {
 	 * already is an Model)
 	 */
 	public void addModel(int x, int y, String name) {
+		GameLogger.logger.finest("addModel " + x + " " + y + " " + name);
 		Model m = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Coordinate c = new Coordinate(x, y, m.getDefaultLayer());
 		m.decreaseTimeToBuild(m.getTimeToBuild());
@@ -285,6 +312,7 @@ public class Controller {
 	 * </ul>
 	 */
 	public int buildModel(Coordinate model, int x, int y, String name) {
+		GameLogger.logger.finest("buildModel " + model + " " + x + " " + y + " " + name);
 		Model b = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Model m = state.getModel(model);
 		Coordinate build = new Coordinate(x, y, b.getDefaultLayer());
@@ -322,17 +350,17 @@ public class Controller {
 	 *
 	 * @param model Model willing to build
 	 * @param build Model that will be built
-	 * @return whether model is added to build or not (when model can't build
+	 * @return whether model is added to build (1) or not (0) (when model can't build
 	 * Type of build / build is already finished / action is done)
 	 */
-	public boolean addModelToBuild(Coordinate model, Coordinate build) {
+	private int addModelToBuild(Coordinate model, Coordinate build) {
 		Model m = state.getModel(model);
 		Model b = state.getModel(build);
 		if (b.getTimeToBuild() == 0 || !(m instanceof BuildingModel) || ((BuildingModel)m).getBuilds() != b.getType() || m.isActionDone()) {
-			return false;
+			return 0;
 		}
 		((BuildingModel)m).setCurrentBuilding(b);
-		return true;
+		return 1;
 	}
 
 	/**
@@ -363,9 +391,8 @@ public class Controller {
 		return retur;
 	}
 	
-	
-
 	public void endTurn() {
+		GameLogger.logger.finest("endTurn");
 		//START finish up current player
 		Model[] models = state.getPlayerModels();
 		for (Model m : models) {

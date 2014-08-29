@@ -1,6 +1,5 @@
 package tests;
 
-import model.map.MapIO;
 import model.map.MapList;
 
 public class MapMain {

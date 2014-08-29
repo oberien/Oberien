@@ -120,7 +120,7 @@ public class Options {
 			Properties properties = new Properties();
 			properties.setProperty("vsync", vsync + "");
 			properties.setProperty("screenMode", screenMode + "");
-			properties.setProperty("resolution", resolution.getWidth() + ":" + resolution.getHeight());
+			properties.setProperty("resolution", resolution.getWidth() + "," + resolution.getHeight());
 			properties.setProperty("onlyUpdateWhenVisible", onlyUpdateWhenVisible + "");
 			properties.setProperty("antiAliasing", antiAliasing + "");
 			properties.setProperty("loadingSpeed", loadingSpeed + "");
@@ -144,7 +144,7 @@ public class Options {
 			properties.load(new FileInputStream("cfg/settings.properties"));
 			vsync = Boolean.parseBoolean(properties.getProperty("vsync", "true"));
 			screenMode = Integer.parseInt(properties.getProperty("screenMode", "0"));
-			String[] res = properties.getProperty("resolution", game.getScreenWidth() + ":" + game.getScreenHeight()).split(":");
+			String[] res = properties.getProperty("resolution", game.getScreenWidth() + "," + game.getScreenHeight()).split(",");
 			resolution = new Dimension(Integer.parseInt(res[0]), Integer.parseInt(res[1]));
 			onlyUpdateWhenVisible = Boolean.parseBoolean(properties.getProperty("onlyUpdateWhenVisible", "true"));
 			antiAliasing = Boolean.parseBoolean(properties.getProperty("antiAliaising", "false"));

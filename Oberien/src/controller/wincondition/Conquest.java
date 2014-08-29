@@ -58,5 +58,4 @@ public class Conquest implements WinCondition, Serializable {
 		}
 		return true;
 	}
-
 }

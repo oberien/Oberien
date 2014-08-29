@@ -5,6 +5,12 @@
  */
 package view.gui.controllers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.lwjgl.util.Dimension;
+import org.newdawn.slick.SlickException;
+
 import controller.Options;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -21,10 +27,6 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.lwjgl.util.Dimension;
-import org.newdawn.slick.SlickException;
 
 public class SettingsScreenController implements ScreenController {
 

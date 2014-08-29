@@ -32,7 +32,7 @@ public class WinConditionConquestTest {
 		Coordinate atk = new Coordinate(60, 74, Layer.Ground);
 		Coordinate def = new Coordinate(60, 75, Layer.Ground);
 		for (int i = 0; i < 6; i++) {
-			controller.attack(atk, def);
+			controller.doAction(Controller.ATTACK, atk, def);
 			controller.endTurn();
 			controller.endTurn();
 		}

@@ -17,7 +17,6 @@ import view.gamesstates.GameStarting;
 import view.gamesstates.NiftyMenu;
 import view.gamesstates.StartPositionChooser;
 import view.gui.event.MouseEvent;
-import controller.Options;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglKeyboardInputEventCreator;
 

@@ -6,13 +6,13 @@ package view.gamesstates;
 
 import java.util.Arrays;
 
+import model.BuildingModel;
 import model.Layer;
 import model.Model;
 import model.map.Coordinate;
 import model.map.Map;
 import model.map.MapList;
 import model.unit.Unit;
-import model.unit.builder.Builder;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -227,13 +227,13 @@ public class GameRunning extends BasicGameState {
 						buildModel = false;
 						
 					//if model moved successfully
-					} else if (controller.move(mapcoord, c) == 1) {
+					} else if (controller.doAction(Controller.MOVE, mapcoord, c) == 1) {
 						//if model can attack
 						Coordinate[] range = state.getDirectAttackrange(c);
 						if (range != null) {
 							if (state.getEnemyModelPositionsInArea(range).length == 0) {
 								mapcoord = null;
-								controller.actionDone(c);
+								controller.setActionDone(c);
 							} else {
 								mapcoord = c;
 							}
@@ -255,7 +255,7 @@ public class GameRunning extends BasicGameState {
 				} else if (m.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
 					int life1 = model.getLife();
 					int life2 = m.getLife();
-					int result = controller.attack(mapcoord, c);
+					int result = controller.doAction(Controller.ATTACK, mapcoord, c);
 					if (result > 0) {
 						if (state.getModel(mapcoord) != null) {
 							dmgCoord1 = mapcoord;
@@ -286,12 +286,12 @@ public class GameRunning extends BasicGameState {
 					unitMoving = null;
 					
 				//if model belongs to current player AND model isn't finished to build yet AND selected model can build
-				} else if (m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() != 0 && model instanceof Builder) {
-					controller.addModelToBuild(mapcoord, c);
+				} else if (m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() != 0 && model instanceof BuildingModel) {
+					controller.doAction(Controller.ADD_MODEL_TO_BUILD, mapcoord, c);
 					buildModel = false;
 				//if clicked onto itself
 				} else if (mapcoord.equals(c)) {
-					controller.actionDone(c);
+					controller.setActionDone(c);
 					mapcoord = null;
 					unitMoving = null;
 				}

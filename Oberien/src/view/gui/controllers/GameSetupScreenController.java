@@ -1,32 +1,27 @@
 package view.gui.controllers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import model.map.MapList;
+import model.player.Player;
+import model.player.PlayerColors;
 import view.gamesstates.NiftyMenu;
 import controller.Controller;
 import controller.wincondition.Conquest;
-import model.map.MapList;
-import model.player.PlayerColors;
-import model.player.Player;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.HoverEffectBuilder;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.Button;
-import de.lessvoid.nifty.controls.ScrollPanel;
 import de.lessvoid.nifty.controls.Scrollbar;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.scrollpanel.builder.ScrollPanelBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.events.NiftyMousePrimaryClickedEvent;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.PanelRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -240,17 +235,26 @@ public class GameSetupScreenController implements ScreenController {
 	}
 	
 	public void resetPlayers() {
-		int removableChildren = playerScrollPanelPanel.getChildrenCount();
-		List<Element> children = playerScrollPanelPanel.getChildren();
-		for (int i = 0; i < removableChildren; i++) {
-			children.get(i).markForRemoval();
-		}
-		
-		id = 1;
-		addPlayerComponents("Player:", "player0TextField", System.getenv("USERNAME"), "1");
+		new Thread() {
+			public void run() {
+				int removableChildren = playerScrollPanelPanel.getChildrenCount();
+				List<Element> children = playerScrollPanelPanel.getChildren();
+				for (int i = 0; i < removableChildren; i++) {
+					children.get(i).markForRemoval();
+				}
+				
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {e.printStackTrace();}
+				
+				id = 0;
+				addPlayerComponents("Player:", "player0TextField", System.getenv("USERNAME"), "1");
+			}
+		}.start();
 	}
 	
 	public void changeTeam(String id) {
+		//TODO: only accept teams that are on the map
 		Button b = screen.findNiftyControl(id, Button.class);
 		int team = Integer.parseInt(b.getText().substring(5));
 		if (team == playerScrollPanelPanel.getChildrenCount()) {
@@ -318,6 +322,7 @@ public class GameSetupScreenController implements ScreenController {
 	}
 	
 	public void startGame() {
+		//TODO: without a player one cannot start
 		String mapName = screen.findElementById("mapNameLabel").getRenderer(TextRenderer.class).getOriginalText();
 		List<Element> children = playerScrollPanelPanel.getChildren();
 		ArrayList<Player> players = new ArrayList<Player>();
