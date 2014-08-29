@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Oberien</name>
-			<type>2</type>
-			<location>C:/Users/xy/Desktop/eclipse/git</location>
-		</link>
-	</linkedResources>
 </projectDescription>
