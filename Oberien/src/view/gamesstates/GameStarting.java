@@ -104,10 +104,10 @@ public class GameStarting extends BasicGameState {
 					
 				}
 			}, new TimeProvider());
-//			Nifty nifty = new Nifty(new BatchRenderDevice(LwjglBatchRenderBackendFactory.create()), new NullSoundDevice(), new SlickSlickInputSystem(sbg), new TimeProvider());
 			nifty.fromXml("res/xml/main.xml", "start");
 			nifty.addXml("res/xml/gamesetup.xml");
-	//			nifty.setDebugOptionPanelColors(true);
+			nifty.addXml("res/xml/settings.xml");
+			nifty.addXml("res/xml/tutorial.xml");
 			sd.setNifty(nifty);
 		} else {
 			sbg.getState(getID() + 1).init(gc, sbg);

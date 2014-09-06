@@ -41,23 +41,23 @@ public class Controller {
 	private WinCondition wc; //oops, I've got to go to the toilet
 	
 	public Controller(Map map, Player[] players, WinCondition wc) {
-		GameLogger.logger.finest("Initializing Controller with:");
-		GameLogger.logger.finest("    Map: " + map.getName());
-		GameLogger.logger.finest("    Players: " + Arrays.toString(players));
-		GameLogger.logger.finest("    WinCondition: " + wc);
+		GameLogger.logger.info("Initializing Controller with:");
+		GameLogger.logger.info("    Map: " + map.getName());
+		GameLogger.logger.info("    Players: " + Arrays.toString(players));
+		GameLogger.logger.info("    WinCondition: " + wc);
 		state = new State(map, players);
 		state.setSight(getSight());
 		this.wc = wc;
 	}
 	
 	public Controller(SerializableState s) {
-		GameLogger.logger.finest("Initializing Controller with SerializableState with:");
-		GameLogger.logger.finest("    Map: " + s.getMapName());
-		GameLogger.logger.finest("    Players: " + Arrays.toString(s.getPlayers()));
-		GameLogger.logger.finest("    WinCondition: " + wc);
-		GameLogger.logger.finest("    currentPlayerIndex: " + s.getCurrentPlayerIndex());
-		GameLogger.logger.finest("    round: " + s.getRound());
-		GameLogger.logger.finest("    models: " + s.getModels().toString());
+		GameLogger.logger.info("Initializing Controller with SerializableState with:");
+		GameLogger.logger.info("    Map: " + s.getMapName());
+		GameLogger.logger.info("    Players: " + Arrays.toString(s.getPlayers()));
+		GameLogger.logger.info("    WinCondition: " + wc);
+		GameLogger.logger.info("    currentPlayerIndex: " + s.getCurrentPlayerIndex());
+		GameLogger.logger.info("    round: " + s.getRound());
+		GameLogger.logger.info("    models: " + s.getModels().toString());
 		wc = s.getWinCondition();
 		state = new State(MapList.getInstance().getMap(s.getMapName()), s.getPlayers());
 		state.setCurrentPlayerIndex(s.getCurrentPlayerIndex());
@@ -89,7 +89,7 @@ public class Controller {
 	 * @return the answer of the action or -1337 if the action couldn't be applied to the arguments
 	 */
 	public int doAction(int action, Coordinate... args) {
-		GameLogger.logger.finest("doAction " + action + Arrays.toString(args));
+		GameLogger.logger.info("doAction " + action + " " + Arrays.toString(args));
 		if (action == MOVE && args.length == 2) {
 			return move(args[0], args[1]);
 		} else if (action == ATTACK && args.length == 2) {
@@ -271,7 +271,7 @@ public class Controller {
 	}
 
 	public void setActionDone(Coordinate c) {
-		GameLogger.logger.finest("setActionDone " + c);
+		GameLogger.logger.info("setActionDone " + c);
 		state.getModel(c).setActionDone(true);
 	}
 
@@ -286,7 +286,7 @@ public class Controller {
 	 * already is an Model)
 	 */
 	public void addModel(int x, int y, String name) {
-		GameLogger.logger.finest("addModel " + x + " " + y + " " + name);
+		GameLogger.logger.info("addModel " + x + " " + y + " " + name);
 		Model m = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Coordinate c = new Coordinate(x, y, m.getDefaultLayer());
 		m.decreaseTimeToBuild(m.getTimeToBuild());
@@ -312,7 +312,7 @@ public class Controller {
 	 * </ul>
 	 */
 	public int buildModel(Coordinate model, int x, int y, String name) {
-		GameLogger.logger.finest("buildModel " + model + " " + x + " " + y + " " + name);
+		GameLogger.logger.info("buildModel " + model + " " + x + " " + y + " " + name);
 		Model b = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Model m = state.getModel(model);
 		Coordinate build = new Coordinate(x, y, b.getDefaultLayer());
@@ -392,7 +392,7 @@ public class Controller {
 	}
 	
 	public void endTurn() {
-		GameLogger.logger.finest("endTurn");
+		GameLogger.logger.info("endTurn");
 		//START finish up current player
 		Model[] models = state.getPlayerModels();
 		for (Model m : models) {
@@ -573,6 +573,7 @@ public class Controller {
 	}
 	
 	public void removeModel(final Coordinate c) {
+		GameLogger.logger.info("removeModel " + c);
 		new Thread() {
 			public void run() {
 				Model model = state.getModel(c);

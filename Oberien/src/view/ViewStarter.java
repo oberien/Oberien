@@ -4,6 +4,7 @@ package view;
 
 
 import logger.ErrorLogger;
+import logger.EventLogger;
 import logger.GameLogger;
 import logger.TechLogger;
 
@@ -23,6 +24,7 @@ public class ViewStarter {
 		ErrorLogger.init();
 		GameLogger.init();
 		TechLogger.init();
+		EventLogger.init();
 		game = new AppGameContainer(new View());
 		Options.initOptions(game);
 		Options.load();

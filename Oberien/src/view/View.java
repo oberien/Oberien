@@ -6,6 +6,8 @@ package view;
 
 import java.util.ArrayList;
 
+import logger.EventLogger;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -23,7 +25,6 @@ import de.lessvoid.nifty.renderer.lwjgl.input.LwjglKeyboardInputEventCreator;
 public class View extends StateBasedGame {
 	private StartData sd;
 	private LwjglKeyboardInputEventCreator inputEventCreator = new LwjglKeyboardInputEventCreator();
-//	private boolean forwardToNifty;
 	/**
 	 * mouse x.
 	 */
@@ -69,15 +70,14 @@ public class View extends StateBasedGame {
 	 * @param mouseDown
 	 */
 	private void forwardMouseEventToNifty(final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final boolean mouseDown) {
-//		if (forwardToNifty) {
-			sd.getMouseEvents().add(new MouseEvent(mouseX, mouseY, mouseWheel, mouseButton, mouseDown));
-//		}
+		sd.getMouseEvents().add(new MouseEvent(mouseX, mouseY, mouseWheel, mouseButton, mouseDown));
 	}
 	
 	/**
 	 * @see org.newdawn.slick.InputListener#mouseMoved(int, int, int, int)
 	 */
 	public void mouseMoved(final int oldx, final int oldy, final int newx, final int newy) {
+		EventLogger.logger.finest("mouseMoved " + oldx + ":" + oldy + " to " + newx + ":" + newy);
 		super.mouseMoved(oldx, oldy, newx, newy);
 		mouseX = newx;
 		mouseY = newy;
@@ -88,6 +88,7 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#mousePressed(int, int, int)
 	 */
 	public void mousePressed(final int button, final int x, final int y) {
+		EventLogger.logger.finest("mousePressed " + button + " " + x + ":" + y);
 		super.mousePressed(button, x, y);
 		mouseX = x;
 		mouseY = y;
@@ -100,6 +101,7 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#mouseReleased(int, int, int)
 	 */
 	public void mouseReleased(final int button, final int x, final int y) {
+		EventLogger.logger.finest("mouseReleased " + button + " " + x + ":" + y);
 		super.mouseReleased(button, x, y);
 		mouseX = x;
 		mouseY = y;
@@ -112,6 +114,7 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#keyPressed(int, char)
 	 */
 	public void keyPressed(final int key, final char c) {
+		EventLogger.logger.finest("keyPressed " + key + " " + c);
 		super.keyPressed(key, c);
 		sd.getKeyEvents().add(inputEventCreator.createEvent(key, c, true));
 	}
@@ -120,12 +123,14 @@ public class View extends StateBasedGame {
 	 * @see org.newdawn.slick.InputListener#keyReleased(int, char)
 	 */
 	public void keyReleased(final int key, final char c) {
+		EventLogger.logger.finest("keyReleased " + key + " " + c);
 		super.keyReleased(key, c);
 		sd.getKeyEvents().add(inputEventCreator.createEvent(key, c, false));
 	}
 	
 	@Override
 	public void mouseWheelMoved(int newValue) {
+		EventLogger.logger.finest("mouseWheelMoved " + newValue);
 		super.mouseWheelMoved(newValue);
 		forwardMouseEventToNifty(mouseX, mouseY, newValue, 0, mouseDown);
 	}
