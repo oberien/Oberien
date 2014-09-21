@@ -12,7 +12,7 @@ public class SerializableState implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String mapName;
-	private WinCondition wc;
+	private String winConditionName;
 	private Player[] players;
 	private int currentPlayerIndex;
 	private int round;
@@ -23,7 +23,7 @@ public class SerializableState implements Serializable {
 	private MyHashMap<Model, Coordinate[]> directAttackranges;
 	private MyHashMap<Model, Coordinate[]> buildranges;
 	
-	public SerializableState(String mapName, WinCondition wc, Player[] players,
+	public SerializableState(String mapName, String winConditionName, Player[] players,
 			int currentPlayerIndex, int round,
 			MyHashMap<Coordinate, Model> models,
 			MyHashMap<Model, Coordinate[]> viewrange,
@@ -33,7 +33,7 @@ public class SerializableState implements Serializable {
 			MyHashMap<Model, Coordinate[]> buildrange) {
 		super();
 		this.mapName = mapName;
-		this.wc = wc;
+		this.winConditionName = winConditionName;
 		this.players = players;
 		this.currentPlayerIndex = currentPlayerIndex;
 		this.round = round;
@@ -53,8 +53,8 @@ public class SerializableState implements Serializable {
 		return mapName;
 	}
 
-	public WinCondition getWinCondition() {
-		return wc;
+	public String getWinConditionName() {
+		return winConditionName;
 	}
 
 	public Player[] getPlayers() {

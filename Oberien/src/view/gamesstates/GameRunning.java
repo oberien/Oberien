@@ -227,7 +227,7 @@ public class GameRunning extends BasicGameState {
 						buildModel = false;
 						
 					//if model moved successfully
-					} else if (controller.doAction(Controller.MOVE, mapcoord, c) == 1) {
+					} else if (controller.move(mapcoord, c) == 1) {
 						//if model can attack
 						Coordinate[] range = state.getDirectAttackrange(c);
 						if (range != null) {
@@ -255,7 +255,7 @@ public class GameRunning extends BasicGameState {
 				} else if (m.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
 					int life1 = model.getLife();
 					int life2 = m.getLife();
-					int result = controller.doAction(Controller.ATTACK, mapcoord, c);
+					int result = controller.attack(mapcoord, c);
 					if (result > 0) {
 						if (state.getModel(mapcoord) != null) {
 							dmgCoord1 = mapcoord;
@@ -287,7 +287,7 @@ public class GameRunning extends BasicGameState {
 					
 				//if model belongs to current player AND model isn't finished to build yet AND selected model can build
 				} else if (m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() != 0 && model instanceof BuildingModel) {
-					controller.doAction(Controller.ADD_MODEL_TO_BUILD, mapcoord, c);
+					controller.addModelToBuild(mapcoord, c);
 					buildModel = false;
 				//if clicked onto itself
 				} else if (mapcoord.equals(c)) {

@@ -25,40 +25,40 @@ import controller.ranges.FullAttackRangeThread;
 import controller.ranges.MoveRangeThread;
 import controller.ranges.ViewRangeThread;
 import controller.wincondition.WinCondition;
+import controller.wincondition.WinConditionList;
+import event.ModelEventAdapter;
+import event.WinEventListener;
 
-public class Controller {
+public class Controller extends ModelEventAdapter implements WinEventListener {
 	public static final int VIEWRANGE = 0;
 	public static final int MOVERANGE = 1;
 	public static final int FULL_ATTACKRANGE = 2;
 	public static final int DIRECT_ATTACKRANGE = 3;
 	public static final int BUILDRANGE = 4;
 	
-	public static final int MOVE = 0;
-	public static final int ATTACK = 1;
-	public static final int ADD_MODEL_TO_BUILD = 2;
-	
 	private State state;
-	private WinCondition wc; //oops, I've got to go to the toilet
+	private String winConditionName;
 	
-	public Controller(Map map, Player[] players, WinCondition wc) {
+	public Controller(Map map, Player[] players, String winConditionName) {
 		GameLogger.logger.info("Initializing Controller with:");
 		GameLogger.logger.info("    Map: " + map.getName());
 		GameLogger.logger.info("    Players: " + Arrays.toString(players));
-		GameLogger.logger.info("    WinCondition: " + wc);
+		GameLogger.logger.info("    WinConditionName: " + winConditionName);
 		state = new State(map, players);
 		state.setSight(getSight());
-		this.wc = wc;
+		WinCondition wc = WinConditionList.getWinCondition(winConditionName, state);
+		wc.addWinEventListener(this);
 	}
 	
 	public Controller(SerializableState s) {
 		GameLogger.logger.info("Initializing Controller with SerializableState with:");
 		GameLogger.logger.info("    Map: " + s.getMapName());
 		GameLogger.logger.info("    Players: " + Arrays.toString(s.getPlayers()));
-		GameLogger.logger.info("    WinCondition: " + wc);
+		GameLogger.logger.info("    WinConditionName: " + s.getWinConditionName());
 		GameLogger.logger.info("    currentPlayerIndex: " + s.getCurrentPlayerIndex());
 		GameLogger.logger.info("    round: " + s.getRound());
 		GameLogger.logger.info("    models: " + s.getModels().toString());
-		wc = s.getWinCondition();
+		winConditionName = s.getWinConditionName();
 		state = new State(MapList.getInstance().getMap(s.getMapName()), s.getPlayers());
 		state.setCurrentPlayerIndex(s.getCurrentPlayerIndex());
 		state.setRound(s.getRound());
@@ -76,28 +76,12 @@ public class Controller {
 	}
 	
 	public SerializableState getSerializableState() {
-		SerializableState s = new SerializableState(state.getMap().getName(), wc,
+		SerializableState s = new SerializableState(state.getMap().getName(), winConditionName,
 				state.getPlayers(), state.getCurrentPlayerIndex(), state.getRound(),
 				state.getModels(), state.getViewranges(), state.getMoveranges(), 
 				state.getFullAttckranges(), state.getDirectAttackranges(),
 				state.getBuildranges());
 		return s;
-	}
-	
-	/**
-	 * does the given action on given models
-	 * @return the answer of the action or -1337 if the action couldn't be applied to the arguments
-	 */
-	public int doAction(int action, Coordinate... args) {
-		GameLogger.logger.info("doAction " + action + " " + Arrays.toString(args));
-		if (action == MOVE && args.length == 2) {
-			return move(args[0], args[1]);
-		} else if (action == ATTACK && args.length == 2) {
-			return attack(args[0], args[1]);
-		} else if (action == ADD_MODEL_TO_BUILD && args.length == 2) {
-			return addModelToBuild(args[0], args[1]);
-		}
-		return -1337;
 	}
 	
 	/**
@@ -114,7 +98,18 @@ public class Controller {
 	 * <li>1 when Model moved successfully</li>
 	 * </ul>
 	 */
-	private int move(Coordinate old, Coordinate neu) {
+	public int move(Coordinate old, Coordinate neu) {
+		GameLogger.logger.info("move " + old + " " + neu);
+		int ret = moveInternal(old, neu);
+		if (ret > 0)
+			modelMoved(old, neu);
+		return ret;
+	}
+	
+	/**
+	 * @see Controller#move(Coordinate, Coordinate)
+	 */
+	private int moveInternal(Coordinate old, Coordinate neu) {
 		Model m = state.getModel(old);
 		if (!(m instanceof Unit)) {
 			return -1;
@@ -140,7 +135,7 @@ public class Controller {
 		}
 		return 0;
 	}
-
+	
 	/**
 	 * Attacker damages Defender
 	 *
@@ -157,7 +152,18 @@ public class Controller {
 	 * <li>5 when both the attacker and the defender missed</li>
 	 * </ul>
 	 */
-	private int attack(Coordinate attacker, Coordinate defender) {
+	public int attack(Coordinate attacker, Coordinate defender) {
+		GameLogger.logger.info("attack " + attacker + " " + defender);
+		int ret = attackInternal(attacker, defender);
+		if (ret > 0)
+			modelAttacked(attacker, defender);
+		return ret;
+	}
+	
+	/**
+	 * @see Controller#attack(Coordinate, Coordinate)
+	 */
+	private int attackInternal(Coordinate attacker, Coordinate defender) {
 		Model atk = state.getModel(attacker);
 		if (!(atk instanceof AttackingModel)) {
 			return -1;
@@ -208,10 +214,7 @@ public class Controller {
 								}
 							}
 						}
-						Player ap = atk.getPlayer();
-						Player dp = def.getPlayer();
 						removeModel(defender);
-						hasWonLost(ap, dp);
 						return 2;
 					}
 				} else {
@@ -250,10 +253,7 @@ public class Controller {
 						survived = atk.damage(damage);
 						if (!survived) {
 							def.levelUp();
-							Player ap = atk.getPlayer();
-							Player dp = def.getPlayer();
 							removeModel(attacker);
-							hasWonLost(dp, ap);
 						}
 						if (attackerMissed) {
 							return 4;
@@ -269,12 +269,7 @@ public class Controller {
 		}
 		return 0;
 	}
-
-	public void setActionDone(Coordinate c) {
-		GameLogger.logger.info("setActionDone " + c);
-		state.getModel(c).setActionDone(true);
-	}
-
+	
 	/**
 	 * Adds an Model to the map - Only use for testing/debugging reasons To
 	 * build an Model use buildModel()
@@ -287,12 +282,20 @@ public class Controller {
 	 */
 	public void addModel(int x, int y, String name) {
 		GameLogger.logger.info("addModel " + x + " " + y + " " + name);
+		addModelInternal(x, y, name);
+		modelAdded(x, y, name);
+	}
+	
+	/**
+	 * @see Controller#addModel(int, int, String)
+	 */
+	private void addModelInternal(int x, int y, String name) {
 		Model m = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Coordinate c = new Coordinate(x, y, m.getDefaultLayer());
 		m.decreaseTimeToBuild(m.getTimeToBuild());
 		addModel(c, m);
 	}
-
+	
 	/**
 	 * Starts building an Model
 	 *
@@ -313,6 +316,16 @@ public class Controller {
 	 */
 	public int buildModel(Coordinate model, int x, int y, String name) {
 		GameLogger.logger.info("buildModel " + model + " " + x + " " + y + " " + name);
+		int ret = buildModelInternal(model, x, y, name);
+		if (ret > 0)
+			modelIsBuild(model, x, y, name);
+		return ret;
+	}
+	
+	/**
+	 * @see Controller#buildModel(Coordinate, int, int, String)
+	 */
+	private int buildModelInternal(Coordinate model, int x, int y, String name) {
 		Model b = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
 		Model m = state.getModel(model);
 		Coordinate build = new Coordinate(x, y, b.getDefaultLayer());
@@ -344,25 +357,41 @@ public class Controller {
 		}
 		return 0;
 	}
-
+	
 	/**
 	 * Adds an Model to build another model
 	 *
-	 * @param model Model willing to build
-	 * @param build Model that will be built
+	 * @param builder Model willing to build
+	 * @param model Model that will be built
 	 * @return whether model is added to build (1) or not (0) (when model can't build
 	 * Type of build / build is already finished / action is done)
 	 */
-	private int addModelToBuild(Coordinate model, Coordinate build) {
-		Model m = state.getModel(model);
-		Model b = state.getModel(build);
+	public int addModelToBuild(Coordinate builder, Coordinate model) {
+		GameLogger.logger.info("addModelToBuild " + builder + " " + model);
+		int ret = addModelToBuildInternal(builder, model);
+		if (ret > 0)
+			modelAddedToBuild(builder, model);
+		return ret;
+	}
+	
+	/**
+	 * @see Controller#addModelToBuild(Coordinate, Coordinate)
+	 */
+	private int addModelToBuildInternal(Coordinate builder, Coordinate model) {
+		Model m = state.getModel(builder);
+		Model b = state.getModel(model);
 		if (b.getTimeToBuild() == 0 || !(m instanceof BuildingModel) || ((BuildingModel)m).getBuilds() != b.getType() || m.isActionDone()) {
 			return 0;
 		}
 		((BuildingModel)m).setCurrentBuilding(b);
 		return 1;
 	}
-
+	
+	public void setActionDone(Coordinate c) {
+		GameLogger.logger.info("setActionDone " + c);
+		state.getModel(c).setActionDone(true);
+	}
+	
 	/**
 	 * Returns the Viewrange of all allied Models
 	 *
@@ -529,7 +558,7 @@ public class Controller {
 		return true;
 	}
 	
-	public boolean addModel(final Coordinate c, final Model model) {
+	private boolean addModel(final Coordinate c, final Model model) {
 		if (state.getModels().containsKey(c)) {
 			return false;
 		}
@@ -605,6 +634,7 @@ public class Controller {
 				}
 				state.setSight(getSight());
 //				new FowToPolygonThread(null, state, null, null).start();
+				modelRemoved(c, model);
 			}
 		}.start();
 	}
@@ -644,33 +674,17 @@ public class Controller {
 			}
 		}
 	}
-	
-	private int getDifference(Coordinate c1, Coordinate c2) {
-		int dx = c1.getX() - c2.getX();
-		int dy = c1.getY() - c2.getY();
-		dx = Math.abs(dx);
-		dy = Math.abs(dy);
-		return dx + dy;
-	}
-	
-	private void hasWonLost(Player attacker, Player defender) {
-		if (wc.hasLost(state, defender)) {
-			if (wc.hasWon(state, attacker)) {
-				playerWon(attacker);
-			} else {
-				playerLost(defender);
-			}
-		}
-	}
-	
-	private void playerWon(Player player) {
-		System.out.println("Player won: " + player);
+
+	@Override
+	public void hasWon(Player p) {
+		System.out.println("Player won: " + p);
 		//TODO add interface to VIEW
 	}
-	
-	private void playerLost(Player player) {
-		System.out.println("Player lost: " + player);
-		removePlayer(player);
+
+	@Override
+	public void hasLost(Player p) {
+		System.out.println("Player lost: " + p);
+		removePlayer(p);
 		endTurn();
 		//TODO add interface to VIEW
 	}

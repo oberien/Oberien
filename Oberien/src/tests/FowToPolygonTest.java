@@ -17,7 +17,7 @@ public class FowToPolygonTest {
 	public static void main(String[] args) throws InterruptedException {
 		Map map = MapList.getInstance().getMap("Tera Rising");
 		
-		Controller controller = new Controller(MapList.getInstance().getCurrentMap(), new Player[]{new Player("Player 1", Color.red, 0), new Player("Player 2", Color.green, 1)}, new Conquest());
+		Controller controller = new Controller(MapList.getInstance().getCurrentMap(), new Player[]{new Player("Player 1", Color.red, 0), new Player("Player 2", Color.green, 1)}, "Conquest");
 		State state = controller.getState();
 		controller.addModel(60, 75, "Base");
 		Thread.sleep(2000);

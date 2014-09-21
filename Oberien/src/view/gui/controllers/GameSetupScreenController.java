@@ -363,7 +363,7 @@ public class GameSetupScreenController implements ScreenController {
 		
 		Player[] player = new Player[players.size()];
 		player = players.toArray(player);
-		NiftyMenu.startGame(new Controller(MapList.getInstance().getMap(mapName), player, new Conquest()));
+		NiftyMenu.startGame(new Controller(MapList.getInstance().getMap(mapName), player, "Conquest"));
 	}
 	
 	public void mainMenu() {
