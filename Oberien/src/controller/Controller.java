@@ -39,6 +39,12 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 	private State state;
 	private String winConditionName;
 	
+	/**
+	 * Initialize Controller for a new game
+	 * @param map The map which is played on
+	 * @param players Array of Players playing
+	 * @param winConditionName Name of the WinCondition selected, which is used to get the WinCondition-class via {@link WinConditionList#getWinCondition(String, State)}
+	 */
 	public Controller(Map map, Player[] players, String winConditionName) {
 		GameLogger.logger.info("Initializing Controller with:");
 		GameLogger.logger.info("    Map: " + map.getName());
@@ -50,6 +56,10 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		wc.addWinEventListener(this);
 	}
 	
+	/**
+	 * Initialized the Controller to use a saved game
+	 * @param s SerializableState loaded from a file used to get important initializing data from
+	 */
 	public Controller(SerializableState s) {
 		GameLogger.logger.info("Initializing Controller with SerializableState with:");
 		GameLogger.logger.info("    Map: " + s.getMapName());
@@ -71,10 +81,18 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		reinitiateState();
 	}
 	
+	/**
+	 * Returns the State used for this instance of game
+	 * @return State of current Game
+	 */
 	public State getState() {
 		return state;
 	}
 	
+	/**
+	 * Creates a SerializableState from data stored in State and Controller, which can be saved via ObjectOutputStream
+	 * @return SerializableState of current game
+	 */
 	public SerializableState getSerializableState() {
 		SerializableState s = new SerializableState(state.getMap().getName(), winConditionName,
 				state.getPlayers(), state.getCurrentPlayerIndex(), state.getRound(),
@@ -387,6 +405,10 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		return 1;
 	}
 	
+	/**
+	 * Sets a Model's action to be finished. This Model can't be selected anymore this turn
+	 * @param c Coordinate the Model is standing on
+	 */
 	public void setActionDone(Coordinate c) {
 		GameLogger.logger.info("setActionDone " + c);
 		state.getModel(c).setActionDone(true);
@@ -420,6 +442,12 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		return retur;
 	}
 	
+	/**
+	 * Ends the turn.<br/>
+	 * Calculates the building status of Models which are built at the moment.<br/>
+	 * Resets every model's action.<br/>
+	 * Calculates new Money and Energy of the following player.
+	 */
 	public void endTurn() {
 		GameLogger.logger.info("endTurn");
 		//START finish up current player
@@ -489,6 +517,9 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		//END
 	}
 	
+	/**
+	 * Reinitializes State after a game has been loaded (SerializableState) and Controller has been constructed.
+	 */
 	private void reinitiateState() {
 		MyHashMap<Coordinate, Model> modelMap = state.getModels();
 		
@@ -515,6 +546,14 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		state.setModelPositionsInSight(modelPositionsInSightList);
 	}
 	
+	/**
+	 * Updates all references to the model, which is moving (Ranges, ModelPositions).<br/>
+	 * Removes current references from State and calculates the new ones, adding them afterwards to State.
+	 * @param from Coordinate the Model was standing on
+	 * @param to Coordinate the model is moving to
+	 * @return <ul>	<li>true if all references are being updated correctly</li>
+	 * 				<li>false if the coordinate the unit wants to move to isn't free</li></li>
+	 */
 	private boolean updateModel(final Coordinate from, final Coordinate to) {
 		if (state.getModels().containsKey(to)) {
 			return false;
@@ -558,6 +597,13 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		return true;
 	}
 	
+	/**
+	 * Adds a model to the given coordinate and calculates all references. The Model is not built yet.
+	 * @param c Coordinate the Model has to be added to
+	 * @param model Model to be added
+	 * @return <ul>	<li>true if the model is added and all references are being updated correctly</li>
+	 * 				<li>false if the coordinate the unit is being added to isn't free</li></li>
+	 */
 	private boolean addModel(final Coordinate c, final Model model) {
 		if (state.getModels().containsKey(c)) {
 			return false;
@@ -601,6 +647,10 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		return true;
 	}
 	
+	/**
+	 * Removes a model and all it's references from the game.
+	 * @param c Coordinate the Model being removed is standing on.
+	 */
 	public void removeModel(final Coordinate c) {
 		GameLogger.logger.info("removeModel " + c);
 		new Thread() {
@@ -639,6 +689,12 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		}.start();
 	}
 	
+	/**
+	 * Calculates the direction a model is looking after having moved
+	 * @param from Coordinate the Model is coming form
+	 * @param to Coordinate the Model is moving to
+	 * @return the new direction the model has to be facing (0=NORTH, 1=EAST, 2=SOUTH, 3=WEST)
+	 */
 	public int getDirectionOf(Coordinate from, Coordinate to) {
 		if (from == null || to == null) {
 			return -1;
@@ -660,6 +716,11 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		}
 	}
 	
+	/**
+	 * Removes all duplicates of an ArrayList of Coordinates, which can be used to clean a list after ranges (e.g. sight) have been calculated.<br/>
+	 * This algorithm sorts the list first. After that it goes through the list once, removing an entry if it equalsthe entry before.
+	 * @param list List with duplicates to be removed
+	 */
 	private void removeDuplicates(ArrayList<Coordinate> list) {
 		Collections.sort(list);
 		Coordinate prove = null;
@@ -674,21 +735,33 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 			}
 		}
 	}
-
+	
+	/**
+	 * This method is called when a player has won. It notifies the view and closes the game.
+	 */
 	@Override
 	public void hasWon(Player p) {
 		System.out.println("Player won: " + p);
 		//TODO add interface to VIEW
+		//TODO Finish game
 	}
-
+	
+	/**
+	 * This method is called whenever a player has lost according to the WinCondition. It notifies the view and removes that player from the game.
+	 */
 	@Override
 	public void hasLost(Player p) {
 		System.out.println("Player lost: " + p);
 		removePlayer(p);
-		endTurn();
+		if (p.equals(state.getCurrentPlayer()))
+			endTurn();
 		//TODO add interface to VIEW
 	}
 	
+	/**
+	 * This method removes a player from the game removing each of it's models.
+	 * @param player
+	 */
 	private void removePlayer(Player player) {
 		MyHashMap<Coordinate, Model> models = state.getModels();
 		Object[] keys = models.keySet().toArray();

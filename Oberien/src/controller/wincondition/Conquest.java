@@ -16,14 +16,14 @@ import event.WinEventAdapter;
 /**
  * In the WinCondition "Conquest" a player will lose, if his base is destroyed. The last man standing has won.
  */
-public class Conquest extends WinCondition implements ModelEventListener, Serializable {
+public class Conquest extends WinCondition implements ModelEventListener {
 	private static final long serialVersionUID = 1L;
 	private State state;
 	
 	public Conquest(State s) {
 		this.state = s;
 	}
-
+	
 	@Override
 	public void modelRemoved(Coordinate c, Model m) {
 		if (m instanceof Base) {
