@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+	<screen id="HUD" controller="view.gui.controllers.HUDScreenController">
+		<layer id="topLayer" childLayout="center">
+			<panel id="topPanel" childLayout="horizontal" height="15%">
+				<panel id="topLeftPanel" childLayout="horizontal">
+					<panel id="verticalAlignTopLeftPanel" childLayout="vertical">
+						<loadingbar id="metalBar"/>
+						<loadingbar id="energyBar"/>
+						<loadingbar id="populationBar"/>
+					</panel>
+				</panel>
+				<panel id="topRightPanel" childLayout="center">
+					<panel id="horizontalAlignTopRightPanel" childLayout="vertical">
+						<text id="roundText" font="res/fonts/32/raven.fnt" text="Round 1     "/>
+						<text id="PlayerName" font="res/fonts/32/raven.fnt" text="Playername"/> 
+					</panel>
+				</panel>
+			</panel>
+		</layer>
+		<layer id="bottomLayer" childLayout="center">
+			
+		</layer>
+	</screen>
+</nifty>

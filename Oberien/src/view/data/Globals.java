@@ -6,6 +6,7 @@
 package view.data;
 
 import org.newdawn.slick.Color;
+import view.gui.controllers.HUDScreenController;
 
 /**
  * This class stores constants that are needed in different locations throughout
@@ -42,4 +43,9 @@ public class Globals {
 	 * Stores the color of the grid rendered by the GridRenderer.
 	 */
 	public static final Color GRID_COLOR = Color.black;
+	/**
+	 * Controller instance of the HUDScreenController needed for updating the
+	 * HUD as the instance is created inside of Nifty.
+	 */
+	public static HUDScreenController hudControl;
 }
