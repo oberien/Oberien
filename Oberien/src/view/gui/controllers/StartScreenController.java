@@ -12,34 +12,38 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 public class StartScreenController implements ScreenController {
-	Nifty nifty;
-	Screen screen;
-	
-	@Override
-	public void bind(Nifty nifty, Screen screen) {
-		this.nifty = nifty;
-		this.screen = screen;
-	}
+		Nifty nifty;
+		Screen screen;
 
-	@Override
-	public void onStartScreen() {
-	}
+		@Override
+		public void bind(Nifty nifty, Screen screen) {
+			this.nifty = nifty;
+			this.screen = screen;
+		}
 
-	@Override
-	public void onEndScreen() {
-	}
-	
-	public void gameSetup() {
-		nifty.gotoScreen("gameSetup");
-	}
-	
-	public void settings() {
-		nifty.gotoScreen("settings");
-	}
-	
-	public void exit() {
-		Options.save();
-		//TODO: Add GameContainer.exit() instead of this
-		System.exit(0);
-	}
+		@Override
+		public void onStartScreen() {
+		}
+
+		@Override
+		public void onEndScreen() {
+		}
+
+		public void gameSetup() {
+			nifty.gotoScreen("gameSetup");
+		}
+
+		public void multiplayer() {
+			nifty.gotoScreen("multiplayer-login");
+		}
+
+		public void settings() {
+			nifty.gotoScreen("settings");
+		}
+
+		public void exit() {
+			Options.save();
+			//TODO: Add GameContainer.exit() instead of this
+			System.exit(0);
+		}
 }
