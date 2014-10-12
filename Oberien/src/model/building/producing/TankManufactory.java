@@ -1,16 +1,16 @@
-package model.building.resourceCollector;
+package model.building.producing;
 
 import model.Layer;
 import model.Type;
 import model.player.Player;
 
-public class SolarCell extends ResourceCollector {
+public class TankManufactory extends Producing {
 
-	public SolarCell(Player player) {
-		super("Solar Cell", Type.RescourceCollector, 513, player, 
-				5, 0, 0,
-				25, 0, 5, Layer.Ground,
-				0, 2, 0);
+	public TankManufactory(Player player) {
+		super("Factory", Type.Producing, 641, player,
+				75, 75, 0,
+				100, 0, 5,
+				Type.Tank, 10, 1, Layer.Ground);
 	}
 	
 	@Override
@@ -20,8 +20,7 @@ public class SolarCell extends ResourceCollector {
 				+ "Standard layer: " + getDefaultLayer() + "<br>"
 				+ "Costs " + getCostMoney() + " money, " + getCostEnergy() + " energy, " + getCostPopulation() + " population<br>"
 				+ "HP: " + getMaxLife() + "<br>Defense: " + getDefense() + "<br>Viewrange: " + getViewRange() + "<br>"
-				+ "Producing money: " + getProducingMoney() + "<br>Producing energy: " 
-				+ getProducingEnergy() + "<br>Producing population: " + getProducingPopulation() + "<br><br>"
-				+ "<i>Solar Cells are the basic energy producers.</i></body></html>";
+				+ "Builds: " + getBuilds() + "<br>Buildspeed: " + getBuildSpeed() + "<br>Buildrange: " + getBuildRange() + "<br><br>"
+				+ "<i>Tank manufactories produce all sorts of tanks. Tanks are heavy armored, long range units.</i></body></html>";
 	}
 }

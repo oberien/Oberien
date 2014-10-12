@@ -37,12 +37,10 @@ public class FieldList {
 	}
 
 	public byte[] getCanPass(Type type) {
-		if (type == Type.Infantry || type == Type.Robot) {
+		if (type == Type.Infantry || type == Type.Robot || type == Type.Spider) {
 			return new byte[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,16,17};
-		} else if (type == Type.Tank) {
-			return new byte[]{0,1,17};
-		} else if (type == Type.Recon) {
-			return new byte[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18};
+		} else if (type == Type.Tank || type == Type.LightVehicle) {
+			return new byte[]{0,1,12,17};
 		} else if (type == Type.Ship) {
 			return new byte[]{14,15};
 		} else if (type == Type.Builder) {

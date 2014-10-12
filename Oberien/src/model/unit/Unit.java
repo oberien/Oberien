@@ -63,6 +63,7 @@ public class Unit extends Model {
 	public int getEvasion() {
 		return evade;
 	}
+	
 	public boolean canPass(byte b) {
 		for (int i = 0; i < canPass.length; i++) {
 			if (canPass[i] == b) {

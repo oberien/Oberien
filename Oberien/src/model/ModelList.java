@@ -3,14 +3,13 @@ package model;
 import java.util.ArrayList;
 
 import model.building.base.Base;
-import model.building.producing.Barracks;
-import model.building.producing.Factory;
-import model.building.producing.SpyCenter;
+import model.building.producing.MilitaryTrainingArea;
+import model.building.producing.RoboHub;
+import model.building.producing.TankManufactory;
 import model.building.resourceCollector.HamsterWheel;
 import model.building.resourceCollector.House;
 import model.building.resourceCollector.NuclearReactor;
 import model.building.resourceCollector.SolarCell;
-import model.building.resourceCollector.Watergenerator;
 import model.building.resourceCollector.Windmill;
 import model.building.storage.BigStorage;
 import model.building.storage.MediumStorage;
@@ -27,10 +26,10 @@ import model.unit.infantry.HeavyAssaultWalker;
 import model.unit.infantry.Rocketeer;
 import model.unit.infantry.Sharpshooter;
 import model.unit.infantry.Soldier;
+import model.unit.infantry.Spy;
 import model.unit.infantry.Warrior;
-import model.unit.recon.Spy;
 import model.unit.robot.AnnoyBot;
-import model.unit.robot.Strider;
+import model.unit.spider.Strider;
 import model.unit.tank.LaserTank;
 import model.unit.tank.Leopard5;
 
@@ -45,7 +44,7 @@ public class ModelList {
 	}
 
 	private ModelList() {
-		models = new Model[30];
+		models = new Model[29];
 		models[0] = new Soldier(null);
 		models[1] = new Rocketeer(null);
 		models[2] = new HeavyAssaultWalker(null);
@@ -65,9 +64,9 @@ public class ModelList {
 		models[16] = new SmallStorage(null);
 		models[17] = new MediumStorage(null);
 		models[18] = new BigStorage(null);
-		models[19] = new Barracks(null);
-		models[20] = new Factory(null);
-		models[21] = new SpyCenter(null);
+		models[19] = new MilitaryTrainingArea(null);
+		models[20] = new TankManufactory(null);
+		models[21] = new RoboHub(null);
 		models[22] = new GatlingGun(null);
 		models[23] = new LaserCannon(null);
 		models[24] = new Base(null);
@@ -75,7 +74,6 @@ public class ModelList {
 		models[26] = new Warrior(null);
 		models[27] = new AnnoyBot(null);
 		models[28] = new Windmill(null);
-		models[29] = new Watergenerator(null);
 	}
 	
 	public Model[] getAllModels() {
@@ -138,20 +136,18 @@ public class ModelList {
 			return new NuclearReactor(player);
 		} else if(name.equals("Windmill")) {
 			return new Windmill(player);
-		} else if(name.equals("Watergenerator")) {
-			return new Watergenerator(player);
 		} else if(name.equals("Small Storage")) {
 			return new SmallStorage(player);
 		} else if(name.equals("Medium Storage")) {
 			return new MediumStorage(player);
 		} else if(name.equals("Big Storage")) {
 			return new BigStorage(player);
-		} else if(name.equals("Barracks")) {
-			return new Barracks(player);
-		} else if(name.equals("Factory")) {
-			return new Factory(player);
-		} else if(name.equals("Spy Center")) {
-			return new SpyCenter(player);
+		} else if(name.equals("Military Training Area")) {
+			return new MilitaryTrainingArea(player);
+		} else if(name.equals("Tank Manufactory")) {
+			return new TankManufactory(player);
+		} else if(name.equals("Robo Hub")) {
+			return new RoboHub(player);
 		} else if(name.equals("Gatling Gun")) {
 			return new GatlingGun(player);
 		} else if(name.equals("Laser Cannon")) {

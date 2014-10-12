@@ -1,17 +1,18 @@
-package model.unit.builder;
+package model.unit.spider;
 
 import model.Layer;
 import model.Type;
 import model.player.Player;
+import model.unit.robot.Robot;
 
-public class ResourceCollectorBuilder extends Builder {
+public class Strider extends Spider {
 
-	public ResourceCollectorBuilder(Player player) {
-		super("Resource Collector Builder", Type.Builder, 768, player, 
-				25, 25, 1,
-				10, 0, 0, 3,
-				8, true, false, false, false, false, Layer.Ground, 
-				Type.RescourceCollector, 5, 1);
+	public Strider(Player player) {
+		super("Strider", Type.Robot, 128, player, 
+				20, 10, 0,
+				50, 2, 7, 5,
+				10, true, false, false, false, false, Layer.Ground,
+				25, 100, 1, null);
 	}
 	
 	@Override
@@ -22,7 +23,9 @@ public class ResourceCollectorBuilder extends Builder {
 				+ "HP: " + getMaxLife() + "<br>Defense: " + getDefense() + "<br>Viewrange: " + getViewRange() + "<br>"
 				+ "Movespeed: " + getMovespeed() + "<br>Can move on (Ground/Water/Air/Underground/Underwater): " + isMoveGround() + "/" + isMoveWater() + "/"
 				+ isMoveAir() + "/" + isMoveUnderground() + "/" + isMoveUnderwater() + "<br>Standard layer: " + getDefaultLayer() + "<br>"
-				+ "Builds: " + getBuilds() + "<br>Buildspeed: " + getBuildSpeed() + "<br>Buildrange: " + getBuildRange() + "<br><br>"
-				+ "<i>Builds ressource collectors.</i></body></html>";
+				+ "Damage: " + getDamage() + "<br>Strikechance: " + getStrike() + "%<br>Attackrange: " + getAttackRange() + "<br>Strong against: " + getStrongAgainst() + "<br><br>"
+				+ "<i>Striders are the basic spider unit with high mobility.</i></body></html>";
 	}
+
+
 }

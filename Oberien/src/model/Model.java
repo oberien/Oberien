@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import model.player.Player;
 
-public class Model implements Serializable{
+public class Model implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
@@ -140,8 +140,23 @@ public class Model implements Serializable{
 		}
 		return false;
 	}
-}
 
+	@Override
+	public String toString() {
+		return "Model [name=" + name + ", type=" + type + ", id=" + id
+				+ ", player=" + player + ", costMoney=" + costMoney
+				+ ", costEnergy=" + costEnergy + ", costPopulation="
+				+ costPopulation + ", life=" + life + ", maxLife=" + maxLife
+				+ ", defense=" + defense + ", viewRange=" + viewRange
+				+ ", timeToBuild=" + timeToBuild + ", direction=" + direction
+				+ ", defaultLayer=" + defaultLayer + ", actionDone="
+				+ actionDone + ", level=" + level + "]";
+	}
+	
+	public String getDescription() {
+		return null;
+	}
+}
 //
 //public class Model {
 //	private String name;
