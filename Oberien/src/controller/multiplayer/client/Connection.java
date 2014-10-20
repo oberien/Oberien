@@ -1,7 +1,6 @@
 package controller.multiplayer.client;
 
 import event.multiplayer.MultiplayerEventAdapter;
-import server.Server;
 
 import java.io.*;
 import java.net.Socket;

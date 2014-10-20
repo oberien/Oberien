@@ -39,12 +39,40 @@ public class Client {
 		con.removeUserEventListener(l);
 	}
 
-	public static void privateMessage(String message) throws IOException {
+	public static void send(String input) throws IOException {
+		if (input.startsWith("/help")) {
+			System.out.println("Help:\n" +
+					/*"    /kick <username> [reason]\n" +
+					"        kicks a user" +*/
+					"    /msg <username> <message>\n" +
+					"        sends a private message" +
+					"    /pm <username> <message>\n" +
+					"        alias to /msg"
+			);
+		/*} else if (input.startsWith("/kick")) {
+			int first = input.indexOf(" ");
+			int second = input.indexOf(" ", first+1);
+			String username = input.substring(first+1, second);
+			String reason = input.substring(second+1, input.length());
+			server.kick(username, reason);*/
+		} else if (input.startsWith("/msg") || input.startsWith("/pm")) {
+			int first = input.indexOf(" ");
+			int second = input.indexOf(" ", first+1);
+			String username = input.substring(first+1, second);
+			String message = input.substring(second+1, input.length());
+			privateMessage(username, message);
+		}
+		else {
+			broadcastMessage(input);
+		}
+	}
+
+	public static void privateMessage(String to, String message) throws IOException {
 		checkForReady();
 		if (!loggedIn) {
 			throw new IllegalStateException("User not logged in. Login first.");
 		}
-		con.send(Command.privateMessage(con.getUsername(), message).toString());
+		con.send(Command.privateMessage(con.getUsername(), to, message).toString());
 	}
 
 	public static void broadcastMessage(String message) throws IOException {

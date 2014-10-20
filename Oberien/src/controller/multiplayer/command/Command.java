@@ -83,8 +83,8 @@ public class Command {
 		return new Command(50, new String[]{username, message});
 	}
 
-	public static Command privateMessage(String username, String message) {
-		return new Command(51, new String[]{username, message});
+	public static Command privateMessage(String from, String to, String message) {
+		return new Command(51, new String[]{from, to, message});
 	}
 
 	public int getCommandId() {

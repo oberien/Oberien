@@ -33,7 +33,7 @@ public class ChatThread extends Thread {
 						con.broadcastMessageReceived(args[0], args[1]);
 						break;
 					case PrivateMessage:
-						con.privateMessageReceived(args[0], args[1]);
+						con.privateMessageReceived(args[0], args[2]);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
