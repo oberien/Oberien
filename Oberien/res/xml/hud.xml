@@ -11,15 +11,15 @@ and open the template in the editor.
 			<panel id="topPanel" childLayout="horizontal" height="15%">
 				<panel id="topLeftPanel" childLayout="horizontal">
 					<panel id="verticalAlignTopLeftPanel" childLayout="vertical">
-						<loadingbar id="metalBar"/>
-						<loadingbar id="energyBar"/>
-						<loadingbar id="populationBar"/>
+						<control name="loadingbar" id="metalBar"/>
+						<control name="loadingbar" id="energyBar"/>
+						<control name="loadingbar" id="populationBar"/>
 					</panel>
 				</panel>
 				<panel id="topRightPanel" childLayout="center">
 					<panel id="horizontalAlignTopRightPanel" childLayout="vertical">
 						<text id="roundText" font="res/fonts/32/raven.fnt" text="Round 1     "/>
-						<text id="PlayerName" font="res/fonts/32/raven.fnt" text="Playername"/> 
+						<text id="playerName" font="res/fonts/32/raven.fnt" text="Playername"/> 
 					</panel>
 				</panel>
 			</panel>

@@ -86,8 +86,6 @@ public class GridRenderer {
 
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 	}

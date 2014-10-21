@@ -11,6 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
 import controller.Controller;
 import de.lessvoid.nifty.Nifty;
+import org.newdawn.slick.opengl.SlickCallable;
 
 public class NiftyMenu extends BasicGameState {
 
@@ -32,7 +33,9 @@ public class NiftyMenu extends BasicGameState {
 	}
 
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		nifty.render(false);
+		SlickCallable.enterSafeBlock();
+		nifty.render(true);
+		SlickCallable.leaveSafeBlock();
 	}
 
 	public static void startGame(Controller controller) {
