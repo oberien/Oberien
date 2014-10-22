@@ -103,7 +103,9 @@ public class Command {
 	public String toString() {
 		StringBuilder sb = new StringBuilder(new String(new char[]{(char)commandId}));
 		for (int i = 0; i < args.length; i++) {
-			sb.append(DIVIDER);
+			if (i > 0) {	
+				sb.append(DIVIDER);
+			}
 			sb.append(args[i]);
 		}
 		return sb.toString();

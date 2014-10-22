@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 
 public class Client {
 	private static Connection con;
@@ -19,7 +20,8 @@ public class Client {
 
 	static {
 		try {
-			con = new Connection(new Socket("localhost", 4444));
+			con = new Connection(new Socket("25.109.193.0", 4444));
+			con.init();
 		} catch (IOException e) {
 			Client.e = e;
 		}
@@ -100,11 +102,12 @@ public class Client {
 		con.send(Command.login(username, Hasher.getPBKDF2(username, password)).toString());
 		Command command = new Command(con.br.readLine());
 		if (command.getCommandType() == CommandType.ActionSucceed) {
+			new ChatThread(con).start();
 			return command.getArgs()[0];
 		} else if (command.getCommandType() == CommandType.ActionFailed) {
 			return null;
 		} else {
-			throw new MultiplayerException("Invalid server answer");
+			throw new MultiplayerException("Invalid server answer: " + command.getCommandType() + ": " + command.getCommandId());
 		}
 	}
 
@@ -118,6 +121,10 @@ public class Client {
 		if (loggedIn) {
 			throw new IllegalStateException("A user is already logged in. Please log out first.");
 		}
+		System.out.println(username);
+		System.out.println(password);
+		System.out.println(Hasher.getPBKDF2(username, password).toString());
+		System.out.println((Arrays.toString(Command.register(username, Hasher.getPBKDF2(username, password)).toString().toCharArray())));
 		con.send(Command.register(username, Hasher.getPBKDF2(username, password)).toString());
 		Command command = new Command(con.br.readLine());
 		if (command.getCommandType() == CommandType.ActionSucceed) {
