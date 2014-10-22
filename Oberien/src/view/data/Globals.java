@@ -47,5 +47,13 @@ public class Globals {
 	 * Controller instance of the HUDScreenController needed for updating the
 	 * HUD as the instance is created inside of Nifty.
 	 */
-	public static HUDScreenController hudControl;
+	private static HUDScreenController hudControl;
+	
+	public static void setHUDController(HUDScreenController hsc) {
+		hudControl = hsc;
+	}
+	
+	public static HUDScreenController getHUDController() {
+		return hudControl;
+	}
 }

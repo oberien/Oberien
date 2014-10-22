@@ -36,6 +36,8 @@ import view.renderer.UnitRenderer;
 import controller.Controller;
 import controller.Options;
 import controller.State;
+import view.data.Globals;
+import view.gui.controllers.HUDScreenController;
 
 public class GameRunning extends BasicGameState {
 	private StartData sd;
@@ -49,6 +51,7 @@ public class GameRunning extends BasicGameState {
 	private FoWRenderer fowr;
 	private ActionGroundRenderer agr;
 	private DamageRenderer dr;
+	private HUDScreenController huc;
 	
 	private int screenWidth;
 	private int screenHeight;
@@ -104,7 +107,8 @@ public class GameRunning extends BasicGameState {
 			screenHeight = gc.getScreenHeight();
 			controller = sd.getController();
 			state = sd.getState();
-						
+					
+			huc = Globals.getHUDController();
 			mm = new MusicManager();
 			mm.init();
 		}
@@ -246,7 +250,7 @@ public class GameRunning extends BasicGameState {
 							}
 						}
 						
-						unitMoving = null;
+						unitMoving = null; 
 					} else {
 						mapcoord = null;
 						unitMoving = null;

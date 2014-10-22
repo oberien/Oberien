@@ -6,19 +6,21 @@
 package view.gui.controllers;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.AbstractController;
 import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
-public class LoadingbarController implements Controller {
+public class LoadingbarController extends AbstractController implements Loadingbar {
 
 	private Nifty nifty;
 	private Screen screen;
 	private Element element;
 	private Parameters parameter;
+	
+	private float progress;
 
 	@Override
 	public void bind(Nifty nifty, Screen screen, Element element, Parameters parameter) {
@@ -44,11 +46,18 @@ public class LoadingbarController implements Controller {
 	public boolean inputEvent(NiftyInputEvent inputEvent) {
 		return false;
 	}
-
+	
+	@Override
 	public void setProgress(float progress) {
+		this.progress = progress;
 		final int MIN_WIDTH = 32;
 		int pixelWidth = (int) (MIN_WIDTH + (element.getParent().getWidth() - MIN_WIDTH) * progress);
 		element.setConstraintWidth(new SizeValue(pixelWidth + "px"));
 		element.getParent().layoutElements();
+	}
+
+	@Override
+	public float getProgress() {
+		return progress;
 	}
 }
