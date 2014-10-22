@@ -6,6 +6,8 @@
 package view.gui.controllers;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.NiftyControl;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -14,6 +16,8 @@ public class HUDScreenController implements ScreenController {
 	private int turn, metal, energy, population;
 	private String playername; 
 	private Nifty nifty;
+	private Element roundText, playerName;
+	private NiftyControl metalBar, energyBar, populationBar;
 	
 	public HUDScreenController() {
 
@@ -21,6 +25,10 @@ public class HUDScreenController implements ScreenController {
 
 	@Override
 	public void bind(Nifty nifty, Screen screen) {
+		roundText = screen.findElementById("roundText");
+		playerName = screen.findElementById("playerName");
+		
+//		metalBar = screen.findNiftyControl(playername, LoadingbarController.class);
 	}
 
 	@Override

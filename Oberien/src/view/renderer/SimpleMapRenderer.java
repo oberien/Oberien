@@ -18,9 +18,7 @@ import org.newdawn.slick.geom.Vector2f;
 import view.data.Globals;
 
 /**
- * This is a very simple Implementation of the MapRenderer. It works fine for
- * small maps, however it is very inefficient for larger maps and thus shouldn't
- * be used.
+ * The standard map renderer. 
  */
 public class SimpleMapRenderer implements MapRenderer {
 
@@ -94,7 +92,6 @@ public class SimpleMapRenderer implements MapRenderer {
 
 	@Override
 	public void draw(Graphics mapg) throws SlickException {
-
 		//leave your fingers off this code if you don't want to get hurt!
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, tiles.getTexture().getTextureID());
 
