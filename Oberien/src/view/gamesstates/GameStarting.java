@@ -107,6 +107,9 @@ public class GameStarting extends BasicGameState {
 			nifty.fromXml("res/xml/main.xml", "start");
 			nifty.addXml("res/xml/gamesetup.xml");
 			nifty.addXml("res/xml/multiplayer-login.xml");
+			nifty.addXml("res/xml/register.xml");
+			nifty.addXml("res/xml/multiplayer-menu.xml");
+			nifty.addXml("res/xml/chat.xml");
 			nifty.addXml("res/xml/settings.xml");
 			nifty.addXml("res/xml/tutorial.xml");
             //nifty.setDebugOptionPanelColors(true);

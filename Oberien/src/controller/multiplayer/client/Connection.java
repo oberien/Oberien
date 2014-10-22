@@ -31,12 +31,19 @@ public class Connection extends MultiplayerEventAdapter {
 	}
 
 	public void send(String s) {
+		System.out.println("0");
 		try {
+			System.out.println(s.endsWith("\n"));
 			if (s.endsWith("\n")) {
+				System.out.println("1");
 				bw.write(s);
+				System.out.println("2");
 			} else {
+				System.out.println("3");
 				bw.write(new StringBuilder(s).append("\n").toString());
+				System.out.println("4");
 			}
+			bw.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 			close();

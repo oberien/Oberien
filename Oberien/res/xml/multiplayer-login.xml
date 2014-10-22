@@ -12,10 +12,18 @@
 		</layer>
 		<layer id="foreground" childLayout="center">
             <panel childLayout="vertical">
-                <control id="username" name="textfield" align="center" width="20%"/>
-                <control id="password" name="textfield" passwordChar="•" align="center" width="20%"/>
-                <control name="button" align="center" width="20%">
-                        <interact onClick="login()"/>
+                <control id="username" name="textfield" align="center" width="20%">
+                	<interact onClick="clearUserField()"/>
+                </control>
+                <control id="password" name="textfield" passwordChar="•" align="center" width="20%">
+                	<interact onClick="clearPwdField()"/>
+                </control>
+                <control name="button" label="Login" align="center" width="20%">
+                	<interact onClick="login()"/>
+                </control>
+                <control name="label" text="Need an account?" algin="center"/>
+                <control name="button" label="Register" align="center" width="20%">
+                	<interact onClick="register()"/>
                 </control>
             </panel>
 		</layer>
