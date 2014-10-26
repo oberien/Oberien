@@ -73,7 +73,7 @@ public class GameLoading extends BasicGameState {
 
 		mapd = sd.getMap();
 
-		units = new Image[513][4];
+		units = new Image[1025][4];
 	}
 
 	@Override
