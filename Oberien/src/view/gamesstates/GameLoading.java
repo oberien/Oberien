@@ -40,6 +40,7 @@ public class GameLoading extends BasicGameState {
 
 	private Image tiles;
 	private Image[][] units;
+	private Image missing;
 	private byte[][] data;
 	private Image map;
 	private Graphics mapg;
@@ -56,6 +57,7 @@ public class GameLoading extends BasicGameState {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		missing = new Image("res/imgs/units/missing.png");
 		loading = new String[18];
 		f = sd.getFont();
 		f = f.deriveFont(Font.PLAIN, gc.getScreenHeight() / loading.length - 5);
@@ -137,7 +139,7 @@ public class GameLoading extends BasicGameState {
 						units[i][d] = new Image("res/imgs/units/" + i + "." + d + ".png");
 						counter++;
 					} catch (Exception ex) {
-						units[i][d] = new Image("res/imgs/units/missing.png");
+						units[i][d] = missing;
 						counter++;
 					}
 				} else {

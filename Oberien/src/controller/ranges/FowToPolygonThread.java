@@ -180,7 +180,7 @@ public class FowToPolygonThread extends Thread {
 			}
 			System.out.println("You needed " + (System.currentTimeMillis()-time) + "ms");
 			
-//			state.addViewrange(state.getModel(c), coords);
+//			state.addViewrange(state.createNewModel(c), coords);
 		} else {
 			//cast ArrayList to Array
 //			Line[] lines = new Line[ret.size()];

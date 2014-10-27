@@ -19,9 +19,9 @@ public class TurnChangedAdapter {
 		listener.remove(l);
 	}
 	
-	public void turnChanged(int turn) {
+	public void roundChanged(int turn) {
 		for (TurnChangedListener l : listener) {
-			l.turnChanged(turn);
+			l.roundChanged(turn);
 		}
 	}
 	

@@ -95,7 +95,7 @@ public class ModelList {
 		return retur;
 	}
 	
-	public Model getModel(String name, Player player) {
+	public Model createNewModel(String name, Player player) {
 		if(name.equals("Soldier")) {
 			return new Soldier(player);
 		} else if(name.equals("Rocketeer")) {

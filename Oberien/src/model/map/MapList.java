@@ -2,6 +2,7 @@ package model.map;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;

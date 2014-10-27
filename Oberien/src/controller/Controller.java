@@ -3,14 +3,11 @@ package controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
+import event.*;
 import logger.GameLogger;
-import model.AttackingModel;
-import model.BuildingModel;
-import model.Model;
-import model.ModelList;
-import model.ProducingModel;
-import model.StoringModel;
+import model.*;
 import model.map.Coordinate;
 import model.map.Field;
 import model.map.FieldList;
@@ -19,17 +16,10 @@ import model.map.MapList;
 import model.player.Player;
 import model.unit.Unit;
 import util.SerializableState;
-import controller.ranges.BuildRangeThread;
-import controller.ranges.DirectAttackRangeThread;
-import controller.ranges.FullAttackRangeThread;
-import controller.ranges.MoveRangeThread;
-import controller.ranges.ViewRangeThread;
 import controller.wincondition.WinCondition;
 import controller.wincondition.WinConditionList;
-import event.ModelEventAdapter;
-import event.WinEventListener;
 
-public class Controller extends ModelEventAdapter implements WinEventListener {
+public class Controller implements WinEventListener {
 	public static final int VIEWRANGE = 0;
 	public static final int MOVERANGE = 1;
 	public static final int FULL_ATTACKRANGE = 2;
@@ -38,7 +28,11 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 	
 	private State state;
 	private String winConditionName;
-	
+
+	private ModelEventAdapter modelEventAdapter = new ModelEventAdapter();
+	private PlayerStatsAdapter playerStatsAdapter = new PlayerStatsAdapter();
+	private TurnChangedAdapter turnChangedAdapter = new TurnChangedAdapter();
+
 	/**
 	 * Initialize Controller for a new game
 	 * @param map The map which is played on
@@ -80,6 +74,25 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		state.setBuildranges(s.getBuildranges());
 		reinitiateState();
 	}
+
+	public void addModelEventListener(ModelEventListener l) {
+		modelEventAdapter.addModelEventListener(l);
+	}
+	public void removeModelEventListener(ModelEventListener l) {
+		modelEventAdapter.removeModelEventListener(l);
+	}
+	public void addPlayerStatsListener(PlayerStatsListener l) {
+		playerStatsAdapter.addPlayerStatsListener(l);
+	}
+	public void removePlayerStatsListener(PlayerStatsListener l) {
+		playerStatsAdapter.removePlayerStatsListener(l);
+	}
+	public void addTurnChangedListener(TurnChangedListener l) {
+		turnChangedAdapter.addTurnChangedListener(l);
+	}
+	public void removeTurnChangedListener(TurnChangedListener l) {
+		turnChangedAdapter.removeTurnChangedListener(l);
+	}
 	
 	/**
 	 * Returns the State used for this instance of game
@@ -120,7 +133,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		GameLogger.logger.info("move " + old + " " + neu);
 		int ret = moveInternal(old, neu);
 		if (ret > 0)
-			modelMoved(old, neu);
+			modelEventAdapter.modelMoved(old, neu);
 		return ret;
 	}
 	
@@ -174,7 +187,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		GameLogger.logger.info("attack " + attacker + " " + defender);
 		int ret = attackInternal(attacker, defender);
 		if (ret > 0)
-			modelAttacked(attacker, defender);
+			modelEventAdapter.modelAttacked(attacker, defender);
 		return ret;
 	}
 	
@@ -294,21 +307,21 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 	 *
 	 * @param x x-Coordinate where to add
 	 * @param y y-Coordinate where to add
-	 * @param i ID of Model to add
+	 * @param name name of Model to add
 	 * @return whether the Model is added or not (e.g. when on that spot there
 	 * already is an Model)
 	 */
 	public void addModel(int x, int y, String name) {
 		GameLogger.logger.info("addModel " + x + " " + y + " " + name);
 		addModelInternal(x, y, name);
-		modelAdded(x, y, name);
+		modelEventAdapter.modelAdded(x, y, name);
 	}
 	
 	/**
 	 * @see Controller#addModel(int, int, String)
 	 */
 	private void addModelInternal(int x, int y, String name) {
-		Model m = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
+		Model m = ModelList.getInstance().createNewModel(name, state.getCurrentPlayer());
 		Coordinate c = new Coordinate(x, y, m.getDefaultLayer());
 		m.decreaseTimeToBuild(m.getTimeToBuild());
 		addModel(c, m);
@@ -320,7 +333,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 	 * @param model Model which is building
 	 * @param x x-Coordinate where to build
 	 * @param y y-Coordinate where to build
-	 * @param i ID of Model to build
+	 * @param name name of Model to build
 	 * @return <ul>
 	 * <li>0 when there already is an Model on that spot</li>
 	 * <li>1 when the Model is built</li>
@@ -335,8 +348,13 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 	public int buildModel(Coordinate model, int x, int y, String name) {
 		GameLogger.logger.info("buildModel " + model + " " + x + " " + y + " " + name);
 		int ret = buildModelInternal(model, x, y, name);
-		if (ret > 0)
-			modelIsBuild(model, x, y, name);
+		if (ret > 0) {
+			Player player = state.getCurrentPlayer();
+			modelEventAdapter.modelIsBuild(model, x, y, name);
+			playerStatsAdapter.moneyChanged(player.getMoney());
+			playerStatsAdapter.energyChanged(player.getEnergy());
+			playerStatsAdapter.populationChanged(player.getPopulation());
+		}
 		return ret;
 	}
 	
@@ -344,7 +362,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 	 * @see Controller#buildModel(Coordinate, int, int, String)
 	 */
 	private int buildModelInternal(Coordinate model, int x, int y, String name) {
-		Model b = ModelList.getInstance().getModel(name, state.getCurrentPlayer());
+		Model b = ModelList.getInstance().createNewModel(name, state.getCurrentPlayer());
 		Model m = state.getModel(model);
 		Coordinate build = new Coordinate(x, y, b.getDefaultLayer());
 		if (!state.getModels().containsKey(build)) {
@@ -388,7 +406,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		GameLogger.logger.info("addModelToBuild " + builder + " " + model);
 		int ret = addModelToBuildInternal(builder, model);
 		if (ret > 0)
-			modelAddedToBuild(builder, model);
+			modelEventAdapter.modelAddedToBuild(builder, model);
 		return ret;
 	}
 	
@@ -413,7 +431,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		GameLogger.logger.info("setActionDone " + c);
 		state.getModel(c).setActionDone(true);
 	}
-	
+
 	/**
 	 * Returns the Viewrange of all allied Models
 	 *
@@ -423,7 +441,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		if (state.getRound() == 0) {
 			return state.getMap().getStartAreaOfTeam(state.getCurrentPlayer().getTeam());
 		}
-		
+
 		ArrayList<Coordinate> ret = new ArrayList<Coordinate>();
 		MyHashMap<Model, Coordinate[]> viewrange = state.getViewranges();
 		Object[] keys = viewrange.keySet().toArray();
@@ -441,7 +459,177 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		retur = ret.toArray(retur);
 		return retur;
 	}
-	
+
+	private Coordinate[] getFullAttackRange(Coordinate c, int range) {
+		ArrayList<Coordinate> coords = new ArrayList();
+		Coordinate[] move = state.getMoverange(c);
+		for (Coordinate m : move) {
+			Coordinate[] attack = getRange(m, range, DIRECT_ATTACKRANGE);
+			for (Coordinate a : attack) {
+				if (!coords.contains(a)) {
+					coords.add(a);
+				}
+			}
+		}
+		Coordinate[] ret = new Coordinate[coords.size()];
+		return coords.toArray(ret);
+	}
+
+	private Coordinate[] getRange(Coordinate c, int range, int type) {
+		if (type == FULL_ATTACKRANGE) {
+			return getFullAttackRange(c, range);
+		}
+		ArrayList<Coordinate> coords = new ArrayList();
+		coords.add(c);
+		Map map = MapList.getInstance().getCurrentMap();
+		FieldList fl = FieldList.getInstance();
+		List<Coordinate> circle = getCircle(c, range, map.getWidth(), map.getHeight());
+//		return circle.toArray(new Coordinate[circle.size()]);
+		for (int i = 0; i < circle.size(); i++) {
+			int left = range;
+			List<Coordinate> line = getBresenhamLine(c, circle.get(i));
+			for (int j = 1; j < line.size(); j++) {
+				Coordinate current = line.get(j);
+				Field field = fl.get(map.get(current.getX(), current.getY()));
+				switch (type) {
+					case VIEWRANGE:
+						left -= field.getViewRange();
+						break;
+					case MOVERANGE:
+						left -= field.getMoveSpeed();
+						break;
+					case DIRECT_ATTACKRANGE:
+					case BUILDRANGE:
+						left -= field.getActionRange();
+						break;
+				}
+				if (left >= 0) {
+					if (!coords.contains(current)) {
+						coords.add(current);
+					}
+				}
+				if (left <= 0) {
+					break;
+				}
+			}
+		}
+
+		Coordinate[] ret = new Coordinate[coords.size()];
+		return coords.toArray(ret);
+	}
+
+	private List<Coordinate> getCircle(Coordinate center, int radius, int maxWidth, int maxHeight) {
+		ArrayList<Coordinate> coords = new ArrayList();
+		int x0 = center.getX();
+		int y0 = center.getY();
+		int f = 1 - radius;
+		int ddF_x = 0;
+		int ddF_y = -2 * radius;
+		int x = 0;
+		int y = radius;
+
+		int xn,yn;
+		yn = y0 + radius;
+		coords.add(new Coordinate(x0, yn < 0 ? 0 : yn > maxHeight ? maxHeight - 1 : yn, Layer.Ground));
+		yn = y0 - radius;
+		coords.add(new Coordinate(x0, yn < 0 ? 0 : yn > maxHeight ? maxHeight - 1 : yn, Layer.Ground));
+		xn = x0 + radius;
+		coords.add(new Coordinate(xn < 0 ? 0 : xn > maxWidth ? maxWidth - 1 : xn, y0, Layer.Ground));
+		xn = x0 - radius;
+		coords.add(new Coordinate(xn < 0 ? 0 : xn > maxWidth ? maxWidth - 1 : xn, y0, Layer.Ground));
+
+		while(x < y) {
+			if(f >= 0) {
+				y--;
+				ddF_y += 2;
+				f += ddF_y;
+			}
+			x++;
+			ddF_x += 2;
+			f += ddF_x + 1;
+
+			int xpx = x0+x, xmx = x0-x, xpy = x0+y, xmy = x0-y,
+					ypy = y0+y, ymy = y0-y, ypx = y0+x, ymx = y0-x;
+			coords.add(new Coordinate(xpx < 0 ? 0 : xpx > maxWidth ? maxWidth - 1 : xpx, ypy < 0 ? 0 : ypy > maxHeight ? maxHeight - 1 : ypy, Layer.Ground));
+			coords.add(new Coordinate(xmx < 0 ? 0 : xmx > maxWidth ? maxWidth - 1 : xmx, ypy < 0 ? 0 : ypy > maxHeight ? maxHeight - 1 : ypy, Layer.Ground));
+			coords.add(new Coordinate(xpx < 0 ? 0 : xpx > maxWidth ? maxWidth - 1 : xpx, ymy < 0 ? 0 : ymy > maxHeight ? maxHeight - 1 : ymy, Layer.Ground));
+			coords.add(new Coordinate(xmx < 0 ? 0 : xmx > maxWidth ? maxWidth - 1 : xmx, ymy < 0 ? 0 : ymy > maxHeight ? maxHeight - 1 : ymy, Layer.Ground));
+			coords.add(new Coordinate(xpy < 0 ? 0 : xpy > maxWidth ? maxWidth - 1 : xpy, ypx < 0 ? 0 : ypx > maxHeight ? maxHeight - 1 : ypx, Layer.Ground));
+			coords.add(new Coordinate(xmy < 0 ? 0 : xmy > maxWidth ? maxWidth - 1 : xmy, ypx < 0 ? 0 : ypx > maxHeight ? maxHeight - 1 : ypx, Layer.Ground));
+			coords.add(new Coordinate(xpy < 0 ? 0 : xpy > maxWidth ? maxWidth - 1 : xpy, ymx < 0 ? 0 : ymx > maxHeight ? maxHeight - 1 : ymx, Layer.Ground));
+			coords.add(new Coordinate(xmy < 0 ? 0 : xmy > maxWidth ? maxWidth - 1 : xmy, ymx < 0 ? 0 : ymx > maxHeight ? maxHeight - 1 : ymx, Layer.Ground));
+		}
+
+		// chunky circle
+
+		Coordinate[] bresenham = new Coordinate[coords.size()];
+		bresenham = coords.toArray(bresenham);
+
+		for (Coordinate c : bresenham) {
+			int touches = 0;
+			ArrayList<Coordinate> next = new ArrayList();
+			Coordinate c0 = new Coordinate(c.getX()+1, c.getY()+1, Layer.Ground);
+			Coordinate c1 = new Coordinate(c.getX()+1, c.getY()-1, Layer.Ground);
+			Coordinate c2 = new Coordinate(c.getX()-1, c.getY()+1, Layer.Ground);
+			Coordinate c3 = new Coordinate(c.getX()-1, c.getY()-1, Layer.Ground);
+			for (Coordinate d : coords) {
+				if (new Coordinate(c.getX()+1, c.getY(), Layer.Ground).equals(d)
+						|| new Coordinate(c.getX()-1, c.getY(), Layer.Ground).equals(d)
+						|| new Coordinate(c.getX(), c.getY()+1, Layer.Ground).equals(d)
+						|| new Coordinate(c.getX(), c.getY()-1, Layer.Ground).equals(d)) {
+					touches++;
+				} else if (c0.equals(d)) {
+					next.add(d);
+				} else if (c1.equals(d)) {
+					next.add(d);
+				} else if (c2.equals(d)) {
+					next.add(d);
+				} else if (c3.equals(d)) {
+					next.add(d);
+				}
+			}
+			if (touches < 2) {
+				for (Coordinate d : next) {
+					int dx = c.getX() - d.getX();
+					int dy = c.getY() - d.getY();
+					Coordinate x1 = new Coordinate(c.getX() - dx, c.getY(), Layer.Ground);
+					Coordinate x2 = new Coordinate(c.getX(), c.getY() - dy, Layer.Ground);
+					int dif1 = getDifference(x1, center);
+					int dif2 = getDifference(x2, center);
+					if (dif1 < dif2 && !coords.contains(x1)) {
+						coords.add(x1);
+					} else if (dif1 > dif2 && !coords.contains(x2)) {
+						coords.add(x2);
+					}
+				}
+			}
+		}
+		removeDuplicates(coords);
+		return coords;
+	}
+
+	private List<Coordinate> getBresenhamLine(Coordinate from, Coordinate to) {
+		ArrayList<Coordinate> list = new ArrayList<>();
+		int x0 = from.getX();
+		int y0 = from.getY();
+		int x1 = to.getX();
+		int y1 = to.getY();
+
+		int dx =  Math.abs(x1 - x0), sx = x0<x1 ? 1 : -1;
+		int dy = -Math.abs(y1 - y0), sy = y0<y1 ? 1 : -1;
+		int err = dx+dy, e2; /* error value e_xy */
+
+		while (true) {  /* loop */
+			list.add(new Coordinate(x0, y0, Layer.Ground));
+			if (x0==x1 && y0==y1) break;
+			e2 = 2*err;
+			if (e2 > dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+			if (e2 < dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+		}
+
+		return list;
+	}
+
 	/**
 	 * Ends the turn.<br/>
 	 * Calculates the building status of Models which are built at the moment.<br/>
@@ -491,6 +679,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		//END
 		
 		//START calculate new player's stats
+		Player player = state.getCurrentPlayer();
 		if (state.getRound() != 0) {
 			models = state.getPlayerModels();
 			int storage = 0;
@@ -500,9 +689,9 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 					//normal buildings
 					if (m instanceof ProducingModel) {
 						ProducingModel pm = (ProducingModel) m;
-						state.getCurrentPlayer().addMoney(pm.getProducingMoney());
-						state.getCurrentPlayer().addEnergy(pm.getProducingEnergy());
-						state.getCurrentPlayer().addPopulation(pm.getProducingPopulation());
+						player.addMoney(pm.getProducingMoney());
+						player.addEnergy(pm.getProducingEnergy());
+						player.addPopulation(pm.getProducingPopulation());
 					}
 					if (m instanceof StoringModel) {
 						StoringModel sm = (StoringModel) m;
@@ -511,12 +700,21 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 					}
 				}
 			}
-			state.getCurrentPlayer().setStorage(storage);
-			state.getCurrentPlayer().setPopulationStorage(populationStorage);
+			player.setStorage(storage);
+			player.setPopulationStorage(populationStorage);
 		}
 		//END
+		turnChangedAdapter.roundChanged(state.getRound());
+		turnChangedAdapter.playernameChanged(player.getName());
+		playerStatsAdapter.moneyChanged(player.getMoney());
+		playerStatsAdapter.energyChanged(player.getEnergy());
+		playerStatsAdapter.populationChanged(player.getPopulation());
 	}
-	
+
+	private int getDifference(Coordinate x, Coordinate y) {
+		return Math.abs(x.getX() - y.getX()) + Math.abs(x.getY() - y.getY());
+	}
+
 	/**
 	 * Reinitializes State after a game has been loaded (SerializableState) and Controller has been constructed.
 	 */
@@ -564,18 +762,23 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 				state.updateModel(from, to);
 				Field actField = FieldList.getInstance().get(state.getMap().get(to.getX(), to.getY()));
 				
-				new ViewRangeThread(null, state, to, model.getViewRange() + actField.getViewPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
+//				new ViewRangeThread(null, state, to, model.getViewRange() + actField.getViewPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
+				state.updateViewrange(model, getRange(to, model.getViewRange() + actField.getViewPlus(), VIEWRANGE));
 				if (model instanceof Unit) {
-					new MoveRangeThread(null, state, to, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), false).start();
+//					new MoveRangeThread(null, state, to, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), false).start();
+					state.updateMoverange(model, getRange(to, ((Unit) model).getMovespeed(), MOVERANGE));
 				}
 				if (model instanceof AttackingModel) {
-					new DirectAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
+//					new DirectAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
+					state.updateDirectAttackrange(model, getRange(to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), DIRECT_ATTACKRANGE));
 					if (model instanceof Unit) {
-						new FullAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
+//						new FullAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
+						state.updateFullAttackrange(model, getRange(to, ((AttackingModel) model).getAttackRange() + actField.getActionPlus(), FULL_ATTACKRANGE));
 					}
 				} 
 				if (model instanceof BuildingModel) {
-					new BuildRangeThread(null, state, to, ((BuildingModel)model).getBuildRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
+//					new BuildRangeThread(null, state, to, ((BuildingModel)model).getBuildRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
+					state.updateBuildrange(model, getRange(to, ((BuildingModel) model).getBuildRange() + actField.getActionPlus(), BUILDRANGE));
 				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
 					state.updatePlayerModelPosition(from, to);
@@ -613,18 +816,23 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 				state.addModel(c, model);
 				Field actField = FieldList.getInstance().get(state.getMap().get(c.getX(), c.getY()));
 				
-				new ViewRangeThread(null, state, c, model.getViewRange() + actField.getViewPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
+//				new ViewRangeThread(null, state, c, model.getViewRange() + actField.getViewPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
+				state.addViewrange(model, getRange(c, model.getViewRange() + actField.getViewPlus(), VIEWRANGE));
 				if (model instanceof Unit) {
-					new MoveRangeThread(null, state, c, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), true).start();
+//					new MoveRangeThread(null, state, c, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), true).start();
+					state.addMoverange(model, getRange(c, ((Unit) model).getMovespeed(), MOVERANGE));
 				}
 				if (model instanceof AttackingModel) {
-					new DirectAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
+//					new DirectAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
+					state.addDirectAttackrange(model, getRange(c, ((AttackingModel) model).getAttackRange() + actField.getActionPlus(), DIRECT_ATTACKRANGE));
 					if (model instanceof Unit) {
-						new FullAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
+//						new FullAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
+						state.addFullAttackrange(model, getRange(c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), FULL_ATTACKRANGE));
 					}
 				} 
 				if (model instanceof BuildingModel) {
-					new BuildRangeThread(null, state, c, ((BuildingModel)model).getBuildRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
+//					new BuildRangeThread(null, state, c, ((BuildingModel)model).getBuildRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
+					state.addBuildrange(model, getRange(c, ((BuildingModel) model).getBuildRange() + actField.getActionPlus(), BUILDRANGE));
 				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
 					state.addPlayerModel(model);
@@ -684,7 +892,7 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 				}
 				state.setSight(getSight());
 //				new FowToPolygonThread(null, state, null, null).start();
-				modelRemoved(c, model);
+				modelEventAdapter.modelRemoved(c, model);
 			}
 		}.start();
 	}
@@ -737,17 +945,16 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 	}
 	
 	/**
-	 * This method is called when a player has won. It notifies the view and closes the game.
+	 * This method is called when a player has won.
 	 */
 	@Override
 	public void hasWon(Player p) {
 		System.out.println("Player won: " + p);
-		//TODO add interface to VIEW
 		//TODO Finish game
 	}
 	
 	/**
-	 * This method is called whenever a player has lost according to the WinCondition. It notifies the view and removes that player from the game.
+	 * This method is called whenever a player has lost according to the WinCondition
 	 */
 	@Override
 	public void hasLost(Player p) {
@@ -755,7 +962,6 @@ public class Controller extends ModelEventAdapter implements WinEventListener {
 		removePlayer(p);
 		if (p.equals(state.getCurrentPlayer()))
 			endTurn();
-		//TODO add interface to VIEW
 	}
 	
 	/**

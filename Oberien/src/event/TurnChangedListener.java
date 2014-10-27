@@ -10,6 +10,6 @@ package event;
  * @author Bobthepeanut
  */
 public interface TurnChangedListener {
-	public void turnChanged(int turn);
+	public void roundChanged(int turn);
 	public void playernameChanged(String playername);
 }

@@ -8,7 +8,7 @@ package event;
 
 import java.util.ArrayList;
 
-public class PlayerStatsAdapter implements PlayerStatsListener {
+public class PlayerStatsAdapter {
 	private ArrayList<PlayerStatsListener> listener = new ArrayList<>();
 	
 	public void addPlayerStatsListener(PlayerStatsListener l) {
@@ -19,21 +19,18 @@ public class PlayerStatsAdapter implements PlayerStatsListener {
 		listener.remove(l);
 	}
 
-	@Override
-	public void metalChanged(int metal) {
+	public void moneyChanged(int metal) {
 		for (PlayerStatsListener l : listener) {
-			l.metalChanged(metal);
+			l.moneyChanged(metal);
 		}
 	}
 
-	@Override
 	public void energyChanged(int energy) {
 		for (PlayerStatsListener l : listener) {
 			l.energyChanged(energy);
 		}
 	}
 
-	@Override
 	public void populationChanged(int population) {
 		for (PlayerStatsListener l : listener) {
 			l.populationChanged(population);
