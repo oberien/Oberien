@@ -69,6 +69,14 @@ public class Client {
 		}
 	}
 
+	public static void broadcastMessage(String message) throws IOException {
+		checkForReady();
+		if (!loggedIn) {
+			throw new IllegalStateException("User not logged in. Login first.");
+		}
+		con.send(Command.broadcastMessage(con.getUsername(), message).toString());
+	}
+
 	public static void privateMessage(String to, String message) throws IOException {
 		checkForReady();
 		if (!loggedIn) {
@@ -77,12 +85,16 @@ public class Client {
 		con.send(Command.privateMessage(con.getUsername(), to, message).toString());
 	}
 
-	public static void broadcastMessage(String message) throws IOException {
+	public static void broadcastToAll(String message) throws IOException, MultiplayerException {
 		checkForReady();
 		if (!loggedIn) {
 			throw new IllegalStateException("User not logged in. Login first.");
 		}
-		con.send(Command.broadcastMessage(con.getUsername(), message).toString());
+		if (con.getPermissions() >= 1000) {
+			con.send(Command.broadcastToAll(con.getUsername(), message).toString());
+		} else {
+			throw new MultiplayerException("No permissions to execute that command.");
+		}
 	}
 
 	/**
@@ -94,16 +106,17 @@ public class Client {
 	 * @throws InvalidKeySpecException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static String login(String username, String password) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, MultiplayerException {
+	public static User login(String username, String password) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, MultiplayerException {
 		checkForReady();
 		if (loggedIn) {
 			throw new IllegalStateException("A user is already logged in. Please log out first.");
 		}
 		con.send(Command.login(username, Hasher.getPBKDF2(username, password)).toString());
 		Command command = new Command(con.br.readLine());
+		String[] args = command.getArgs();
 		if (command.getCommandType() == CommandType.ActionSucceed) {
 			new ChatThread(con).start();
-			return command.getArgs()[0];
+			return new User(args[1], args[1].charAt(0));
 		} else if (command.getCommandType() == CommandType.ActionFailed) {
 			return null;
 		} else {

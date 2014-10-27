@@ -41,6 +41,8 @@ public class Command {
 				return CommandType.UserRemoved;
 			case 25:
 				return CommandType.Kick;
+			case 27:
+				return CommandType.BroadcastToAll;
 
 			case 50:
 				return CommandType.Broadcast;
@@ -79,6 +81,10 @@ public class Command {
 		return new Command(25, new String[]{reason});
 	}
 
+	public static Command broadcastToAll(String username, String message) {
+		return new Command(27, new String[]{username, message});
+	}
+
 	public static Command broadcastMessage(String username, String message) {
 		return new Command(50, new String[]{username, message});
 	}
@@ -103,9 +109,7 @@ public class Command {
 	public String toString() {
 		StringBuilder sb = new StringBuilder(new String(new char[]{(char)commandId}));
 		for (int i = 0; i < args.length; i++) {
-			if (i > 0) {	
-				sb.append(DIVIDER);
-			}
+			sb.append(DIVIDER);
 			sb.append(args[i]);
 		}
 		return sb.toString();

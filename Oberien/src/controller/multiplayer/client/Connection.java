@@ -10,7 +10,7 @@ public class Connection extends MultiplayerEventAdapter {
 	private BufferedWriter bw;
 	public BufferedReader br;
 
-	private String username;
+	private User user;
 	public boolean isInit = false;
 
 	public Connection(Socket socket) {
@@ -31,17 +31,11 @@ public class Connection extends MultiplayerEventAdapter {
 	}
 
 	public void send(String s) {
-		System.out.println("0");
 		try {
-			System.out.println(s.endsWith("\n"));
 			if (s.endsWith("\n")) {
-				System.out.println("1");
 				bw.write(s);
-				System.out.println("2");
 			} else {
-				System.out.println("3");
 				bw.write(new StringBuilder(s).append("\n").toString());
-				System.out.println("4");
 			}
 			bw.flush();
 		} catch (IOException e) {
@@ -69,10 +63,14 @@ public class Connection extends MultiplayerEventAdapter {
 	}
 
 	public String getUsername() {
-		return username;
+		return user.getUsername();
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public int getPermissions() {
+		return user.getPermissions();
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
