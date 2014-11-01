@@ -21,7 +21,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import view.data.StartData;
@@ -36,10 +35,12 @@ import view.renderer.UnitRenderer;
 import controller.Controller;
 import controller.Options;
 import controller.State;
+import de.lessvoid.nifty.Nifty;
+import org.newdawn.slick.opengl.SlickCallable;
 import view.data.Globals;
-import view.gui.controllers.HUDScreenController;
 
-public class GameRunning extends BasicGameState {
+public class GameRunning extends EventHandlingGameState {
+
 	private StartData sd;
 	private Map map;
 	private Controller controller;
@@ -51,8 +52,7 @@ public class GameRunning extends BasicGameState {
 	private FoWRenderer fowr;
 	private ActionGroundRenderer agr;
 	private DamageRenderer dr;
-	private HUDScreenController huc;
-	
+
 	private int screenWidth;
 	private int screenHeight;
 	private boolean scaleUp;
@@ -75,7 +75,9 @@ public class GameRunning extends BasicGameState {
 	private String dmg2;
 	private long attackMillis;
 	private boolean buildModel;
-	
+
+	private Nifty nifty;
+
 	private MusicManager mm;
 
 	public GameRunning(StartData sd) {
@@ -95,7 +97,7 @@ public class GameRunning extends BasicGameState {
 			map = sd.getMap();
 			mr = sd.getMr();
 			mr.init();
-			
+
 			hudr = sd.getHudr();
 			ur = sd.getUr();
 			fowr = sd.getFowr();
@@ -107,8 +109,9 @@ public class GameRunning extends BasicGameState {
 			screenHeight = gc.getScreenHeight();
 			controller = sd.getController();
 			state = sd.getState();
-					
-			huc = Globals.getHUDController();
+
+			Globals.getHUDController().registerControllerListeners(sd);
+			nifty = sd.getNifty();
 			mm = new MusicManager();
 			mm.init();
 		}
@@ -126,7 +129,7 @@ public class GameRunning extends BasicGameState {
 		if (buildModel == true) {
 			build = true;
 		} else {
-			build = hudr.getSelectedModel()!=null;
+			build = hudr.getSelectedModel() != null;
 		}
 		agr.draw(g, state, mapcoord, build);
 		Model model;
@@ -139,13 +142,18 @@ public class GameRunning extends BasicGameState {
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
 		hudr.draw(g, state, sbg, state.getModel(mapcoord));
+		SlickCallable.enterSafeBlock();
+		nifty.render(false);
+		SlickCallable.leaveSafeBlock();
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		nifty.update();
+		handleEvents();
 		if (gc.getInput().isKeyDown(Keyboard.KEY_P)) {
 			mm.playMusic();
-		} else if(gc.getInput().isKeyDown(Keyboard.KEY_O)) {
+		} else if (gc.getInput().isKeyDown(Keyboard.KEY_O)) {
 			mm.stopMusic();
 		}
 		//zooming/scaling
@@ -154,7 +162,7 @@ public class GameRunning extends BasicGameState {
 			float mouseMapX = mouseX / scale + camX;
 			float mouseMapY = mouseY / scale + camY;
 			if (scaleUp) {
-				scale += 0.003*delta;
+				scale += 0.003 * delta;
 			} else if (mw > 0) {
 				scale += 0.1;
 			}
@@ -164,7 +172,7 @@ public class GameRunning extends BasicGameState {
 			camX += gc.getScreenWidth() / 2 / scale - gc.getScreenWidth() / 2;
 			camY += gc.getScreenHeight() / 2 / scale - gc.getScreenHeight() / 2;
 			if (scaleDown) {
-				scale -= 0.003*delta;
+				scale -= 0.003 * delta;
 			} else if (mw < 0) {
 				scale -= 0.1;
 			}
@@ -198,9 +206,9 @@ public class GameRunning extends BasicGameState {
 		//Events
 		//MouseEvents
 		Point mpoint = me.getMousePos();
-		
+
 		hudr.update(me.isMousePressed(0), mpoint);
-		
+
 		int mapx = (int) (camX + mpoint.getX() / scale);
 		int mapy = (int) (camY + mpoint.getY() / scale);
 		Coordinate c = new Coordinate(mapx / 32, mapy / 32, Layer.Ground);
@@ -208,7 +216,7 @@ public class GameRunning extends BasicGameState {
 		Model m = state.getModel(c);
 		//selected model
 		Model model = state.getModel(mapcoord);
-		
+
 		Model modelToBuild = hudr.getSelectedModel();
 		//Mouse button down -> Unit gets selected/moves/attacks
 		if (hudr.isMouseEventAvailable()) {
@@ -229,8 +237,8 @@ public class GameRunning extends BasicGameState {
 						mapcoord = null;
 						unitMoving = null;
 						buildModel = false;
-						
-					//if model moved successfully
+
+						//if model moved successfully
 					} else if (controller.move(mapcoord, c) == 1) {
 						//if model can attack
 						Coordinate[] range = state.getDirectAttackrange(c);
@@ -249,13 +257,13 @@ public class GameRunning extends BasicGameState {
 								mapcoord = c;
 							}
 						}
-						
-						unitMoving = null; 
+
+						unitMoving = null;
 					} else {
 						mapcoord = null;
 						unitMoving = null;
 					}
-				//if there is an EMEMY model on the field to move
+					//if there is an EMEMY model on the field to move
 				} else if (m.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
 					int life1 = model.getLife();
 					int life2 = m.getLife();
@@ -288,33 +296,33 @@ public class GameRunning extends BasicGameState {
 					attackMillis = System.currentTimeMillis();
 					mapcoord = null;
 					unitMoving = null;
-					
-				//if model belongs to current player AND model isn't finished to build yet AND selected model can build
+
+					//if model belongs to current player AND model isn't finished to build yet AND selected model can build
 				} else if (m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() != 0 && model instanceof BuildingModel) {
 					controller.addModelToBuild(mapcoord, c);
 					buildModel = false;
-				//if clicked onto itself
+					//if clicked onto itself
 				} else if (mapcoord.equals(c)) {
 					controller.setActionDone(c);
 					mapcoord = null;
 					unitMoving = null;
 				}
-			//if no model is selected, it will be selected if unit belongs to current player AND is finished building
+				//if no model is selected, it will be selected if unit belongs to current player AND is finished building
 			} else if (m != null && !m.isActionDone() && m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() == 0) {
 				mapcoord = c;
-			//if model can't move there
+				//if model can't move there
 			} else {
 				mapcoord = null;
 				unitMoving = null;
 			}
-		//Mousebutton not down
+			//Mousebutton not down
 		} else {
 			//modelToBuild is selected
 			if (modelToBuild != null && !buildModel) {
 				buildModel = true;
 			}
 			//is a unit selected and has to be drawn at mouseposition?
-			if (mapcoord != null && model instanceof Unit && !((Unit)model).isMoved()) {
+			if (mapcoord != null && model instanceof Unit && !((Unit) model).isMoved()) {
 				Coordinate[] range;
 				//if selected unit is building
 				if (buildModel) {

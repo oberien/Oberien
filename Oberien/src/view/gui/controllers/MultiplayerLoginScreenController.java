@@ -43,7 +43,7 @@ public class MultiplayerLoginScreenController implements ScreenController {
 		String user = screen.findNiftyControl("username", TextField.class).getDisplayedText();
 		String pwd = screen.findNiftyControl("password", TextField.class).getRealText();
 		try {
-			String username = Client.login(user, pwd);
+			String username = Client.login(user, pwd).getUsername();
 			if(username != null) {
 				nifty.gotoScreen("chat");
 			} else {

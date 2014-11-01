@@ -14,7 +14,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import view.data.StartData;
@@ -27,7 +26,7 @@ import controller.Controller;
 import controller.Options;
 import controller.State;
 
-public class StartPositionChooser extends BasicGameState {
+public class StartPositionChooser extends EventHandlingGameState {
 
 	private final StartData sd;
 	private Controller controller;
@@ -94,6 +93,7 @@ public class StartPositionChooser extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		//zooming/scaling
+		handleEvents();
 		int mw = Mouse.getDWheel();
 		if ((scaleUp || mw > 0) && scale < 2) {
 			float mouseMapX = mouseX / scale + camX;

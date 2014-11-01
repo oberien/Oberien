@@ -11,7 +11,7 @@ and open the template in the editor.
 			<panel id="topPanel" childLayout="horizontal" height="15%">
 				<panel id="topLeftPanel" childLayout="horizontal">
 					<panel id="verticalAlignTopLeftPanel" childLayout="vertical">
-						<control name="loadingbar" id="metalBar"/>
+						<control name="loadingbar" id="moneyBar"/>
 						<control name="loadingbar" id="energyBar"/>
 						<control name="loadingbar" id="populationBar"/>
 					</panel>
