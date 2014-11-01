@@ -7,6 +7,7 @@ import model.map.Map;
 
 import org.newdawn.slick.Image;
 
+import view.gui.event.KeyboardEvent;
 import view.gui.event.MouseEvent;
 import view.renderer.ActionGroundRenderer;
 import view.renderer.DamageRenderer;
@@ -18,7 +19,6 @@ import view.renderer.UnitRenderer;
 import controller.Controller;
 import controller.State;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 
 public class StartData {
 	private Controller controller;
@@ -38,7 +38,7 @@ public class StartData {
 	private Nifty nifty;
 	//nifty eventhandling
 	private List<MouseEvent> mouseEvents;
-	private List<KeyboardInputEvent> keyEvents;
+	private List<KeyboardEvent> keyEvents;
 
 	public Nifty getNifty() {
 		return nifty;
@@ -160,11 +160,11 @@ public class StartData {
 		this.mouseEvents = mouseEvents;
 	}
 
-	public List<KeyboardInputEvent> getKeyEvents() {
+	public List<KeyboardEvent> getKeyEvents() {
 		return keyEvents;
 	}
 
-	public void setKeyEvents(List<KeyboardInputEvent> keyEvents) {
+	public void setKeyEvents(List<KeyboardEvent> keyEvents) {
 		this.keyEvents = keyEvents;
 	}
 }

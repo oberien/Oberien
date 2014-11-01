@@ -20,6 +20,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import view.components.Panel;
 import view.data.StartData;
+import view.gui.event.KeyboardEvent;
 import view.gui.event.MouseEvent;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyInputConsumer;
@@ -79,14 +80,15 @@ public class GameStarting extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
 		if (count == 0) {
 			Nifty nifty = new Nifty(new BatchRenderDevice(LwjglBatchRenderBackendFactory.create()), new NullSoundDevice(), new InputSystem() {
+				@Override
 				public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
 					for (MouseEvent event : sd.getMouseEvents()) {
 						event.processMouseEvents(inputEventConsumer);
 					}
 					sd.getMouseEvents().clear();
 					
-					for (KeyboardInputEvent event : sd.getKeyEvents()) {
-						inputEventConsumer.processKeyboardEvent(event);
+					for (KeyboardEvent event : sd.getKeyEvents()) {
+						event.processKeyboardEvent(inputEventConsumer);
 					}
 					sd.getKeyEvents().clear();
 				}

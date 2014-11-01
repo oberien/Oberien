@@ -13,37 +13,19 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import view.data.StartData;
-import view.gamesstates.GameLoading;
-import view.gamesstates.GameRunning;
-import view.gamesstates.GameStarting;
-import view.gamesstates.NiftyMenu;
-import view.gamesstates.StartPositionChooser;
+import view.gamesstates.*;
+import view.gui.event.KeyboardEvent;
 import view.gui.event.MouseEvent;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
-import de.lessvoid.nifty.renderer.lwjgl.input.LwjglKeyboardInputEventCreator;
+import view.gui.event.Type;
 
 public class View extends StateBasedGame {
 	private StartData sd;
-	private LwjglKeyboardInputEventCreator inputEventCreator = new LwjglKeyboardInputEventCreator();
-	/**
-	 * mouse x.
-	 */
-	private int mouseX;
 
-	/**
-	 * mouse y.
-	 */
+	private int mouseX;
 	private int mouseY;
-	
-	/**
-	 * mouse button
-	 */
 	private int mouseButton;
-	
-	/**
-	 * mouse down.
-	 */
 	private boolean mouseDown;
+
 	
 
 	public View() {
@@ -54,7 +36,7 @@ public class View extends StateBasedGame {
 	public void initStatesList(GameContainer gc) throws SlickException {
 		sd = new StartData();
 		sd.setMouseEvents(new ArrayList<MouseEvent>());
-		sd.setKeyEvents(new ArrayList<KeyboardInputEvent>());
+		sd.setKeyEvents(new ArrayList<KeyboardEvent>());
 		
 		this.addState(new GameStarting(sd));
 		this.addState(new NiftyMenu(sd));
@@ -67,71 +49,82 @@ public class View extends StateBasedGame {
 	 * 
 	 * @param mouseX
 	 * @param mouseY
+	 * @param mouseWheel
+	 * @param mouseButton
 	 * @param mouseDown
 	 */
-	private void forwardMouseEventToNifty(final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final boolean mouseDown) {
-		sd.getMouseEvents().add(new MouseEvent(mouseX, mouseY, mouseWheel, mouseButton, mouseDown));
-	}
-	
-	/**
-	 * @see org.newdawn.slick.InputListener#mouseMoved(int, int, int, int)
-	 */
-	public void mouseMoved(final int oldx, final int oldy, final int newx, final int newy) {
-		EventLogger.logger.finest("mouseMoved " + oldx + ":" + oldy + " to " + newx + ":" + newy);
-		super.mouseMoved(oldx, oldy, newx, newy);
-		mouseX = newx;
-		mouseY = newy;
-		forwardMouseEventToNifty(mouseX, mouseY, 0, mouseButton, mouseDown);
+	private void forwardMouseEvent(final int fromX, final int fromY, final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final int clickCount, final boolean mouseDown, Type type) {
+		MouseEvent e = new MouseEvent(fromX, fromY, mouseX, mouseY, mouseWheel, mouseButton, clickCount, mouseDown, type);
+		sd.getMouseEvents().add(e);
+		((EventHandlingGameState)getCurrentState()).mouseEventFired(e);
 	}
 
-	/**
-	 * @see org.newdawn.slick.InputListener#mousePressed(int, int, int)
-	 */
+	private void forwardKeyboardEvent(final int key, final char c, final boolean pressed) {
+		KeyboardEvent e = new KeyboardEvent(key, c, pressed);
+		sd.getKeyEvents().add(e);
+		((EventHandlingGameState)getCurrentState()).keyboardEventFired(e);
+	}
+
+	@Override
+	public void mouseClicked(final int button, final int x, final int y, final int clickCount) {
+		EventLogger.logger.finest("mouseClicked " + button + " " + clickCount + " " + x + ":" + y);
+		mouseX = x;
+		mouseY = y;
+		mouseButton = button;
+		forwardMouseEvent(0, 0, mouseX, mouseY, 0, mouseButton, clickCount, mouseDown, Type.mouseClicked);
+	}
+
+	@Override
+	public void mouseDragged(final int oldx, final int oldy, final int newx, final int newy) {
+		EventLogger.logger.finest("mouseDragged " + oldx + ":" + oldy + " to " + newx + ":" + newy);
+		mouseX = newx;
+		mouseY = newy;
+		forwardMouseEvent(oldx, oldy, mouseX, mouseY, 0, mouseButton, 0, mouseDown, Type.mouseDragged);
+	}
+
+	@Override
+	public void mouseMoved(final int oldx, final int oldy, final int newx, final int newy) {
+		EventLogger.logger.finest("mouseMoved " + oldx + ":" + oldy + " to " + newx + ":" + newy);
+		mouseX = newx;
+		mouseY = newy;
+		forwardMouseEvent(oldx, oldy, mouseX, mouseY, 0, mouseButton, 0, mouseDown, Type.mouseMoved);
+	}
+
+	@Override
 	public void mousePressed(final int button, final int x, final int y) {
 		EventLogger.logger.finest("mousePressed " + button + " " + x + ":" + y);
-		super.mousePressed(button, x, y);
 		mouseX = x;
 		mouseY = y;
 		mouseButton = button;
 		mouseDown = true;
-		forwardMouseEventToNifty(mouseX, mouseY, 0, mouseButton, mouseDown);
+		forwardMouseEvent(0, 0, mouseX, mouseY, 0, mouseButton, 0, mouseDown, Type.mousePressed);
 	}
 
-	/**
-	 * @see org.newdawn.slick.InputListener#mouseReleased(int, int, int)
-	 */
+	@Override
 	public void mouseReleased(final int button, final int x, final int y) {
 		EventLogger.logger.finest("mouseReleased " + button + " " + x + ":" + y);
-		super.mouseReleased(button, x, y);
 		mouseX = x;
 		mouseY = y;
 		mouseButton = button;
 		mouseDown = false;
-		forwardMouseEventToNifty(mouseX, mouseY, 0, button, mouseDown);
+		forwardMouseEvent(0, 0, mouseX, mouseY, 0, button, 0, mouseDown, Type.mouseReleased);
 	}
 
-	/**
-	 * @see org.newdawn.slick.InputListener#keyPressed(int, char)
-	 */
-	public void keyPressed(final int key, final char c) {
-		EventLogger.logger.finest("keyPressed " + key + " " + c);
-		super.keyPressed(key, c);
-		sd.getKeyEvents().add(inputEventCreator.createEvent(key, c, true));
-	}
-
-	/**
-	 * @see org.newdawn.slick.InputListener#keyReleased(int, char)
-	 */
-	public void keyReleased(final int key, final char c) {
-		EventLogger.logger.finest("keyReleased " + key + " " + c);
-		super.keyReleased(key, c);
-		sd.getKeyEvents().add(inputEventCreator.createEvent(key, c, false));
-	}
-	
 	@Override
 	public void mouseWheelMoved(int newValue) {
 		EventLogger.logger.finest("mouseWheelMoved " + newValue);
-		super.mouseWheelMoved(newValue);
-		forwardMouseEventToNifty(mouseX, mouseY, newValue, 0, mouseDown);
+		forwardMouseEvent(0, 0, mouseX, mouseY, newValue, 0, 0, mouseDown, Type.mouseWheelMoved);
+	}
+
+	@Override
+	public void keyPressed(final int key, final char c) {
+		EventLogger.logger.finest("keyPressed " + key + " " + c);
+		forwardKeyboardEvent(key, c, true);
+	}
+
+	@Override
+	public void keyReleased(final int key, final char c) {
+		EventLogger.logger.finest("keyReleased " + key + " " + c);
+		forwardKeyboardEvent(key, c, false);
 	}
 }
