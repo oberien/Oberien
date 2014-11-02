@@ -31,24 +31,25 @@ public abstract class EventHandlingGameState extends BasicGameState {
 
 			switch (e.getType()) {
 				case mouseClicked:
-					super.mouseClicked(e.getButton(), e.getMouseX(), e.getMouseY(), e.getClickCount());
+					mouseClicked(e.getButton(), e.getMouseX(), e.getMouseY(), e.getClickCount());
 					break;
 				case mouseDragged:
-					super.mouseDragged(e.getFromX(), e.getFromY(), e.getMouseX(), e.getMouseY());
+					mouseDragged(e.getFromX(), e.getFromY(), e.getMouseX(), e.getMouseY());
 					break;
 				case mouseMoved:
-					super.mouseMoved(e.getFromX(), e.getFromY(), e.getMouseX(), e.getMouseY());
+					mouseMoved(e.getFromX(), e.getFromY(), e.getMouseX(), e.getMouseY());
 					break;
 				case mousePressed:
-					super.mousePressed(e.getButton(), e.getMouseX(), e.getMouseY());
+					mousePressed(e.getButton(), e.getMouseX(), e.getMouseY());
 					break;
 				case mouseReleased:
-					super.mouseReleased(e.getButton(), e.getMouseX(), e.getMouseY());
+					mouseReleased(e.getButton(), e.getMouseX(), e.getMouseY());
 					break;
 				case mouseWheelMoved:
-					super.mouseWheelMoved(e.getMouseWheel());
+					mouseWheelMoved(e.getMouseWheel());
 			}
 		}
+		mouseEvents.clear();
 	}
 
 	public void handleKeyboardEvents() {
@@ -58,10 +59,11 @@ public abstract class EventHandlingGameState extends BasicGameState {
 			}
 
 			if (e.isPressed()) {
-				super.keyPressed(e.getKey(), e.getC());
+				keyPressed(e.getKey(), e.getC());
 			} else {
-				super.keyReleased(e.getKey(), e.getC());
+				keyReleased(e.getKey(), e.getC());
 			}
 		}
+		keyboardEvents.clear();
 	}
 }

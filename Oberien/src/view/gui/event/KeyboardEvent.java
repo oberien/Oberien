@@ -37,4 +37,14 @@ public class KeyboardEvent {
 	public boolean isPressed() {
 		return pressed;
 	}
+
+	@Override
+	public String toString() {
+		return "KeyboardEvent{" +
+				"key=" + key +
+				", c=" + c +
+				", pressed=" + pressed +
+				", handled=" + handled +
+				'}';
+	}
 }

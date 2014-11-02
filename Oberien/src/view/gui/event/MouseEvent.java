@@ -70,4 +70,20 @@ public class MouseEvent {
 	public boolean hasBeenHandled() {
 		return handled;
 	}
+
+	@Override
+	public String toString() {
+		return "MouseEvent{" +
+				"fromX=" + fromX +
+				", fromY=" + fromY +
+				", mouseX=" + mouseX +
+				", mouseY=" + mouseY +
+				", mouseWheel=" + mouseWheel +
+				", button=" + button +
+				", clickCount=" + clickCount +
+				", buttonDown=" + buttonDown +
+				", type=" + type +
+				", handled=" + handled +
+				'}';
+	}
 }

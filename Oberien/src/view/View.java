@@ -56,13 +56,17 @@ public class View extends StateBasedGame {
 	private void forwardMouseEvent(final int fromX, final int fromY, final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final int clickCount, final boolean mouseDown, Type type) {
 		MouseEvent e = new MouseEvent(fromX, fromY, mouseX, mouseY, mouseWheel, mouseButton, clickCount, mouseDown, type);
 		sd.getMouseEvents().add(e);
-		((EventHandlingGameState)getCurrentState()).mouseEventFired(e);
+		if (getCurrentState() instanceof EventHandlingGameState) {
+			((EventHandlingGameState)getCurrentState()).mouseEventFired(e);
+		}
 	}
 
 	private void forwardKeyboardEvent(final int key, final char c, final boolean pressed) {
 		KeyboardEvent e = new KeyboardEvent(key, c, pressed);
 		sd.getKeyEvents().add(e);
-		((EventHandlingGameState)getCurrentState()).keyboardEventFired(e);
+		if (getCurrentState() instanceof EventHandlingGameState) {
+			((EventHandlingGameState)getCurrentState()).keyboardEventFired(e);
+		}
 	}
 
 	@Override

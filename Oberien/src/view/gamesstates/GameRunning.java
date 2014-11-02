@@ -39,34 +39,21 @@ import de.lessvoid.nifty.Nifty;
 import org.newdawn.slick.opengl.SlickCallable;
 import view.data.Globals;
 
-public class GameRunning extends EventHandlingGameState {
+public class GameRunning extends MapState {
+	private GameContainer gc;
 
 	private StartData sd;
-	private Map map;
 	private Controller controller;
 	private State state;
-	private MouseEvents me;
-	private MapRenderer mr;
+
 	private HUDRenderer hudr;
 	private UnitRenderer ur;
 	private FoWRenderer fowr;
 	private ActionGroundRenderer agr;
 	private DamageRenderer dr;
 
-	private int screenWidth;
-	private int screenHeight;
-	private boolean scaleUp;
-	private boolean scaleDown;
-	private boolean moveLeft;
-	private boolean moveRight;
-	private boolean moveUp;
-	private boolean moveDown;
 	private boolean endTurn;
-	private int mouseX;
-	private int mouseY;
-	private float scale = 1;
-	private float camX = 0;
-	private float camY = 0;
+
 	private Coordinate mapcoord;
 	private Coordinate unitMoving;
 	private Coordinate dmgCoord1;
@@ -81,6 +68,7 @@ public class GameRunning extends EventHandlingGameState {
 	private MusicManager mm;
 
 	public GameRunning(StartData sd) {
+		super(sd);
 		this.sd = sd;
 		dmg1 = "";
 		dmg2 = "";
@@ -93,20 +81,15 @@ public class GameRunning extends EventHandlingGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		super.init(gc, sbg);
 		if (MapList.getInstance().getCurrentMap() != null) {
-			map = sd.getMap();
-			mr = sd.getMr();
-			mr.init();
+			this.gc = gc;
 
 			hudr = sd.getHudr();
 			ur = sd.getUr();
 			fowr = sd.getFowr();
 			agr = sd.getAgr();
 			dr = sd.getDr();
-			me = new MouseEvents();
-			me.init();
-			screenWidth = gc.getScreenWidth();
-			screenHeight = gc.getScreenHeight();
 			controller = sd.getController();
 			state = sd.getState();
 
@@ -119,11 +102,8 @@ public class GameRunning extends EventHandlingGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.setAntiAlias(Options.isAntiAliasing());
-		g.resetTransform();
-		g.translate(-camX * scale, -camY * scale);
-		g.scale(scale, scale);
-		mr.draw(g);
+		super.render(gc, sbg, g);
+
 		fowr.draw(g, state.getSight());
 		boolean build;
 		if (buildModel == true) {
@@ -150,67 +130,30 @@ public class GameRunning extends EventHandlingGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		nifty.update();
-		handleEvents();
-		if (gc.getInput().isKeyDown(Keyboard.KEY_P)) {
-			mm.playMusic();
-		} else if (gc.getInput().isKeyDown(Keyboard.KEY_O)) {
-			mm.stopMusic();
-		}
-		//zooming/scaling
-		int mw = Mouse.getDWheel();
-		if ((scaleUp || mw > 0) && scale < 2) {
-			float mouseMapX = mouseX / scale + camX;
-			float mouseMapY = mouseY / scale + camY;
-			if (scaleUp) {
-				scale += 0.003 * delta;
-			} else if (mw > 0) {
-				scale += 0.1;
-			}
-			camX = mouseMapX - mouseX / scale;
-			camY = mouseMapY - mouseY / scale;
-		} else if ((scaleDown || mw < 0) && scale >= 0.3) {
-			camX += gc.getScreenWidth() / 2 / scale - gc.getScreenWidth() / 2;
-			camY += gc.getScreenHeight() / 2 / scale - gc.getScreenHeight() / 2;
-			if (scaleDown) {
-				scale -= 0.003 * delta;
-			} else if (mw < 0) {
-				scale -= 0.1;
-			}
-			camX -= gc.getScreenWidth() / 2 / scale - gc.getScreenWidth() / 2;
-			camY -= gc.getScreenHeight() / 2 / scale - gc.getScreenHeight() / 2;
+		super.update(gc, sbg, delta);
+
+		//set damage coords to null when time > 2000ms
+		if (System.currentTimeMillis() - attackMillis > 2000) {
+			dmgCoord1 = null;
+			dmgCoord2 = null;
 		}
 
-		//camera
-		float moveSpeed = delta / scale;
-		float minX = -500 / scale * ((float) gc.getScreenWidth() / gc.getScreenHeight());
-		float minY = -500 / scale * ((float) gc.getScreenHeight() / gc.getScreenWidth());
-		float maxX = map.getWidth() * 32 - minX - gc.getScreenWidth() / scale;
-		float maxY = map.getHeight() * 32 - minY - gc.getScreenHeight() / scale;
+		//TODO create an ingame button to end turn
+		if (endTurn) {
+			mapcoord = null;
+			unitMoving = null;
+			dmgCoord1 = null;
+			dmgCoord2 = null;
+			controller.endTurn();
+			endTurn = false;
+		}
+	}
 
-		if (moveLeft && camX > minX) {
-			camX -= moveSpeed;
-		}
-		if (moveUp && camY > minY) {
-			camY -= moveSpeed;
-		}
-		if (moveRight && camX < maxX) {
-			camX += moveSpeed;
-		}
-		if (moveDown && camY < maxY) {
-			camY += moveSpeed;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-			gc.exit();
-		}
-
-		//Events
-		//MouseEvents
-		Point mpoint = me.getMousePos();
-
-		hudr.update(me.isMousePressed(0), mpoint);
-
-		int mapx = (int) (camX + mpoint.getX() / scale);
-		int mapy = (int) (camY + mpoint.getY() / scale);
+	@Override
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		super.mouseClicked(button, x, y, clickCount);
+		int mapx = (int) (camX + x / scale);
+		int mapy = (int) (camY + y / scale);
 		Coordinate c = new Coordinate(mapx / 32, mapy / 32, Layer.Ground);
 		//model of current field
 		Model m = state.getModel(c);
@@ -337,96 +280,19 @@ public class GameRunning extends EventHandlingGameState {
 				unitMoving = null;
 			}
 		}
-
-		//set damage coords to null when time > 2000ms
-		if (System.currentTimeMillis() - attackMillis > 2000) {
-			dmgCoord1 = null;
-			dmgCoord2 = null;
-		}
-
-		//TODO create an ingame button to end turn
-		if (endTurn) {
-			mapcoord = null;
-			unitMoving = null;
-			dmgCoord1 = null;
-			dmgCoord2 = null;
-			controller.endTurn();
-			endTurn = false;
-		}
 	}
 
 	@Override
 	public void keyPressed(int key, char c) {
-//		System.out.println("Pressed: " + key + " " + c);
-		if (c == '+') {
-			scaleUp = true;
-		}
-		if (c == '-') {
-			scaleDown = true;
-		}
-		if (key == Input.KEY_LEFT) {
-			moveLeft = true;
-		}
-		if (key == Input.KEY_RIGHT) {
-			moveRight = true;
-		}
-		if (key == Input.KEY_UP) {
-			moveUp = true;
-		}
-		if (key == Input.KEY_DOWN) {
-			moveDown = true;
-		}
-		if (key == Input.KEY_RETURN) {
+		super.keyPressed(key, c);
+		if (key == Keyboard.KEY_P) {
+			mm.playMusic();
+		} else if (key == Keyboard.KEY_O) {
+			mm.stopMusic();
+		} else if (key == Input.KEY_RETURN) {
 			endTurn = true;
-		}
-	}
-
-	@Override
-	public void keyReleased(int key, char c) {
-//		System.out.println("Released: " + key + " " + c);
-		if (c == '+') {
-			scaleUp = false;
-		}
-		if (c == '-') {
-			scaleDown = false;
-		}
-		if (key == Input.KEY_LEFT) {
-			moveLeft = false;
-		}
-		if (key == Input.KEY_RIGHT) {
-			moveRight = false;
-		}
-		if (key == Input.KEY_UP) {
-			moveUp = false;
-		}
-		if (key == Input.KEY_DOWN) {
-			moveDown = false;
-		}
-	}
-
-	@Override
-	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-//		System.out.println("mouse moved from " + oldx + ":" + oldy + " to " + newx + ":" + newy);
-		mouseX = newx;
-		mouseY = newy;
-		if (newx < 3) {
-			moveLeft = true;
-		} else if (newx > screenWidth - 4) {
-			moveRight = true;
-		} else if (moveLeft && oldx < 3) {
-			moveLeft = false;
-		} else if (moveRight && oldx > screenWidth - 4) {
-			moveRight = false;
-		}
-
-		if (newy < 3) {
-			moveUp = true;
-		} else if (newy > screenHeight - 4) {
-			moveDown = true;
-		} else if (moveUp && oldy < 3) {
-			moveUp = false;
-		} else if (moveDown && oldy > screenHeight - 4) {
-			moveDown = false;
+		} else if (key == Keyboard.KEY_ESCAPE) {
+			gc.exit();
 		}
 	}
 }
