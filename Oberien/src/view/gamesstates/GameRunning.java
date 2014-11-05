@@ -93,7 +93,7 @@ public class GameRunning extends MapState {
 			controller = sd.getController();
 			state = sd.getState();
 
-			Globals.getHUDController().registerControllerListeners(sd);
+//			Globals.getHUDController().registerControllerListeners(sd);
 			nifty = sd.getNifty();
 			mm = new MusicManager();
 			mm.init();
