@@ -122,14 +122,14 @@ public class GameRunning extends MapState {
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
 		hudr.draw(g, state, sbg, state.getModel(mapcoord));
-		SlickCallable.enterSafeBlock();
-		nifty.render(false);
-		SlickCallable.leaveSafeBlock();
+//		SlickCallable.enterSafeBlock();
+//		nifty.render(false);
+//		SlickCallable.leaveSafeBlock();
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		nifty.update();
+//		nifty.update();
 		super.update(gc, sbg, delta);
 
 		//set damage coords to null when time > 2000ms
