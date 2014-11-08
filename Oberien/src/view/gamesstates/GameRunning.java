@@ -151,6 +151,7 @@ public class GameRunning extends MapState {
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
+		System.out.println(":D");
 		super.mouseClicked(button, x, y, clickCount);
 		int mapx = (int) (camX + x / scale);
 		int mapy = (int) (camY + y / scale);

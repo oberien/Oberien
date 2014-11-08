@@ -7,6 +7,7 @@ package view.gui.controllers;
 
 import controller.Controller;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
@@ -15,6 +16,7 @@ import event.ModelEventListener;
 import event.PlayerStatsListener;
 import event.TurnChangedListener;
 import model.Model;
+import model.ModelList;
 import model.map.Coordinate;
 import view.data.Globals;
 import view.data.StartData;
@@ -50,7 +52,27 @@ public class HUDScreenController implements ScreenController, ModelEventListener
 
 		unitBox = screen.findElementById("unitBox");
 
+		addImages();
+
 		Globals.setHUDController(this);
+	}
+
+	private void addImages() {
+		Model[] ml = ModelList.getInstance().getAllModels();
+		for (final Model m : ml) {
+			new ImageBuilder(m.getName() + "ImageBox") {
+				{
+					filename("/res/imgs/units/" + m.getId() + ".2.png");
+					height("32px");
+					width("32px");
+					interactOnClick("unitImageBoxClicked(" + m.getName() + ")");
+				}
+			}.build(nifty, screen, unitBox);
+		}
+	}
+
+	public void unitImageBoxClicked(String name) {
+		
 	}
 
 	@Override
@@ -99,14 +121,13 @@ public class HUDScreenController implements ScreenController, ModelEventListener
 //			}
 //		}.build(nifty, screen, unitBox);
 //	}
-
 	public void registerControllerListeners(StartData sd) {
 		c = sd.getController();
 		c.addModelEventListener(this);
 		c.addTurnChangedListener(this);
 		c.addTurnChangedListener(this);
 	}
-	
+
 	@Override
 	public void modelMoved(Coordinate from, Coordinate to) {
 	}
