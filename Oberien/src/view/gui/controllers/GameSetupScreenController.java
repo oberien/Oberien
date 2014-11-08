@@ -360,7 +360,7 @@ public class GameSetupScreenController implements ScreenController {
 			int team = Integer.parseInt(screen.findNiftyControl("team" + i, Button.class).getText().substring(5))-1;
 			players.add(new Player(name, colorSlick, team));
 		}
-		
+
 		Player[] player = new Player[players.size()];
 		player = players.toArray(player);
 		NiftyMenu.startGame(new Controller(MapList.getInstance().getMap(mapName), player, "Conquest"));

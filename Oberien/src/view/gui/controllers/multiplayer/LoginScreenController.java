@@ -1,17 +1,21 @@
-package view.gui.controllers;
+package view.gui.controllers.multiplayer;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
+import controller.multiplayer.LoginException;
+import controller.multiplayer.MailNotValidatedException;
 import controller.multiplayer.MultiplayerException;
+import controller.multiplayer.ValidationException;
 import controller.multiplayer.client.Client;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class MultiplayerLoginScreenController implements ScreenController {
+public class LoginScreenController implements ScreenController {
 	Nifty nifty;
 	Screen screen;
 
@@ -44,17 +48,17 @@ public class MultiplayerLoginScreenController implements ScreenController {
 		String pwd = screen.findNiftyControl("password", TextField.class).getRealText();
 		try {
 			String username = Client.login(user, pwd).getUsername();
-			if(username != null) {
-				nifty.gotoScreen("chat");
-			} else {
-				System.out.println("FAILED");
-			}
+			System.out.println("chat");
+			nifty.gotoScreen("chat");
 		} catch(InvalidKeySpecException | NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			screen.findElementById("errorMessage").getRenderer(TextRenderer.class).setText("Internal Client Error: " + e.getMessage());
 		} catch(IOException e) {
-			e.printStackTrace();
-		} catch(MultiplayerException e) {
-			e.printStackTrace();
+			screen.findElementById("errorMessage").getRenderer(TextRenderer.class).setText("Connection to Server failed: " + e.getMessage());
+		} catch(ValidationException | MultiplayerException | LoginException e) {
+			screen.findElementById("errorMessage").getRenderer(TextRenderer.class).setText(e.getMessage());
+		} catch (MailNotValidatedException e) {
+			System.out.println("validateMail");
+			nifty.gotoScreen("validateMail");
 		}
 	}
 	

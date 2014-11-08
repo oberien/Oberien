@@ -1,5 +1,9 @@
 package controller.multiplayer.client;
 
+import event.multiplayer.ChatEvent;
+import event.multiplayer.ChatEventType;
+import event.multiplayer.UserEvent;
+import event.multiplayer.UserEventType;
 import util.command.Command;
 
 import java.io.IOException;
@@ -12,28 +16,37 @@ public class ChatThread extends Thread {
 	}
 
 	public void run() {
+		System.out.println("chat started");
 		while (!isInterrupted()) {
 			try {
-				Command c = new Command(con.br.readLine());
+				System.out.println("read Command");
+				String line = con.br.readLine();
+				// disconnected
+				if (line == null) {
+					con.close();
+					return;
+				}
+				Command c = new Command(line);
+				System.out.println("command: " + c.getCommandType());
 				String[] args = c.getArgs();
 				switch (c.getCommandType()) {
 					case UserAdded:
 						for (String s : args) {
-							con.userAdded(s);
+							con.userAdded(new UserEvent(UserEventType.UserAdded, s));
 						}
 						break;
 					case UserRemoved:
 						for (String s : args) {
-							con.userRemoved(s);
+							con.userRemoved(new UserEvent(UserEventType.UserRemoved, s));
 						}
 						break;
 					case Kick:
-						con.kicked(args[0]);
+						con.kicked(new UserEvent(UserEventType.Kick, args[0]));
 					case Broadcast:
-						con.broadcastMessageReceived(args[0], args[1]);
+						con.broadcastMessageReceived(new ChatEvent(ChatEventType.BroadcastMessageReceived, args[0], args[1]));
 						break;
 					case PrivateMessage:
-						con.privateMessageReceived(args[0], args[2]);
+						con.privateMessageReceived(new ChatEvent(ChatEventType.PrivateMessageReceived, args[0], args[2]));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -13,15 +13,15 @@ public class ChatEventAdapter {
 		listeners.remove(l);
 	}
 
-	public void broadcastMessageReceived(String username, String message) {
+	public void broadcastMessageReceived(ChatEvent e) {
 		for (ChatEventListener l : listeners) {
-			l.broadcastMessageReceived(username, message);
+			l.broadcastMessageReceived(e);
 		}
 	}
 
-	public void privateMessageReceived(String username, String message) {
+	public void privateMessageReceived(ChatEvent e) {
 		for (ChatEventListener l : listeners) {
-			l.privateMessageReceived(username, message);
+			l.privateMessageReceived(e);
 		}
 	}
 }

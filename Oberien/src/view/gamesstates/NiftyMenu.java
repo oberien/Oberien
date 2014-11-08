@@ -1,5 +1,7 @@
 package view.gamesstates;
 
+import event.NiftyMenuUpdateAdapter;
+import event.NiftyMenuUpdateListener;
 import model.map.MapList;
 
 import org.newdawn.slick.GameContainer;
@@ -19,8 +21,19 @@ public class NiftyMenu extends BasicGameState {
 	private static StateBasedGame sbg;
 	private Nifty nifty;
 
+	private static NiftyMenuUpdateAdapter niftyMenuUpdateAdapter;
+
 	public NiftyMenu(StartData sd) {
 		this.sd = sd;
+		niftyMenuUpdateAdapter = new NiftyMenuUpdateAdapter();
+	}
+
+	public static void addNiftyMenuUpdateListener(NiftyMenuUpdateListener l) {
+		niftyMenuUpdateAdapter.addNiftyMenuUpdateListener(l);
+	}
+
+	public static void removeNiftyMenuUpdateListener(NiftyMenuUpdateListener l) {
+		niftyMenuUpdateAdapter.removeNiftyMenuUpdateListener(l);
 	}
 
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -29,6 +42,7 @@ public class NiftyMenu extends BasicGameState {
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+		niftyMenuUpdateAdapter.update();
 		nifty.update();
 	}
 

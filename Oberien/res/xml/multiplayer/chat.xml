@@ -6,24 +6,13 @@
 	<useControls filename="nifty-default-controls.xml" />
 	<useControls filename="res/xml/customControls/customControls.xml" />
 
-	<screen id="chat" controller="view.gui.controllers.ChatScreenController">
+	<screen id="chat" controller="view.gui.controllers.multiplayer.ChatScreenController">
 		<layer id="background" childLayout="vertical">
 			<image filename="res/imgs/ui/bg02.png"/>
 		</layer>
 		<layer id="foreground" childLayout="center">
 			<panel childLayout="vertical" backgroundColor="#fffc" valign="center" align="center">
-				<panel childLayout="vertical" backgorundColor="555" width="50%" height="95%" valign="top" align="left">
-					
-				</panel>
-				<panel childLayout="vertical" backgroundColor="912" width="50%" height="95%" valign="top" align="right">
-					
-				</panel> 
-				<panel childLayout="vertical" backgroundColor="111" height="5%" valign="bottom" align="center">
-					<control id="chatLine" width="90%" name="textfield" align="left" valign="center"/>
-					<control name="button" width="10%" align="right" valign="center">
-						<interact onClick="sendMessage()"/>
-					</control>
-				</panel>
+                <control id="chat" name="nifty-chat" width="50%" height="50%" lines="25" sendLabel="Send Message" />
 			</panel>
 		</layer>
 		<layer id="backLayer" childLayout="center">

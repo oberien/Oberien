@@ -10,7 +10,7 @@ public class Hasher {
 	private static final int ITERATIONS = 2000;
 
 	public static String getPBKDF2(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		char[] chars = password.toCharArray();
+		char[] chars = password.toLowerCase().toCharArray();
 		byte[] salt = username.getBytes();
 
 		PBEKeySpec spec = new PBEKeySpec(chars, salt, ITERATIONS, 64 * 8);

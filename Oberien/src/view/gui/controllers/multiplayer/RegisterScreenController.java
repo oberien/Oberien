@@ -1,15 +1,17 @@
-package view.gui.controllers;
+package view.gui.controllers.multiplayer;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-import controller.Options;
+import controller.multiplayer.LoginException;
+import controller.multiplayer.MailNotValidatedException;
 import controller.multiplayer.MultiplayerException;
+import controller.multiplayer.ValidationException;
 import controller.multiplayer.client.Client;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -28,6 +30,7 @@ public class RegisterScreenController implements ScreenController {
 		screen.findNiftyControl("username", TextField.class).setText("Username");
 		screen.findNiftyControl("password", TextField.class).setText("Password");
 		screen.findNiftyControl("password-confirmation", TextField.class).setText("Confirm password");
+		screen.findNiftyControl("mail", TextField.class).setText("E-Mail");
 	}
 
 	@Override
@@ -45,29 +48,37 @@ public class RegisterScreenController implements ScreenController {
 	public void clearPwdConField() {
 		screen.findNiftyControl("password-confirmation", TextField.class).setText("");
 	}
+
+	public void clearMailField() {
+		screen.findNiftyControl("mail", TextField.class).setText("");
+	}
 	
 	public void register() {
 		String user = screen.findNiftyControl("username", TextField.class).getDisplayedText();
 		String pwd = screen.findNiftyControl("password", TextField.class).getRealText();
 		String pwdConfirmation = screen.findNiftyControl("password-confirmation", TextField.class).getRealText();
+		String mail = screen.findNiftyControl("mail", TextField.class).getDisplayedText();
 		if(pwd.equals(pwdConfirmation)) {
 			try {
-				System.out.println(user + "    " + pwd + "    " + pwdConfirmation);
-				Client.register(user, pwd);
+				Client.register(user, pwd, mail);
+				nifty.gotoScreen("login");
 			} catch(InvalidKeySpecException | NoSuchAlgorithmException e) {
-				e.printStackTrace();
+				screen.findElementById("errorMessage").getRenderer(TextRenderer.class).setText("Internal Client Error: " + e.getMessage());
 			} catch(IOException e) {
-				e.printStackTrace();
-			} catch(MultiplayerException e) {
-				e.printStackTrace();
+				screen.findElementById("errorMessage").getRenderer(TextRenderer.class).setText("Connection to Server failed: " + e.getMessage());
+			} catch(ValidationException | MultiplayerException | LoginException e) {
+				screen.findElementById("errorMessage").getRenderer(TextRenderer.class).setText(e.getMessage());
+			} catch (MailNotValidatedException e) {
+				nifty.gotoScreen("validateMail");
 			}
 		} else {
-			System.out.println("Passwords don't match");
+			screen.findElementById("errorMessage").getRenderer(TextRenderer.class).setText("Passwords don't match");
 		}
 		
 	}
 	
 	public void back() {
-		nifty.gotoScreen("start");
+		Client.logout();
+		nifty.gotoScreen("login");
 	}
 }

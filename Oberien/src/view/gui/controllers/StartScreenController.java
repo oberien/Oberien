@@ -34,7 +34,7 @@ public class StartScreenController implements ScreenController {
 		}
 
 		public void multiplayer() {
-			nifty.gotoScreen("multiplayer-login");
+			nifty.gotoScreen("login");
 		}
 
 		public void settings() {

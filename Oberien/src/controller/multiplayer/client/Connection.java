@@ -62,6 +62,10 @@ public class Connection extends MultiplayerEventAdapter {
 		}
 	}
 
+	public User getUser() {
+		return user;
+	}
+
 	public String getUsername() {
 		return user.getUsername();
 	}

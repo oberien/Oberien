@@ -12,7 +12,7 @@
 		</layer>
 		<layer id="foreground" childLayout="vertical">
 			<panel id="oberienPanel" align="center" valign="center" childLayout="center" height="25%">
-				<text id="oberien" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#fff" text="Oberien" width="100%" height="20%"/>
+				<text id="oberien" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#ffff" text="Oberien" width="100%" height="20%"/>
 			</panel>
             <panel id="gameSetupPanel" align="center" valign="center" childLayout="center" height="25%">
                 <control id="gameSetupButton" name="button" label="Game Setup" align="center" valign="center" width="10%" height="16%">

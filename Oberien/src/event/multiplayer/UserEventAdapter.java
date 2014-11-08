@@ -13,21 +13,21 @@ public class UserEventAdapter {
 		listeners.add(l);
 	}
 
-	public void kicked(String reason) {
+	public void kicked(UserEvent e) {
 		for (UserEventListener l : listeners) {
-			l.kicked(reason);
+			l.kicked(e);
 		}
 	}
 
-	public void userAdded(String username) {
+	public void userAdded(UserEvent e) {
 		for (UserEventListener l : listeners) {
-			l.userAdded(username);
+			l.userAdded(e);
 		}
 	}
 
-	public void userRemoved(String username) {
+	public void userRemoved(UserEvent e) {
 		for (UserEventListener l : listeners) {
-			l.userRemoved(username);
+			l.userRemoved(e);
 		}
 	}
 }

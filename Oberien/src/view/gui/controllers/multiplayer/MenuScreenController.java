@@ -1,4 +1,4 @@
-package view.gui.controllers;
+package view.gui.controllers.multiplayer;
 
 import controller.Options;
 import de.lessvoid.nifty.Nifty;
@@ -6,7 +6,7 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
-public class MultiplayerMenuScreenController implements ScreenController {
+public class MenuScreenController implements ScreenController {
 	Nifty nifty;
 	Screen screen;
 
