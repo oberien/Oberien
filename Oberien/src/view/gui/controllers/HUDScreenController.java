@@ -12,6 +12,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import event.HUDModelClickedAdapter;
 import event.ModelEventListener;
 import event.PlayerStatsListener;
 import event.TurnChangedListener;
@@ -21,7 +22,7 @@ import model.map.Coordinate;
 import view.data.Globals;
 import view.data.StartData;
 
-public class HUDScreenController implements ScreenController, ModelEventListener, PlayerStatsListener, TurnChangedListener {
+public class HUDScreenController extends HUDModelClickedAdapter implements ScreenController, ModelEventListener, PlayerStatsListener, TurnChangedListener {
 
 //	private int turn, money, energy, population;
 	private String playername;
@@ -72,7 +73,11 @@ public class HUDScreenController implements ScreenController, ModelEventListener
 	}
 
 	public void unitImageBoxClicked(String name) {
-		
+		for (Model l : ModelList.getInstance().getAllModels()) {
+			if (l.getName().equals(name)) {
+				HUDModelClicked(l);
+			}
+		}
 	}
 
 	@Override
