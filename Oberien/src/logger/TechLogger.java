@@ -14,7 +14,7 @@ public class TechLogger {
 	private static final Logger slickLogger = Logger.getLogger("org.newdawn");
 	private static final Logger niftyLogger = Logger.getLogger("de.lessvoid.nifty");
 	
-	{
+	static {
 		init();
 	}
 	

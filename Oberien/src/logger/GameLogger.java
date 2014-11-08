@@ -12,7 +12,7 @@ import java.util.logging.SimpleFormatter;
 public class GameLogger {
 	public static final Logger logger = Logger.getLogger(GameLogger.class.getName());
 	
-	{
+	static {
 		init();
 	}
 	

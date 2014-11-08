@@ -1,9 +1,13 @@
-package controller.multiplayer.command;
+package util.command;
 
 public enum CommandType {
 	ActionFailed, ActionSucceed,
-	Register, Login,
+	Register, Login, ValidateMail,
 	UserAdded, UserRemoved,
+
 	Kick, Ban, BroadcastToAll,
-	Broadcast, PrivateMessage
+
+	Broadcast, PrivateMessage,
+
+	WrongCommandType
 }

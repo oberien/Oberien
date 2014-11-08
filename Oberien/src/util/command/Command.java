@@ -1,4 +1,4 @@
-package controller.multiplayer.command;
+package util.command;
 
 public class Command {
 	private static final String DIVIDER = new String(new char[]{0});
@@ -36,9 +36,12 @@ public class Command {
 			case 3:
 				return CommandType.Login;
 			case 4:
-				return CommandType.UserAdded;
+				return CommandType.ValidateMail;
 			case 5:
+				return CommandType.UserAdded;
+			case 6:
 				return CommandType.UserRemoved;
+
 			case 25:
 				return CommandType.Kick;
 			case 27:
@@ -48,9 +51,16 @@ public class Command {
 				return CommandType.Broadcast;
 			case 51:
 				return CommandType.PrivateMessage;
+
+			case 65535:
+				return CommandType.WrongCommandType;
 			default:
 				return null;
 		}
+	}
+
+	public static Command wrongCommandType(String... args) {
+		return new Command(65535, args);
 	}
 
 	public static Command actionFailed(String... args) {
@@ -61,20 +71,24 @@ public class Command {
 		return new Command(1, args);
 	}
 
-	public static Command register(String username, String pwdHash) {
-		return new Command(2, new String[]{username, pwdHash});
+	public static Command register(String username, String pwdHash, String mail) {
+		return new Command(2, new String[]{username, pwdHash, mail});
 	}
 
 	public static Command login(String username, String pwdHash) {
 		return new Command(3, new String[]{username, pwdHash});
 	}
 
+	public static Command validateMail(String activationToken) {
+		return new Command(4, new String[]{activationToken});
+	}
+
 	public static Command addUsers(String... usernames) {
-		return new Command(4, usernames);
+		return new Command(5, usernames);
 	}
 
 	public static Command removeUsers(String... usernames) {
-		return new Command(5, usernames);
+		return new Command(6, usernames);
 	}
 
 	public static Command kick(String reason) {
@@ -109,7 +123,9 @@ public class Command {
 	public String toString() {
 		StringBuilder sb = new StringBuilder(new String(new char[]{(char)commandId}));
 		for (int i = 0; i < args.length; i++) {
-			sb.append(DIVIDER);
+			if (i > 0) {
+				sb.append(DIVIDER);
+			}
 			sb.append(args[i]);
 		}
 		return sb.toString();

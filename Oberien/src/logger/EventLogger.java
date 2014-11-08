@@ -12,7 +12,7 @@ import java.util.logging.SimpleFormatter;
 public class EventLogger {
 	public static final Logger logger = Logger.getLogger(EventLogger.class.getName());
 	
-	{
+	static {
 		init();
 	}
 	

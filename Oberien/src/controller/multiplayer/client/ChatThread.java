@@ -1,6 +1,6 @@
 package controller.multiplayer.client;
 
-import controller.multiplayer.command.Command;
+import util.command.Command;
 
 import java.io.IOException;
 

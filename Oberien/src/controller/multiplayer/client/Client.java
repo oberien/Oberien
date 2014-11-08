@@ -1,11 +1,13 @@
 package controller.multiplayer.client;
 
 import controller.multiplayer.MultiplayerException;
-import controller.multiplayer.command.Command;
-import controller.multiplayer.command.CommandType;
+import controller.multiplayer.ValidationException;
+import util.command.Command;
+import util.command.CommandType;
 import event.multiplayer.ChatEventListener;
 import event.multiplayer.UserEventListener;
-import hash.Hasher;
+import util.hash.Hasher;
+import util.validate.Validator;
 
 import java.io.*;
 import java.net.Socket;
@@ -93,7 +95,7 @@ public class Client {
 		if (con.getPermissions() >= 1000) {
 			con.send(Command.broadcastToAll(con.getUsername(), message).toString());
 		} else {
-			throw new MultiplayerException("No permissions to execute that command.");
+			throw new MultiplayerException("No permissions to execute that helper.command.");
 		}
 	}
 
@@ -106,7 +108,7 @@ public class Client {
 	 * @throws InvalidKeySpecException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static User login(String username, String password) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, MultiplayerException {
+	public static User login(String username, String password) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, MultiplayerException, ValidationException {
 		checkForReady();
 		if (loggedIn) {
 			throw new IllegalStateException("A user is already logged in. Please log out first.");
@@ -114,14 +116,43 @@ public class Client {
 		con.send(Command.login(username, Hasher.getPBKDF2(username, password)).toString());
 		Command command = new Command(con.br.readLine());
 		String[] args = command.getArgs();
-		if (command.getCommandType() == CommandType.ActionSucceed) {
-			new ChatThread(con).start();
-			return new User(args[1], args[1].charAt(0));
-		} else if (command.getCommandType() == CommandType.ActionFailed) {
-			return null;
-		} else {
-			throw new MultiplayerException("Invalid server answer: " + command.getCommandType() + ": " + command.getCommandId());
+		switch (command.getCommandType()) {
+			case ActionSucceed:
+				new ChatThread(con).start();
+				return new User(args[0], args[1].charAt(0));
+			case ActionFailed:
+				evaluateFailureId(args[0].charAt(0));
+			default:
+				throw new MultiplayerException(command);
 		}
+	}
+
+	public static boolean validateMail(String activationToken) throws IOException, ValidationException, MultiplayerException {
+		checkForReady();
+		if (loggedIn) {
+			throw new IllegalStateException("A user is already logged in. Please log out first.");
+		}
+		if (!Validator.validateActivationToken(activationToken)) {
+			throw new ValidationException("Validation Token contains invalid characters.");
+		}
+		con.send(Command.validateMail(activationToken).toString());
+		Command command = new Command(con.br.readLine());
+		return evaluateSuccessFailureServerAnswer(command);
+	}
+
+	public static boolean register(String username, String password, String mail) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, MultiplayerException, ValidationException {
+		checkForReady();
+		if (loggedIn) {
+			throw new IllegalStateException("A user is already logged in. Please log out first.");
+		}
+		if (!Validator.validateUsername(username)) {
+			throw new ValidationException("Username contains invalid characters.");
+		} else if (!Validator.validateMail(mail)) {
+			throw new ValidationException("Mail is invalid.");
+		}
+		con.send(Command.register(username, Hasher.getPBKDF2(username, password), mail).toString());
+		Command command = new Command(con.br.readLine());
+		return evaluateSuccessFailureServerAnswer(command);
 	}
 
 	public static void logout() {
@@ -129,27 +160,38 @@ public class Client {
 		loggedIn = false;
 	}
 
-	public static boolean register(String username, String password) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, MultiplayerException {
-		checkForReady();
-		if (loggedIn) {
-			throw new IllegalStateException("A user is already logged in. Please log out first.");
-		}
-		System.out.println(username);
-		System.out.println(password);
-		System.out.println(Hasher.getPBKDF2(username, password).toString());
-		System.out.println((Arrays.toString(Command.register(username, Hasher.getPBKDF2(username, password)).toString().toCharArray())));
-		con.send(Command.register(username, Hasher.getPBKDF2(username, password)).toString());
-		Command command = new Command(con.br.readLine());
-		if (command.getCommandType() == CommandType.ActionSucceed) {
-			return true;
-		} else if (command.getCommandType() == CommandType.ActionFailed) {
-			return false;
-		} else {
-			throw new MultiplayerException("Invalid server answer");
+	private static boolean evaluateSuccessFailureServerAnswer(Command command) throws MultiplayerException, ValidationException {
+		String[] args = command.getArgs();
+		switch (command.getCommandType()) {
+			case ActionSucceed:
+				return true;
+			case ActionFailed:
+				evaluateFailureId(args[0].charAt(0));
+			default:
+				throw new MultiplayerException(command);
 		}
 	}
 
-
+	private static void evaluateFailureId(int failureid) throws MultiplayerException, ValidationException {
+		switch (failureid) {
+			case 0:
+				throw new MultiplayerException("Username already taken.");
+			case 1:
+				throw new ValidationException("Username contains invalid characters.");
+			case 2:
+				throw new MultiplayerException("E-Mail is not yet validated.");
+			case 3:
+				throw new ValidationException("Mail is invalid.");
+			case 4:
+				throw new MultiplayerException("Login needed before E-Mail validation.");
+			case 5:
+				throw new MultiplayerException("ValidationToken contains invalid characters.");
+			case 6:
+				throw new MultiplayerException("E-Mail Validation failed - wrong Token.");
+			default:
+				throw new MultiplayerException("Invalid Failure ID.");
+		}
+	}
 
 	private static void checkForReady() throws IOException {
 		if (e != null) {
