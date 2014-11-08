@@ -6,6 +6,9 @@ package view.gamesstates;
 
 import java.util.Arrays;
 
+import event.HUDModelClickedListener;
+import event.ModelClickedAdapter;
+import event.ModelClickedListener;
 import model.BuildingModel;
 import model.Layer;
 import model.Model;
@@ -26,12 +29,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import view.data.StartData;
 import view.eventhandler.MouseEvents;
 import view.music.MusicManager;
-import view.renderer.ActionGroundRenderer;
-import view.renderer.DamageRenderer;
-import view.renderer.FoWRenderer;
-import view.renderer.HUDRenderer;
-import view.renderer.MapRenderer;
-import view.renderer.UnitRenderer;
+import view.renderer.*;
 import controller.Controller;
 import controller.Options;
 import controller.State;
@@ -39,7 +37,7 @@ import de.lessvoid.nifty.Nifty;
 import org.newdawn.slick.opengl.SlickCallable;
 import view.data.Globals;
 
-public class GameRunning extends MapState {
+public class GameRunning extends MapState implements HUDModelClickedListener {
 	private GameContainer gc;
 
 	private StartData sd;
@@ -67,11 +65,23 @@ public class GameRunning extends MapState {
 
 	private MusicManager mm;
 
+	private ModelClickedAdapter modelClickedAdapter;
+
 	public GameRunning(StartData sd) {
 		super(sd);
 		this.sd = sd;
 		dmg1 = "";
 		dmg2 = "";
+
+		modelClickedAdapter = new ModelClickedAdapter();
+	}
+
+	public void addModelClickedEventListener(ModelClickedListener l) {
+		modelClickedAdapter.addModelClickedEventListener(l);
+	}
+
+	public void removeModelClickedEventListener(ModelClickedListener l) {
+		modelClickedAdapter.removeModelClickedEventListener(l);
 	}
 
 	@Override
@@ -106,7 +116,7 @@ public class GameRunning extends MapState {
 
 		fowr.draw(g, state.getSight());
 		boolean build;
-		if (buildModel == true) {
+		if (buildModel) {
 			build = true;
 		} else {
 			build = hudr.getSelectedModel() != null;
@@ -151,135 +161,146 @@ public class GameRunning extends MapState {
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		System.out.println(":D");
 		super.mouseClicked(button, x, y, clickCount);
 		int mapx = (int) (camX + x / scale);
 		int mapy = (int) (camY + y / scale);
 		Coordinate c = new Coordinate(mapx / 32, mapy / 32, Layer.Ground);
+		System.out.println(c);
 		//model of current field
 		Model m = state.getModel(c);
+		if (m != null) {
+			modelClickedAdapter.modelClicked(m);
+		}
 		//selected model
 		Model model = state.getModel(mapcoord);
 
 		Model modelToBuild = hudr.getSelectedModel();
 		//Mouse button down -> Unit gets selected/moves/attacks
-		if (hudr.isMouseEventAvailable()) {
-			//if a model is already selected
-			if (mapcoord != null) {
-				//if no model is on the field to move
-				if (m == null) {
-					//if a model is selected to build
-					if (modelToBuild != null) {
-						int id = controller.buildModel(mapcoord, c.getX(), c.getY(), modelToBuild.getName());
-						if (id == 1) {
-							model.setActionDone(true);
-						} else {
-							System.out.println("BuildError: " + id);
-						}
-						//TODO add messages when builderror occurs
-						hudr.resetSelection();
-						mapcoord = null;
-						unitMoving = null;
-						buildModel = false;
-
-						//if model moved successfully
-					} else if (controller.move(mapcoord, c) == 1) {
-						//if model can attack
-						Coordinate[] range = state.getDirectAttackrange(c);
-						if (range != null) {
-							if (state.getEnemyModelPositionsInArea(range).length == 0) {
-								mapcoord = null;
-								controller.setActionDone(c);
-							} else {
-								mapcoord = c;
-							}
-						} else {
-							//if model can build
-							range = state.getBuildrange(c);
-							if (range != null) {
-								buildModel = true;
-								mapcoord = c;
-							}
-						}
-
-						unitMoving = null;
+		//if a model is already selected
+		if (mapcoord != null) {
+			//if no model is on the field to move
+			if (m == null) {
+				//if a model is selected to build
+				if (modelToBuild != null) {
+					int id = controller.buildModel(mapcoord, c.getX(), c.getY(), modelToBuild.getName());
+					if (id == 1) {
+						model.setActionDone(true);
 					} else {
-						mapcoord = null;
-						unitMoving = null;
+						System.out.println("BuildError: " + id);
 					}
-					//if there is an EMEMY model on the field to move
-				} else if (m.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
-					int life1 = model.getLife();
-					int life2 = m.getLife();
-					int result = controller.attack(mapcoord, c);
-					if (result > 0) {
-						if (state.getModel(mapcoord) != null) {
-							dmgCoord1 = mapcoord;
-							if (result == 1 || result == 4) {
-								dmg1 = (life1 - model.getLife()) + "";
-							} else if (result == 3 || result == 5) {
-								dmg1 = "missed";
-							} else if (result == 4) {
-								dmg1 = "";
-							}
-						} else {
-							dmgCoord1 = null;
-						}
-
-						if (state.getModel(c) != null) {
-							dmgCoord2 = c;
-							if (result == 1 || result == 2 || result == 3) {
-								dmg2 = (life2 - m.getLife()) + "";
-							} else if (result == 4 || result == 5) {
-								dmg2 = "missed";
-							}
-						} else {
-							dmgCoord2 = null;
-						}
-					}
-					attackMillis = System.currentTimeMillis();
+					//TODO add messages when builderror occurs
+					hudr.resetSelection();
 					mapcoord = null;
 					unitMoving = null;
-
-					//if model belongs to current player AND model isn't finished to build yet AND selected model can build
-				} else if (m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() != 0 && model instanceof BuildingModel) {
-					controller.addModelToBuild(mapcoord, c);
 					buildModel = false;
-					//if clicked onto itself
-				} else if (mapcoord.equals(c)) {
-					controller.setActionDone(c);
+
+					//if model moved successfully
+				} else if (controller.move(mapcoord, c) == 1) {
+					//if model can attack
+					Coordinate[] range = state.getDirectAttackrange(c);
+					if (range != null) {
+						if (state.getEnemyModelPositionsInArea(range).length == 0) {
+							mapcoord = null;
+							controller.setActionDone(c);
+						} else {
+							mapcoord = c;
+						}
+					} else {
+						//if model can build
+						range = state.getBuildrange(c);
+						if (range != null) {
+							buildModel = true;
+							mapcoord = c;
+						}
+					}
+
+					unitMoving = null;
+				} else {
 					mapcoord = null;
 					unitMoving = null;
 				}
-				//if no model is selected, it will be selected if unit belongs to current player AND is finished building
-			} else if (m != null && !m.isActionDone() && m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() == 0) {
-				mapcoord = c;
-				//if model can't move there
-			} else {
+				//if there is an EMEMY model on the field to move
+			} else if (m.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
+				int life1 = model.getLife();
+				int life2 = m.getLife();
+				int result = controller.attack(mapcoord, c);
+				if (result > 0) {
+					if (state.getModel(mapcoord) != null) {
+						dmgCoord1 = mapcoord;
+						if (result == 1 || result == 4) {
+							dmg1 = (life1 - model.getLife()) + "";
+						} else if (result == 3 || result == 5) {
+							dmg1 = "missed";
+						} else if (result == 4) {
+							dmg1 = "";
+						}
+					} else {
+						dmgCoord1 = null;
+					}
+
+					if (state.getModel(c) != null) {
+						dmgCoord2 = c;
+						if (result == 1 || result == 2 || result == 3) {
+							dmg2 = (life2 - m.getLife()) + "";
+						} else if (result == 4 || result == 5) {
+							dmg2 = "missed";
+						}
+					} else {
+						dmgCoord2 = null;
+					}
+				}
+				attackMillis = System.currentTimeMillis();
+				mapcoord = null;
+				unitMoving = null;
+
+				//if model belongs to current player AND model isn't finished to build yet AND selected model can build
+			} else if (m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() != 0 && model instanceof BuildingModel) {
+				controller.addModelToBuild(mapcoord, c);
+				buildModel = false;
+				//if clicked onto itself
+			} else if (mapcoord.equals(c)) {
+				controller.setActionDone(c);
 				mapcoord = null;
 				unitMoving = null;
 			}
-			//Mousebutton not down
+			//if no model is selected, it will be selected if unit belongs to current player AND is finished building
+		} else if (m != null && !m.isActionDone() && m.getPlayer() == state.getCurrentPlayer() && m.getTimeToBuild() == 0) {
+			mapcoord = c;
+			//if model can't move there
 		} else {
-			//modelToBuild is selected
-			if (modelToBuild != null && !buildModel) {
-				buildModel = true;
-			}
-			//is a unit selected and has to be drawn at mouseposition?
-			if (mapcoord != null && model instanceof Unit && !((Unit) model).isMoved()) {
-				Coordinate[] range;
-				//if selected unit is building
-				if (buildModel) {
-					range = state.getBuildrange(mapcoord);
-				} else {
-					range = state.getMoverange(mapcoord);
-				}
-				if (Arrays.asList(range).contains(c)) {
-					unitMoving = c;
-				}
+			mapcoord = null;
+			unitMoving = null;
+		}
+		System.out.println(mapcoord);
+	}
+
+	@Override
+	public void mouseMoved(int x0, int y0, int x1, int y1) {
+		super.mouseMoved(x0, y0, x1, y1);
+		Model modelToBuild = hudr.getSelectedModel();
+		Model model = state.getModel(mapcoord);
+		int mapx = (int) (camX + x1 / scale);
+		int mapy = (int) (camY + y1 / scale);
+		Coordinate c = new Coordinate(mapx / 32, mapy / 32, Layer.Ground);
+
+		//modelToBuild is selected
+		if (modelToBuild != null && !buildModel) {
+			buildModel = true;
+		}
+		//is a unit selected and has to be drawn at mouseposition?
+		if (mapcoord != null && model instanceof Unit && !((Unit) model).isMoved()) {
+			Coordinate[] range;
+			//if selected unit is building
+			if (buildModel) {
+				range = state.getBuildrange(mapcoord);
 			} else {
-				unitMoving = null;
+				range = state.getMoverange(mapcoord);
 			}
+			if (Arrays.asList(range).contains(c)) {
+				unitMoving = c;
+			}
+		} else {
+			unitMoving = null;
 		}
 	}
 
@@ -295,5 +316,10 @@ public class GameRunning extends MapState {
 		} else if (key == Keyboard.KEY_ESCAPE) {
 			gc.exit();
 		}
+	}
+
+	@Override
+	public void HUDModelClicked(Model m) {
+
 	}
 }
