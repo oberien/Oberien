@@ -330,7 +330,7 @@ public class Controller implements WinEventListener {
 	/**
 	 * Starts building an Model
 	 *
-	 * @param model Model which is building
+	 * @param builder Model which is building
 	 * @param x x-Coordinate where to build
 	 * @param y y-Coordinate where to build
 	 * @param name name of Model to build
@@ -345,12 +345,12 @@ public class Controller implements WinEventListener {
 	 * fit</li>
 	 * </ul>
 	 */
-	public int buildModel(Coordinate model, int x, int y, String name) {
-		GameLogger.logger.info("buildModel " + model + " " + x + " " + y + " " + name);
-		int ret = buildModelInternal(model, x, y, name);
+	public int buildModel(Coordinate builder, int x, int y, String name) {
+		GameLogger.logger.info("buildModel " + builder + " " + x + " " + y + " " + name);
+		int ret = buildModelInternal(builder, x, y, name);
 		if (ret > 0) {
 			Player player = state.getCurrentPlayer();
-			modelEventAdapter.modelIsBuild(model, x, y, name);
+			modelEventAdapter.modelIsBuild(builder, x, y, name);
 			playerStatsAdapter.moneyChanged(player.getMoney());
 			playerStatsAdapter.energyChanged(player.getEnergy());
 			playerStatsAdapter.populationChanged(player.getPopulation());

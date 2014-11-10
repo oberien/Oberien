@@ -11,15 +11,14 @@ import de.lessvoid.nifty.render.batch.BatchRenderFont;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import event.NiftyMenuUpdateListener;
-import event.multiplayer.ChatEvent;
-import event.multiplayer.ChatEventListener;
-import event.multiplayer.UserEvent;
-import event.multiplayer.UserEventListener;
+import event.multiplayer.*;
+import logger.ErrorLogger;
 import view.gamesstates.NiftyMenu;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class ChatScreenController implements ScreenController, NiftyMenuUpdateListener, ChatEventListener, UserEventListener {
 	private Nifty nifty;
@@ -41,6 +40,7 @@ public class ChatScreenController implements ScreenController, NiftyMenuUpdateLi
 		Client.addChatEventListener(this);
 		Client.addUserEventListener(this);
 		NiftyMenu.addNiftyMenuUpdateListener(this);
+		chat.update();
 	}
 
 	@Override
@@ -80,9 +80,13 @@ public class ChatScreenController implements ScreenController, NiftyMenuUpdateLi
 	public void messageSent(String id, ChatTextSendEvent e) {
 		try {
 			System.out.println(e.getText());
-			Client.send(e.getText());
+			String help = Client.send(e.getText());
+			if (help != null) {
+				chatEventBuffer.add(new ChatEvent(ChatEventType.PrivateMessageReceived, "Help", help));
+			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			ErrorLogger.logger.log(Level.SEVERE, e1.getMessage(), e1);
+			screen.findElementById("errorMessage").getRenderer(TextRenderer.class).setText("Connection to Server failed: " + e1.getMessage());
 		}
 	}
 

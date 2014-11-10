@@ -30,7 +30,7 @@ public class Connection extends MultiplayerEventAdapter {
 		}
 	}
 
-	public void send(String s) {
+	public void send(String s) throws IOException {
 		try {
 			if (s.endsWith("\n")) {
 				bw.write(s);
@@ -39,8 +39,8 @@ public class Connection extends MultiplayerEventAdapter {
 			}
 			bw.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
 			close();
+			throw e;
 		}
 	}
 

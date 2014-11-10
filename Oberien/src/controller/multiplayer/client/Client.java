@@ -18,14 +18,18 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 
 public class Client {
+	private final static String IP = "localhost";
+	private final static int PORT = 4444;
+
 	private static Connection con;
 	private static boolean inited;
 	private static boolean loggedIn = false;
 
 	static {
 		try {
-			con = new Connection(new Socket("localhost", 4444));
+			con = new Connection(new Socket(IP, PORT));
 			con.init();
+			inited = true;
 		} catch (IOException e) {
 			inited = false;
 		}
@@ -45,16 +49,16 @@ public class Client {
 		con.removeUserEventListener(l);
 	}
 
-	public static void send(String input) throws IOException {
+	public static String send(String input) throws IOException {
 		if (input.startsWith("/help")) {
-			System.out.println("Help:\n" +
+			return "\n" +
 					/*"    /kick <username> [reason]\n" +
 					"        kicks a user" +*/
 					"    /msg <username> <message>\n" +
 					"        sends a private message" +
 					"    /pm <username> <message>\n" +
 					"        alias to /msg"
-			);
+			;
 		/*} else if (input.startsWith("/kick")) {
 			int first = input.indexOf(" ");
 			int second = input.indexOf(" ", first+1);
@@ -71,6 +75,7 @@ public class Client {
 		else {
 			broadcastMessage(input);
 		}
+		return null;
 	}
 
 	public static void broadcastMessage(String message) throws IOException {
@@ -87,6 +92,7 @@ public class Client {
 	}
 
 	public static void privateMessage(String to, String message) throws IOException {
+		System.out.println("private message: " + to + "         " + message);
 		try {
 			checkForReady();
 			if (!loggedIn) {
@@ -142,7 +148,11 @@ public class Client {
 					loggedIn = true;
 					return user;
 				case ActionFailed:
-					evaluateFailureId(args[0].charAt(0));
+					int failureid = args[0].charAt(0);
+					if (failureid == 3) {
+						loggedIn = true;
+					}
+					evaluateFailureId(failureid);
 				default:
 					throw new MultiplayerException(command);
 			}
@@ -155,8 +165,8 @@ public class Client {
 	public static boolean validateMail(String activationToken) throws IOException, ValidationException, MultiplayerException, MailNotValidatedException, LoginException {
 		try {
 			checkForReady();
-			if (loggedIn) {
-				throw new IllegalStateException("A user is already logged in. Please log out first.");
+			if (!loggedIn) {
+				throw new IllegalStateException("User not logged in. Login first.");
 			}
 			if (!Validator.validateActivationToken(activationToken)) {
 				throw new ValidationException("Validation Token contains invalid characters.");
@@ -234,7 +244,7 @@ public class Client {
 	private static void checkForReady() throws IOException {
 		if (!inited) {
 			try {
-				con = new Connection(new Socket("localhost", 4444));
+				con = new Connection(new Socket(IP, PORT));
 				con.init();
 				inited = true;
 			} catch (IOException e1) {

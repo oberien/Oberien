@@ -11,9 +11,10 @@
 			<image filename="res/imgs/ui/bg02.png"/>
 		</layer>
 		<layer id="foreground" childLayout="center">
-			<panel childLayout="vertical" backgroundColor="#fffc" valign="center" align="center">
-                <control id="chat" name="nifty-chat" width="50%" height="50%" lines="25" sendLabel="Send Message" />
+			<panel childLayout="vertical" backgroundColor="#fffc"  width="50%" height="50%" valign="center" align="center">
+                <control id="chat" name="nifty-chat" lines="25" sendLabel="Send Message" />
 			</panel>
+            <text id="errorMessage" wrap="true" font="res/fonts/32/raven.fnt" color="#f00f" text=""/>
 		</layer>
 		<layer id="backLayer" childLayout="center">
 			<control id="backButton" name="buttonRed" label="Main Menu" align="right" valign="top">
