@@ -33,7 +33,7 @@ public class UnitRenderer {
 		uf.loadGlyphs();
 	}
 	
-	public void draw(Graphics g, State state, Coordinate unitMoving, Model model, int direction, Color col) throws SlickException {
+	public void draw(Graphics g, State state) throws SlickException {
 		pos = state.getModelPositionsInSight();
 		Model m;
 		Image img;
@@ -42,18 +42,15 @@ public class UnitRenderer {
 		for (Coordinate c : pos) {
 			m = state.getModel(c);
 			float alpha = (float) (0.75 * ((m.getCostMoney() - m.getTimeToBuild()) / m.getCostMoney()));
-			Player player = m.getPlayer();
-			if (player == null) {
-				color = col;
-			} else {
-				color = player.getColor();
-			}
+			color = m.getPlayer().getColor();
 			img = units[m.getId()][m.getDirection()].copy();
+
 			if (!m.isActionDone()) {
 				img.setImageColor(color.r, color.g, color.b, 0.25f + alpha);
 			} else {
 				img.setImageColor(0.75f, 0.75f, 0.75f);
 			}
+
 			g.drawImage(img, c.getX() * 32, c.getY() * 32);
 			if (m.getLife() != m.getMaxLife()) {
 				float life = (float) m.getLife() / m.getMaxLife();
@@ -65,18 +62,6 @@ public class UnitRenderer {
 			if (m.getLevel() > 0) {
 				uf.drawString(c.getX() * 32 + 3, c.getY() * 32 + 2, m.getLevel() + "", Color.white);
 			}
-		}
-		
-		if (unitMoving != null) {
-			Player player = model.getPlayer();
-			if (player == null) {
-				color = col;
-			} else {
-				color = player.getColor();
-			}
-			img = units[model.getId()][direction].copy();
-			img.setImageColor(color.r, color.g, color.b, 0.5f);
-			g.drawImage(img, unitMoving.getX() * 32, unitMoving.getY() * 32);
 		}
 	}
 }

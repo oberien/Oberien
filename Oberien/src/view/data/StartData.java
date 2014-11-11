@@ -9,13 +9,7 @@ import org.newdawn.slick.Image;
 
 import view.gui.event.KeyboardEvent;
 import view.gui.event.MouseEvent;
-import view.renderer.ActionGroundRenderer;
-import view.renderer.DamageRenderer;
-import view.renderer.FoWRenderer;
-import view.renderer.GridRenderer;
-import view.renderer.HUDRenderer;
-import view.renderer.MapRenderer;
-import view.renderer.UnitRenderer;
+import view.renderer.*;
 import controller.Controller;
 import controller.State;
 import de.lessvoid.nifty.Nifty;
@@ -31,6 +25,7 @@ public class StartData {
 	private ActionGroundRenderer agr;
 	private HUDRenderer hudr;
 	private UnitRenderer ur;
+	private ActionUnitRenderer aur;
 	private DamageRenderer dr;
 	private Font font;
 	private GridRenderer gr;
@@ -70,6 +65,14 @@ public class StartData {
 
 	public void setUr(UnitRenderer ur) {
 		this.ur = ur;
+	}
+
+	public ActionUnitRenderer getAur() {
+		return aur;
+	}
+
+	public void setAur(ActionUnitRenderer aur) {
+		this.aur = aur;
 	}
 
 	public Image getTiles() {

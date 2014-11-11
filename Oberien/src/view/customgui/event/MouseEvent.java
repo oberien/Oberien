@@ -1,4 +1,4 @@
-package view.event;
+package view.customgui.event;
 
 public class MouseEvent {
 	private final int button;

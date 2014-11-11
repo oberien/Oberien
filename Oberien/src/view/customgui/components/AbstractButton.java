@@ -1,9 +1,9 @@
-package view.components;
+package view.customgui.components;
 
 import java.util.ArrayList;
 
-import view.event.ActionEvent;
-import view.event.ActionListener;
+import view.customgui.event.ActionEvent;
+import view.customgui.event.ActionListener;
 
 public class AbstractButton extends Panel {
 	

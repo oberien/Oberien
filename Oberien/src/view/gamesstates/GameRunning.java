@@ -40,6 +40,7 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 
 	private HUDRenderer hudr;
 	private UnitRenderer ur;
+	private ActionUnitRenderer aur;
 	private FoWRenderer fowr;
 	private ActionGroundRenderer agr;
 	private DamageRenderer dr;
@@ -92,6 +93,7 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 
 			hudr = sd.getHudr();
 			ur = sd.getUr();
+			aur = sd.getAur();
 			fowr = sd.getFowr();
 			agr = sd.getAgr();
 			dr = sd.getDr();
@@ -117,7 +119,8 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		} else {
 			model = state.getModel(selectedModelCoordinate);
 		}
-		ur.draw(g, state, unitActionCoordinate, model, controller.getDirectionOf(selectedModelCoordinate, unitActionCoordinate), state.getCurrentPlayer().getColor());
+		ur.draw(g, state);
+		aur.draw(g, model, unitActionCoordinate, controller.getDirectionOf(selectedModelCoordinate, unitActionCoordinate), state.getCurrentPlayer().getColor());
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
 		hudr.draw(g, state, sbg, state.getModel(selectedModelCoordinate));
@@ -187,7 +190,7 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		}
 
 		// Clicked on itself -> set action done
-		if (selectedModelCoordinate.equals(currentCoordinate)) {
+		if (currentCoordinate.equals(selectedModelCoordinate)) {
 			retur = setActionDone(currentCoordinate);
 			if (retur) return;
 		}

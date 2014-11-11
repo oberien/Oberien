@@ -16,10 +16,8 @@ public class ChatThread extends Thread {
 	}
 
 	public void run() {
-		System.out.println("chat started");
 		while (!isInterrupted()) {
 			try {
-				System.out.println("read Command");
 				String line = con.br.readLine();
 				// disconnected
 				if (line == null) {
@@ -27,7 +25,6 @@ public class ChatThread extends Thread {
 					return;
 				}
 				Command c = new Command(line);
-				System.out.println("command: " + c.getCommandType());
 				String[] args = c.getArgs();
 				switch (c.getCommandType()) {
 					case UserAdded:

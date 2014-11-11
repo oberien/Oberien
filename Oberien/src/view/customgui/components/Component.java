@@ -1,11 +1,11 @@
-package view.components;
+package view.customgui.components;
 
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
 
-import view.event.MouseEvent;
-import view.event.MouseListener;
+import view.customgui.event.MouseEvent;
+import view.customgui.event.MouseListener;
 
 public class Component {
 	private Point location;

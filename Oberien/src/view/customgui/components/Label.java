@@ -1,4 +1,4 @@
-package view.components;
+package view.customgui.components;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.UnicodeFont;

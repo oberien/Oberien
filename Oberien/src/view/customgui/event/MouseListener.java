@@ -1,4 +1,4 @@
-package view.event;
+package view.customgui.event;
 
 public interface MouseListener {
 	public void mouseClicked(MouseEvent e);

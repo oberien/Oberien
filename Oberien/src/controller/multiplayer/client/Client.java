@@ -92,7 +92,6 @@ public class Client {
 	}
 
 	public static void privateMessage(String to, String message) throws IOException {
-		System.out.println("private message: " + to + "         " + message);
 		try {
 			checkForReady();
 			if (!loggedIn) {

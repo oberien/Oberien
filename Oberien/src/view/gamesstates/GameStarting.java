@@ -4,8 +4,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import logger.ErrorLogger;
 
@@ -18,13 +16,12 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import view.components.Panel;
+import view.customgui.components.Panel;
 import view.data.StartData;
 import view.gui.event.KeyboardEvent;
 import view.gui.event.MouseEvent;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyInputConsumer;
-import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;

@@ -1,4 +1,4 @@
-package view.components;
+package view.customgui.components;
 
 public class Dimension {
 	private float width;

@@ -7,20 +7,15 @@ import model.map.Coordinate;
 import model.map.Map;
 import model.map.MapList;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.StateBasedGame;
 
 import view.data.StartData;
-import view.eventhandler.MouseEvents;
 import view.renderer.FoWRenderer;
 import view.renderer.GridRenderer;
-import view.renderer.MapRenderer;
 import view.renderer.UnitRenderer;
 import controller.Controller;
 import controller.Options;
@@ -33,7 +28,6 @@ public class StartPositionChooser extends MapState {
 	private Controller controller;
 	private State state;
 	private Map map;
-	private MouseEvents me;
 	private UnitRenderer ur;
 	private FoWRenderer fowr;
 
@@ -58,8 +52,6 @@ public class StartPositionChooser extends MapState {
 			controller = sd.getController();
 			state = sd.getState();
 			map = sd.getMap();
-			me = new MouseEvents();
-			me.init();
 			ur = sd.getUr();
 			fowr = sd.getFowr();
 			gr = sd.getGr();
@@ -70,8 +62,8 @@ public class StartPositionChooser extends MapState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		super.render(gc, sbg, g);
 		fowr.draw(g, state.getSight());
-		ur.draw(g, state, null, null, 0, state.getCurrentPlayer().getColor());
-		gr.draw();
+		ur.draw(g, state);
+//		gr.draw();
 	}
 
 	@Override
@@ -100,7 +92,6 @@ public class StartPositionChooser extends MapState {
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		super.mouseClicked(button, x, y, clickCount);
-		System.out.println(x + ":" + y);
 		int mapx = (int) (super.camX + x / super.scale);
 		int mapy = (int) (super.camY + y / super.scale);
 

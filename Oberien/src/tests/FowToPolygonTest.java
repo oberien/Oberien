@@ -10,8 +10,7 @@ import org.newdawn.slick.Color;
 
 import controller.Controller;
 import controller.State;
-import controller.ranges.FowToPolygonThread;
-import controller.wincondition.Conquest;
+import controller.FowToPolygonThread;
 
 public class FowToPolygonTest {
 	public static void main(String[] args) throws InterruptedException {

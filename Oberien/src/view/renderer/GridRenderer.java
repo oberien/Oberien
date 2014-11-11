@@ -35,7 +35,6 @@ public class GridRenderer {
 	 * @param screenSizeY The height of the screen.
 	 */
 	public void init(int mapSizeX, int mapSizeY, int screenSizeX, int screenSizeY) {
-		System.out.println(mapSizeX);
 		linesX = mapSizeX;
 		linesY = mapSizeY;
 		this.screenSizeX = screenSizeX;

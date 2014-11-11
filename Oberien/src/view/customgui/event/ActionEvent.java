@@ -1,4 +1,4 @@
-package view.event;
+package view.customgui.event;
 
 public class ActionEvent {
 	private final String actionCommand;

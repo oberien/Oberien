@@ -2,16 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.components;
+package view.customgui.components;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.UnicodeFont;
 
-import view.event.ActionEvent;
-import view.event.MouseEvent;
-import view.event.MouseListener;
+import view.customgui.event.ActionEvent;
+import view.customgui.event.MouseEvent;
+import view.customgui.event.MouseListener;
 
 public class Button extends AbstractButton implements MouseListener {
 	private int bwidth, bheight, bheight2, bwidth2;
