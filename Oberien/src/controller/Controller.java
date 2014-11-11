@@ -328,7 +328,7 @@ public class Controller implements WinEventListener {
 	}
 	
 	/**
-	 * Starts building an Model
+	 * Starts building a Model
 	 *
 	 * @param builder Model which is building
 	 * @param x x-Coordinate where to build

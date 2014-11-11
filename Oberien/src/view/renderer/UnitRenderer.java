@@ -34,14 +34,14 @@ public class UnitRenderer {
 	}
 	
 	public void draw(Graphics g, State state, Coordinate unitMoving, Model model, int direction, Color col) throws SlickException {
-		pos = state.getModelPositionsInArea(state.getSight());
+		pos = state.getModelPositionsInSight();
 		Model m;
 		Image img;
 		Color color;
-		
-		for (int i = 0; i < pos.length; i++) {
-			m = state.getModel(pos[i]);
-			float alpha = (float) (0.75 * ((m.getCostMoney()-m.getTimeToBuild())/m.getCostMoney()));
+
+		for (Coordinate c : pos) {
+			m = state.getModel(c);
+			float alpha = (float) (0.75 * ((m.getCostMoney() - m.getTimeToBuild()) / m.getCostMoney()));
 			Player player = m.getPlayer();
 			if (player == null) {
 				color = col;
@@ -50,20 +50,20 @@ public class UnitRenderer {
 			}
 			img = units[m.getId()][m.getDirection()].copy();
 			if (!m.isActionDone()) {
-				img.setImageColor(color.r, color.g, color.b, 0.25f+alpha);
+				img.setImageColor(color.r, color.g, color.b, 0.25f + alpha);
 			} else {
-					img.setImageColor(0.75f, 0.75f, 0.75f);
+				img.setImageColor(0.75f, 0.75f, 0.75f);
 			}
-			g.drawImage(img, pos[i].getX() * 32, pos[i].getY() * 32);
+			g.drawImage(img, c.getX() * 32, c.getY() * 32);
 			if (m.getLife() != m.getMaxLife()) {
-				float life = (float)m.getLife() / m.getMaxLife();
+				float life = (float) m.getLife() / m.getMaxLife();
 				g.setColor(Color.black);
-				g.drawRect(pos[i].getX() * 32+1, pos[i].getY() * 32-3, 30, 4);
+				g.drawRect(c.getX() * 32 + 1, c.getY() * 32 - 3, 30, 4);
 				g.setColor(Color.green);
-				g.fillRect(pos[i].getX() * 32+2, pos[i].getY() * 32-2, 30*life, 3);
+				g.fillRect(c.getX() * 32 + 2, c.getY() * 32 - 2, 30 * life, 3);
 			}
 			if (m.getLevel() > 0) {
-				uf.drawString(pos[i].getX()*32 + 3, pos[i].getY()*32 + 2, m.getLevel()+"", Color.white);
+				uf.drawString(c.getX() * 32 + 3, c.getY() * 32 + 2, m.getLevel() + "", Color.white);
 			}
 		}
 		

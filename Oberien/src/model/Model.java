@@ -112,6 +112,10 @@ public class Model implements Serializable {
 	public int getLevel() {
 		return level;
 	}
+
+	public boolean isBuilt() {
+		return timeToBuild < 1;
+	}
 	
 	public void decreaseTimeToBuild(int i) {
 		if (timeToBuild-i < 0) {
