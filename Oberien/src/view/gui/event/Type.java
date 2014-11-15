@@ -1,5 +1,5 @@
 package view.gui.event;
 
 public enum Type {
-	mouseClicked, mouseDragged, mouseMoved, mousePressed, mouseReleased, mouseWheelMoved
+	mouseDragged, mouseMoved, mousePressed, mouseReleased, mouseWheelMoved
 }

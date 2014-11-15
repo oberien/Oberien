@@ -3,12 +3,15 @@ package view.gamesstates;
 import org.newdawn.slick.state.BasicGameState;
 import view.gui.event.KeyboardEvent;
 import view.gui.event.MouseEvent;
+import view.gui.event.Type;
 
 import java.util.ArrayList;
 
 public abstract class EventHandlingGameState extends BasicGameState {
 	private ArrayList<MouseEvent> mouseEvents = new ArrayList();
 	private ArrayList<KeyboardEvent> keyboardEvents = new ArrayList();
+	private MouseEvent last = null;
+	private int clickCount = 1;
 
 	public void mouseEventFired(MouseEvent e) {
 		mouseEvents.add(e);
@@ -26,14 +29,25 @@ public abstract class EventHandlingGameState extends BasicGameState {
 	public void handleMouseEvents() {
 		for (MouseEvent e : mouseEvents) {
 			if (e.hasBeenHandled()) {
-				System.out.println(e);
 				continue;
 			}
 
+			//emulate clickCount
+			if (e.getType() == Type.mousePressed && (last == null || last.getType() == Type.mouseReleased)) {
+				clickCount++;
+			}
+			if (e.getType() != Type.mousePressed && e.getType() != Type.mouseReleased) {
+				clickCount = 1;
+			}
+
+			if (last != null
+					&& last.getType() == Type.mousePressed
+					&& e.getType() == Type.mouseReleased
+					&& !last.hasBeenHandled()) {
+				mouseClicked(e.getButton(), e.getMouseX(), e.getMouseY(), clickCount);
+			}
+
 			switch (e.getType()) {
-				case mouseClicked:
-					mouseClicked(e.getButton(), e.getMouseX(), e.getMouseY(), e.getClickCount());
-					break;
 				case mouseDragged:
 					mouseDragged(e.getFromX(), e.getFromY(), e.getMouseX(), e.getMouseY());
 					break;
@@ -49,6 +63,7 @@ public abstract class EventHandlingGameState extends BasicGameState {
 				case mouseWheelMoved:
 					mouseWheelMoved(e.getMouseWheel());
 			}
+			last = e;
 		}
 		mouseEvents.clear();
 	}

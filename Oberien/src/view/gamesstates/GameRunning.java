@@ -158,7 +158,7 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		super.mouseClicked(button, x, y, clickCount);
+		System.out.println(clickCount);
 
 		boolean retur;
 

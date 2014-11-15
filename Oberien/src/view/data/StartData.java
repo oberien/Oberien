@@ -31,9 +31,6 @@ public class StartData {
 	private GridRenderer gr;
 	
 	private Nifty nifty;
-	//nifty eventhandling
-	private List<MouseEvent> mouseEvents;
-	private List<KeyboardEvent> keyEvents;
 
 	public Nifty getNifty() {
 		return nifty;
@@ -153,21 +150,5 @@ public class StartData {
 
 	public void setAgr(ActionGroundRenderer agr) {
 		this.agr = agr;
-	}
-
-	public List<MouseEvent> getMouseEvents() {
-		return mouseEvents;
-	}
-
-	public void setMouseEvents(List<MouseEvent> mouseEvents) {
-		this.mouseEvents = mouseEvents;
-	}
-
-	public List<KeyboardEvent> getKeyEvents() {
-		return keyEvents;
-	}
-
-	public void setKeyEvents(List<KeyboardEvent> keyEvents) {
-		this.keyEvents = keyEvents;
 	}
 }
