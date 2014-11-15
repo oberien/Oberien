@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<!-- style for the button background panel -->
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<style id="nifty-button-image#panel">
+		<attributes width="100px" height="42px" childLayout="center" visibleToMouse="true"/>
+		<effect>
+			<onHover name="border" color="#822f" post="true"/>
+			<onClick name="border" color="#933f" post="true"/>
+			<onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150"/>
+			<onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150"/>
+		</effect>
+	</style>
+	
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<!-- style for the button text -->
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<style id="nifty-button-green#image"/>
+</nifty-styles>
