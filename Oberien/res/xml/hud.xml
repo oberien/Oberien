@@ -7,26 +7,29 @@ and open the template in the editor.
 
 <nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
 	<screen id="HUD" controller="view.gui.controllers.HUDScreenController">
-		<layer id="topLayer" childLayout="center">
-			<panel id="topPanel" childLayout="horizontal" height="15%">
-				<panel id="topLeftPanel" childLayout="horizontal">
-					<panel id="verticalAlignTopLeftPanel" childLayout="vertical">
-						<control name="loadingbar" id="moneyBar"/>
-						<control name="loadingbar" id="energyBar"/>
-						<control name="loadingbar" id="populationBar"/>
-					</panel>
-				</panel>
-				<panel id="topRightPanel" childLayout="center">
-					<panel id="horizontalAlignTopRightPanel" childLayout="vertical">
-						<text id="turnText" font="res/fonts/32/raven.fnt" text="Turn 1     "/>
-						<text id="playerName" font="res/fonts/32/raven.fnt" wrap="true" text="Playername"/> 
+		<layer id="layer" childLayout="vertical">
+			<panel id="topCenterPanel" childLayout="center">
+				<panel id="paddingPanel" childLayout="center" padding="0%,30%,0%,30%">
+					<panel id="topPanel" childLayout="horizontal" backgroundColor="#f0f0f0">
+						<panel id="topLeftPanel" childLayout="horizontal">
+							<panel id="verticalAlignTopLeftPanel" childLayout="vertical">
+								<control name="loadingbar" id="moneyBar" width="100%"/>
+								<control name="loadingbar" id="energyBar" width="100%"/>
+								<control name="loadingbar" id="populationBar" width="100%"/>
+							</panel>
+						</panel>
+						<panel id="topRightPanel" childLayout="center">
+							<panel id="horizontalAlignTopRightPanel" childLayout="vertical">
+								<text id="turnText" font="res/fonts/32/raven.fnt" text="Turn 1     "/>
+								<text id="playerName" font="res/fonts/32/raven.fnt" wrap="true" text="Playername"/> 
+							</panel>
+						</panel>
 					</panel>
 				</panel>
 			</panel>
-		</layer>
-		<layer id="bottomLayer" childLayout="center">
-			<panel id="unitBox" height="20%"  width="20%" childLayout="vertical" align="left" valign="bottom">
-				
+			<panel id="fillpanel" height="60%"/>
+			<panel id="unitBox" height="20%"  width="20%" backgroundColor="#f0f0f0" childLayout="vertical" align="left" valign="bottom">
+				<interact onClick="unitBoxClick()"/>
 			</panel>
 		</layer>
 	</screen>

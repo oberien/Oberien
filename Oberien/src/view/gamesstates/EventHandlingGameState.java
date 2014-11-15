@@ -26,6 +26,7 @@ public abstract class EventHandlingGameState extends BasicGameState {
 	public void handleMouseEvents() {
 		for (MouseEvent e : mouseEvents) {
 			if (e.hasBeenHandled()) {
+				System.out.println(e);
 				continue;
 			}
 

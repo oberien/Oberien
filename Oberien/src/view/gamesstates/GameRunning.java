@@ -30,6 +30,8 @@ import view.renderer.*;
 import controller.Controller;
 import controller.State;
 import de.lessvoid.nifty.Nifty;
+import org.newdawn.slick.opengl.SlickCallable;
+import view.data.Globals;
 
 public class GameRunning extends MapState implements HUDModelClickedListener {
 	private GameContainer gc;
@@ -99,9 +101,12 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 			dr = sd.getDr();
 			controller = sd.getController();
 			state = sd.getState();
-
-//			Globals.getHUDController().registerControllerListeners(sd);
+			
 			nifty = sd.getNifty();
+			nifty.gotoScreen("HUD");
+			nifty.update();
+			Globals.getHUDController().registerListeners(sd, this);
+			Globals.getHUDController().addHUDModelClickedEventListener(this);
 			mm = new MusicManager();
 			mm.init();
 		}
@@ -120,18 +125,18 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 			model = state.getModel(selectedModelCoordinate);
 		}
 		ur.draw(g, state);
-		aur.draw(g, model, unitActionCoordinate, controller.getDirectionOf(selectedModelCoordinate, unitActionCoordinate), state.getCurrentPlayer().getColor());
+		aur.draw(g, modelToBuild, unitActionCoordinate, controller.getDirectionOf(selectedModelCoordinate, unitActionCoordinate), state.getCurrentPlayer().getColor());
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
 		hudr.draw(g, state, sbg, state.getModel(selectedModelCoordinate));
-//		SlickCallable.enterSafeBlock();
-//		nifty.render(false);
-//		SlickCallable.leaveSafeBlock();
+		SlickCallable.enterSafeBlock();
+		nifty.render(false);
+		SlickCallable.leaveSafeBlock();
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-//		nifty.update();
+		nifty.update();
 		super.update(gc, sbg, delta);
 
 		//set damage coords to null when time > 2000ms
