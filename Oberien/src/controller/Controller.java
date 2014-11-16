@@ -386,6 +386,7 @@ public class Controller implements WinEventListener {
 					state.getCurrentPlayer().usePopulation(b.getCostPopulation());
 					addModel(build, b);
 					((BuildingModel)m).setCurrentBuilding(b);
+					m.setActionDone(true);
 					return 1;
 				}
 			}

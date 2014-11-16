@@ -119,13 +119,13 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		fowr.draw(g, state.getSight());
 		agr.draw(g, state, selectedModelCoordinate, modelToBuild != null);
 		Model model;
-		if (hudr.getSelectedModel() != null) {
-			model = hudr.getSelectedModel();
+		if (modelToBuild != null) {
+			model = modelToBuild;
 		} else {
 			model = state.getModel(selectedModelCoordinate);
 		}
 		ur.draw(g, state);
-		aur.draw(g, modelToBuild, unitActionCoordinate, controller.getDirectionOf(selectedModelCoordinate, unitActionCoordinate), state.getCurrentPlayer().getColor());
+		aur.draw(g, model, unitActionCoordinate, controller.getDirectionOf(selectedModelCoordinate, unitActionCoordinate), state.getCurrentPlayer().getColor());
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
 		hudr.draw(g, state, sbg, state.getModel(selectedModelCoordinate));
@@ -158,8 +158,6 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		System.out.println(clickCount);
-
 		boolean retur;
 
 		int mapx = (int) (camX + x / scale);
@@ -177,19 +175,19 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		}
 
 		// BuildingModel selected and modelToBuild is chosen in HUD
-		if (selectedModelCoordinate instanceof BuildingModel && modelToBuild != null) {
+		if (selectedModel instanceof BuildingModel && modelToBuild != null) {
 			retur = buildModel(selectedModelCoordinate, currentCoordinate, modelToBuild);
 			if (retur) return;
 		}
 
 		// BuildingModel selected and will be added to to build the model on currentPos
-		if (selectedModelCoordinate instanceof BuildingModel && !currentModel.isBuilt()) {
+		if (selectedModel instanceof BuildingModel && currentModel != null && !currentModel.isBuilt()) {
 			retur = addModelToBuild(selectedModelCoordinate, currentCoordinate);
 			if (retur) return;
 		}
 
 		// AttackingModel is chosen and clicked coordinate is an enemy model
-		if (selectedModelCoordinate instanceof AttackingModel && currentModel.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
+		if (selectedModel instanceof AttackingModel && currentModel.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
 			retur = attack(selectedModelCoordinate, currentCoordinate);
 			if (retur) return;
 		}
@@ -334,6 +332,7 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 			mm.stopMusic();
 		} else if (key == Input.KEY_RETURN) {
 			endTurn = true;
+			resetSelectedModels();
 		} else if (key == Keyboard.KEY_ESCAPE) {
 			gc.exit();
 		}

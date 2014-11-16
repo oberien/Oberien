@@ -41,6 +41,10 @@ public class UnitRenderer {
 
 		for (Coordinate c : pos) {
 			m = state.getModel(c);
+			//TODO: this is only a dirty workaround for an issue I couldn't find
+			if (m == null) {
+				continue;
+			}
 			float alpha = (float) (0.75 * ((m.getCostMoney() - m.getTimeToBuild()) / m.getCostMoney()));
 			color = m.getPlayer().getColor();
 			img = units[m.getId()][m.getDirection()].copy();

@@ -70,9 +70,9 @@ public abstract class EventHandlingGameState extends BasicGameState {
 
 	public void handleKeyboardEvents() {
 		for (KeyboardEvent e : keyboardEvents) {
-			if (e.hasBeenHandled()) {
-				continue;
-			}
+//			if (e.hasBeenHandled()) {
+//				continue;
+//			}
 
 			if (e.isPressed()) {
 				keyPressed(e.getKey(), e.getC());
