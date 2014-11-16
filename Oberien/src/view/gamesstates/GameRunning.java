@@ -184,7 +184,7 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		}
 
 		// AttackingModel is chosen and clicked coordinate is an enemy model
-		if (selectedModel instanceof AttackingModel && currentModel.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
+		if (selectedModel instanceof AttackingModel && currentModel != null && currentModel.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
 			retur = attack(selectedModelCoordinate, currentCoordinate);
 			if (retur) return;
 		}
@@ -284,7 +284,8 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		int result = controller.move(from, to);
 		boolean moved = result > 0;
 		if (moved) {
-			resetSelectedModels();
+			selectedModelCoordinate = to;
+			unitActionCoordinate = null;
 		}
 		return moved;
 	}

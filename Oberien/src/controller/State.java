@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import model.Model;
 import model.map.Coordinate;
@@ -133,8 +134,8 @@ public class State {
 	}
 	public void updateModel(Coordinate from, Coordinate to) {
 		Model m = getModel(from);
-		models.remove(from);
 		models.put(to, m);
+		models.remove(from);
 	}
 	public void addModel(Coordinate c, Model model) {
 		models.put(c, model);
@@ -154,7 +155,6 @@ public class State {
 		return viewranges.get(getModel(c));
 	}
 	public void updateViewrange(Model model, Coordinate[] neu) {
-		viewranges.remove(model);
 		viewranges.put(model, neu);
 	}
 	public void addViewrange(Model model, Coordinate[] neu) {
@@ -174,7 +174,6 @@ public class State {
 		return moveranges.get(getModel(c));
 	}
 	public void updateMoverange(Model model, Coordinate[] neu) {
-		moveranges.remove(model);
 		moveranges.put(model, neu);
 	}
 	public void addMoverange(Model model, Coordinate[] neu) {
@@ -194,7 +193,6 @@ public class State {
 		return fullAttackranges.get(getModel(c));
 	}
 	public void updateFullAttackrange(Model model, Coordinate[] neu) {
-		fullAttackranges.remove(model);
 		fullAttackranges.put(model, neu);
 	}
 	public void addFullAttackrange(Model model, Coordinate[] neu) {
@@ -214,7 +212,6 @@ public class State {
 		return directAttackranges.get(getModel(c));
 	}
 	public void updateDirectAttackrange(Model model, Coordinate[] neu) {
-		directAttackranges.remove(model);
 		directAttackranges.put(model, neu);
 	}
 	public void addDirectAttackrange(Model model, Coordinate[] neu) {
@@ -234,7 +231,6 @@ public class State {
 		return buildranges.get(getModel(c));
 	}
 	public void updateBuildrange(Model model, Coordinate[] neu) {
-		buildranges.remove(model);
 		buildranges.put(model, neu);
 	}
 	public void addBuildrange(Model model, Coordinate[] neu) {
@@ -278,8 +274,9 @@ public class State {
 		playerModelPositions = null;
 	}
 	public void updatePlayerModelPosition(Coordinate from, Coordinate to) {
-		playerModelPositionList.remove(from);
 		playerModelPositionList.add(to);
+		playerModelPositionList.remove(from);
+		playerModelPositions = null;
 	}
 	public void addPlayerModelPosition(Coordinate c) {
 		playerModelPositionList.add(c);
@@ -303,8 +300,9 @@ public class State {
 		allyModelPositions = null;
 	}
 	public void updateAllyModelPosition(Coordinate from, Coordinate to) {
-		allyModelPositionList.remove(from);
 		allyModelPositionList.add(to);
+		allyModelPositionList.remove(from);
+		allyModelPositions = null;
 	}
 	public void addAllyModelPosition(Coordinate c) {
 		allyModelPositionList.add(c);
@@ -328,8 +326,9 @@ public class State {
 		modelPositionsInSight = null;
 	}
 	public void updateModelPositionInSight(Coordinate from, Coordinate to) {
-		modelPositionsInSightList.remove(from);
 		modelPositionsInSightList.add(to);
+		modelPositionsInSightList.remove(from);
+		modelPositionsInSight = null;
 	}
 	public void addModelPositionInSight(Coordinate c) {
 		modelPositionsInSightList.add(c);

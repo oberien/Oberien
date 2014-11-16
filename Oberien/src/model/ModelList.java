@@ -1,5 +1,6 @@
 package model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import model.building.base.Base;
@@ -96,66 +97,15 @@ public class ModelList {
 	}
 	
 	public Model createNewModel(String name, Player player) {
-		if(name.equals("Soldier")) {
-			return new Soldier(player);
-		} else if(name.equals("Rocketeer")) {
-			return new Rocketeer(player);
-		} else if(name.equals("Heavy Assault Walker")) {
-			return new HeavyAssaultWalker(player);
-		} else if(name.equals("Sharpshooter")) {
-			return new Sharpshooter(player);
-		} else if(name.equals("Warrior")) {
-			return new Warrior(player);
-		} else if(name.equals("Strider")) {
-			return new Strider(player);
-		} else if(name.equals("Annoy Bot")) {
-			return new AnnoyBot(player);
-		} else if(name.equals("Leopard 5")) {
-			return new Leopard5(player);
-		} else if(name.equals("Laser Tank")) {
-			return new LaserTank(player);
-		} else if(name.equals("Spy")) {
-			return new Spy(player);
-		} else if(name.equals("Resource Collector Builder")) {
-			return new ResourceCollectorBuilder(player);
-		} else if(name.equals("Storage Builder")) {
-			return new StorageBuilder(player);
-		} else if(name.equals("Producing Builder")) {
-			return new ProducingBuilder(player);
-		} else if(name.equals("Turret Builder")) {
-			return new TurretBuilder(player);
-		} else if(name.equals("High Range Turret Builder")) {
-			return new HighRangeTurretBuilder(player);
-		} else if(name.equals("Solar Cell")) {
-			return new SolarCell(player);
-		} else if(name.equals("Hamster Wheel")) {
-			return new HamsterWheel(player);
-		} else if(name.equals("House")) {
-			return new House(player);
-		} else if(name.equals("Nuclear Reactor")) {
-			return new NuclearReactor(player);
-		} else if(name.equals("Windmill")) {
-			return new Windmill(player);
-		} else if(name.equals("Small Storage")) {
-			return new SmallStorage(player);
-		} else if(name.equals("Medium Storage")) {
-			return new MediumStorage(player);
-		} else if(name.equals("Big Storage")) {
-			return new BigStorage(player);
-		} else if(name.equals("Military Training Area")) {
-			return new MilitaryTrainingArea(player);
-		} else if(name.equals("Tank Manufactory")) {
-			return new TankManufactory(player);
-		} else if(name.equals("Robo Hub")) {
-			return new RoboHub(player);
-		} else if(name.equals("Gatling Gun")) {
-			return new GatlingGun(player);
-		} else if(name.equals("Laser Cannon")) {
-			return new LaserCannon(player);
-		} else if(name.equals("Base")) {
-			return new Base(player);
-		} else {
-			return null;
+		for (Model m : getAllModels()) {
+			if (m.getName().equals(name)) {
+				try {
+					return m.getClass().getConstructor(player.getClass()).newInstance(player);
+				} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+		return null;
 	}
 }

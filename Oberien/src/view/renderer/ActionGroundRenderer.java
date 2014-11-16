@@ -5,6 +5,7 @@
 package view.renderer;
 
 import model.AttackingModel;
+import model.BuildingModel;
 import model.Model;
 import model.map.Coordinate;
 import model.unit.Unit;
@@ -16,46 +17,46 @@ import controller.State;
 
 import logger.ErrorLogger;
 
+import java.util.logging.Level;
+
 public class ActionGroundRenderer {
 
-	private Coordinate[] enmop;
-	
 	public ActionGroundRenderer() {
 		
 	}
 	
-	public void draw(Graphics g, State state, Coordinate selectedModel, boolean build) {
+	public void draw(Graphics g, State state, Coordinate selectedModelCoordinate, boolean build) {
 		try {
 			Coordinate[] range;
 			
-			if (selectedModel == null) {
+			if (selectedModelCoordinate == null) {
 				return;
 			}
-			Model m = state.getModel(selectedModel);
+			Model m = state.getModel(selectedModelCoordinate);
 			if (m != null && !m.isActionDone()) {
-				if (build) {
+				if (build || (m instanceof Unit && ((Unit)m).isMoved() && m instanceof BuildingModel)) {
 					g.setColor(new Color(0.1f, 0.1f, 0.1f, 0.5f));
-					range = state.getBuildrange(selectedModel);
-					for (int i = 0; i < range.length; i++) {
-						g.fillRect(range[i].getX() * 32, range[i].getY() * 32, 32, 32);
+					range = state.getBuildrange(selectedModelCoordinate);
+					for (Coordinate aRange : range) {
+						g.fillRect(aRange.getX() * 32, aRange.getY() * 32, 32, 32);
 					}
 				} else {
 					if (m instanceof Unit && !((Unit)m).isMoved()) {
 						g.setColor(new Color(0.3f, 0.9f, 0.3f, 0.5f));
-						range = state.getMoverange(selectedModel);
-						for (int i = 0; i < range.length; i++) {
-							g.fillRect(range[i].getX() * 32, range[i].getY() * 32, 32, 32);
+						range = state.getMoverange(selectedModelCoordinate);
+						for (Coordinate aRange : range) {
+							g.fillRect(aRange.getX() * 32, aRange.getY() * 32, 32, 32);
 						}
 					}
 
 					if (m instanceof AttackingModel) {
 						g.setColor(new Color(1.0f, 0.1f, 0.1f, 0.5f));
 						if (m instanceof Unit && !((Unit)m).isMoved()) {
-							range = state.getFullAttackrange(selectedModel);
+							range = state.getFullAttackrange(selectedModelCoordinate);
 						} else {
-							range = state.getDirectAttackrange(selectedModel);
+							range = state.getDirectAttackrange(selectedModelCoordinate);
 						}
-						enmop = state.getEnemyModelPositionsInArea(range);
+						Coordinate[] enmop = state.getEnemyModelPositionsInArea(range);
 						for (Coordinate c : range) {
 							for (Coordinate p : enmop) {
 								if (c.equals(p)) {
@@ -67,7 +68,7 @@ public class ActionGroundRenderer {
 				}
 			}
 		} catch (NullPointerException e) {
-			ErrorLogger.logger.severe(e.getMessage());
+			ErrorLogger.logger.log(Level.SEVERE, "ERROR: ", e);
 		}
 	}
 }
