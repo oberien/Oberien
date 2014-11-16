@@ -40,7 +40,6 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 	private Controller controller;
 	private State state;
 
-	private HUDRenderer hudr;
 	private UnitRenderer ur;
 	private ActionUnitRenderer aur;
 	private FoWRenderer fowr;
@@ -93,7 +92,6 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		if (MapList.getInstance().getCurrentMap() != null) {
 			this.gc = gc;
 
-			hudr = sd.getHudr();
 			ur = sd.getUr();
 			aur = sd.getAur();
 			fowr = sd.getFowr();
@@ -128,7 +126,6 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		aur.draw(g, model, unitActionCoordinate, controller.getDirectionOf(selectedModelCoordinate, unitActionCoordinate), state.getCurrentPlayer().getColor());
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
-		hudr.draw(g, state, sbg, state.getModel(selectedModelCoordinate));
 		SlickCallable.enterSafeBlock();
 		nifty.render(false);
 		SlickCallable.leaveSafeBlock();

@@ -51,7 +51,7 @@ public class LoadingbarController extends AbstractController implements Loadingb
 	public void setProgress(float progress) {
 		this.progress = progress;
 		final int MIN_WIDTH = 32;
-		int pixelWidth = (int) (MIN_WIDTH + (element.getParent().getWidth() - MIN_WIDTH) * progress);
+		float pixelWidth = (float) (MIN_WIDTH + (element.getParent().getWidth() - MIN_WIDTH) * progress);
 		element.setConstraintWidth(new SizeValue(pixelWidth + "px"));
 		element.getParent().layoutElements();
 	}

@@ -19,19 +19,19 @@ public class PlayerStatsAdapter {
 		listener.remove(l);
 	}
 
-	public void moneyChanged(int metal) {
+	public void moneyChanged(float metal) {
 		for (PlayerStatsListener l : listener) {
 			l.moneyChanged(metal);
 		}
 	}
 
-	public void energyChanged(int energy) {
+	public void energyChanged(float energy) {
 		for (PlayerStatsListener l : listener) {
 			l.energyChanged(energy);
 		}
 	}
 
-	public void populationChanged(int population) {
+	public void populationChanged(float population) {
 		for (PlayerStatsListener l : listener) {
 			l.populationChanged(population);
 		}

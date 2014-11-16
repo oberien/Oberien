@@ -13,22 +13,22 @@ and open the template in the editor.
 					<panel id="topPanel" childLayout="horizontal" backgroundColor="#903020">
 						<panel id="topLeftPanel" childLayout="horizontal">
 							<panel id="verticalAlignTopLeftPanel" childLayout="vertical">
-								<panel id="moneyBarAndTextLayoutPanel" childLayout="horizontal">
+								<panel id="moneyBarAndTextLayoutPanel" childLayout="horizontal" padding="15%,0%,15%,0%">
 									<control name="loadingbar" id="moneyBar"  width="75%"/>	
 									<panel id="centerMoneyBarTextPanel" childLayout="center">
-										<text id="moneyBarText" font="res/fonts/16/raven.fnt" text = "00000/00000" valign="center"/>
+										<text id="moneyBarText" font="res/fonts/16/raven.fnt" text = "00000/00000M" valign="center"/>
 									</panel>
 								</panel>
-								<panel id="energyBarAndTextLayoutPanel" childLayout="horizontal">
+								<panel id="energyBarAndTextLayoutPanel" childLayout="horizontal" padding="15%,0%,15%,0%">
 									<control name="loadingbar" id="energyBar" width="75%"/>
 									<panel id="centerEnergyBarTextPanel" childLayout="center">
-										<text id="energyBarText" font="res/fonts/16/raven.fnt" text = "00000/00000" valign="center"/>
+										<text id="energyBarText" font="res/fonts/16/raven.fnt" text = "00000/00000E" valign="center"/>
 									</panel>
 								</panel>
-								<panel id="populationBarAndTextLayoutPanel" childLayout="horizontal">
+								<panel id="populationBarAndTextLayoutPanel" childLayout="horizontal" padding="15%,0%,15%,0%">
 									<control name="loadingbar" id="populationBar" width="75%"/>
 									<panel id="centerPopulationBarTextPanel" childLayout="center">
-										<text id="populationBarText" font="res/fonts/16/raven.fnt" text = "00000/00000" valign="center"/>
+										<text id="populationBarText" font="res/fonts/16/raven.fnt" text = "00000/00000P" valign="center"/>
 									</panel>
 								</panel>
 							</panel>

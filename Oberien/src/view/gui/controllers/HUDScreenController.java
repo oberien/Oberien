@@ -88,10 +88,12 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 	}
 
 	public void unitBoxClick() {
-		for (int i = modelImageBoxes.size() - 1; i >= 0; i--) {
-			modelImageBoxes.remove(i);
+		for (int i = subBoxes.size() - 1; i >= 0; i--) {
+			Element el = subBoxes.get(i);
+			for (Element e : el.getChildren()) {
+				e.markForRemoval();
+			}
 		}
-		modelImageBoxes.clear();
 	}
 
 	@Override
@@ -113,6 +115,7 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 		moneyChanged(p.getMoney());
 		energyChanged(p.getEnergy());
 		populationChanged(p.getPopulation());
+		playernameChanged(p.getName());
 	}
 
 	@Override
@@ -140,21 +143,21 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 	}
 
 	@Override
-	public void moneyChanged(int money) {
-		moneyBar.setProgress(money / c.getState().getCurrentPlayer().getStorage());
-		moneyBarText.getRenderer(TextRenderer.class).setText(money + "/" + c.getState().getCurrentPlayer().getStorage());
+	public void moneyChanged(float money) {
+		moneyBar.setProgress(money / ((float) c.getState().getCurrentPlayer().getStorage()));
+		moneyBarText.getRenderer(TextRenderer.class).setText(((int) money) + "/" + c.getState().getCurrentPlayer().getStorage() + "M");
 	}
 
 	@Override
-	public void energyChanged(int energy) {
-		energyBar.setProgress(energy / c.getState().getCurrentPlayer().getStorage());
-		energyBarText.getRenderer(TextRenderer.class).setText(energy + "/" + c.getState().getCurrentPlayer().getStorage());
+	public void energyChanged(float energy) {
+		energyBar.setProgress(energy / ((float) c.getState().getCurrentPlayer().getStorage()));
+		energyBarText.getRenderer(TextRenderer.class).setText(((int) energy) + "/" + c.getState().getCurrentPlayer().getStorage() + "E");
 	}
 
 	@Override
-	public void populationChanged(int population) {
-		populationBar.setProgress(population / c.getState().getCurrentPlayer().getPopulationStorage());
-		populationBarText.getRenderer(TextRenderer.class).setText(population + "/" + c.getState().getCurrentPlayer().getPopulationStorage());
+	public void populationChanged(float population) {
+		populationBar.setProgress(population / ((float) c.getState().getCurrentPlayer().getPopulationStorage()));
+		populationBarText.getRenderer(TextRenderer.class).setText(((int) population) + "/" + c.getState().getCurrentPlayer().getPopulationStorage() + "P");
 	}
 
 	@Override
@@ -191,7 +194,6 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 								width(Globals.TILE_SIZE + "px");
 							}
 						}.build(nifty, screen, subBox));
-
 				i++;
 			}
 		}
