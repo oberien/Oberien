@@ -155,6 +155,11 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
+		if (button == 1) {
+			resetSelectedModels();
+			return;
+		}
+
 		boolean retur;
 
 		int mapx = (int) (camX + x / scale);
@@ -189,15 +194,20 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 			if (retur) return;
 		}
 
-		// Clicked on itself -> set action done
+		// Clicked on itself -> ignore
 		if (currentCoordinate.equals(selectedModelCoordinate)) {
-			retur = setActionDone(currentCoordinate);
-			if (retur) return;
+			return;
 		}
 
 		// Unit is chosen and wants to move
 		if (selectedModel instanceof Unit) {
 			retur = move(selectedModelCoordinate, currentCoordinate);
+			if (retur) return;
+		}
+
+		// Clicked on a different unit of same player
+		if (currentModel != null && currentModel.getPlayer().equals(state.getCurrentPlayer())) {
+			retur = selectModel(currentModel, currentCoordinate);
 			if (retur) return;
 		}
 

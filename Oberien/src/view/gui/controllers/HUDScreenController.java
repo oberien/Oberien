@@ -172,30 +172,30 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 
 	@Override
 	public void modelClicked(Model m) {
-		if (m == null) {
-			unitBoxClick();
-		} else if (m instanceof BuildingModel) {
-			BuildingModel b = (BuildingModel) m;
-			Model[] list = ModelList.getInstance().getModelsOfType(b.getBuilds());
-			int a = 0;
-			Element subBox = subBoxes.get(0);
-			int i = 0;
-			for (final Model e : list) {
-				if (i * Globals.TILE_SIZE > unitBox.getWidth()) {
-					a++;
-					subBox = subBoxes.get(a);
-				}
-				modelImageBoxes.add(
-						new ButtonBuilder(e.getName() + "ImageBox") {
-							{
-								name("buttonImage");
-								filename("/res/imgs/units/" + e.getId() + ".2.png");
-								height(Globals.TILE_SIZE + "px");
-								width(Globals.TILE_SIZE + "px");
-							}
-						}.build(nifty, screen, subBox));
-				i++;
+		unitBoxClick();
+		if (m == null || !(m instanceof BuildingModel)) {
+			return;
+		}
+		BuildingModel b = (BuildingModel) m;
+		Model[] list = ModelList.getInstance().getModelsOfType(b.getBuilds());
+		int a = 0;
+		Element subBox = subBoxes.get(0);
+		int i = 0;
+		for (final Model e : list) {
+			if (i * Globals.TILE_SIZE > unitBox.getWidth()) {
+				a++;
+				subBox = subBoxes.get(a);
 			}
+			modelImageBoxes.add(
+					new ButtonBuilder(e.getName() + "ImageBox") {
+						{
+							name("buttonImage");
+							filename("/res/imgs/units/" + e.getId() + ".2.png");
+							height(Globals.TILE_SIZE + "px");
+							width(Globals.TILE_SIZE + "px");
+						}
+					}.build(nifty, screen, subBox));
+			i++;
 		}
 	}
 }
