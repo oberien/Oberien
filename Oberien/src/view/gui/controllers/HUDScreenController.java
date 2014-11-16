@@ -7,9 +7,9 @@ package view.gui.controllers;
 
 import controller.Controller;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyEvent;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -25,6 +25,7 @@ import model.BuildingModel;
 import model.Model;
 import model.ModelList;
 import model.map.Coordinate;
+import model.player.Player;
 import view.data.Globals;
 import view.data.StartData;
 import view.gamesstates.GameRunning;
@@ -36,6 +37,7 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 	private Loadingbar moneyBar, energyBar, populationBar;
 	private Screen screen;
 	private Element unitBox;
+	private Element moneyBarText, energyBarText, populationBarText;
 	private Controller c;
 	private final ArrayList<Element> modelImageBoxes = new ArrayList<>();
 	private final ArrayList<Element> subBoxes = new ArrayList<>();
@@ -57,6 +59,10 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 		energyBar = screen.findNiftyControl("energyBar", Loadingbar.class);
 		populationBar = screen.findNiftyControl("populationBar", Loadingbar.class);
 
+		moneyBarText = screen.findElementById("moneyBarText");
+		energyBarText = screen.findElementById("energyBarText");
+		populationBarText = screen.findElementById("populationBarText");
+
 		unitBox = screen.findElementById("unitBox");
 
 		for (int i = 0; i < unitBox.getHeight(); i += Globals.TILE_SIZE) {
@@ -73,7 +79,7 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 	}
 
 	@NiftyEventSubscriber(pattern = ".*ImageBox")
-	public void unitImageBoxClicked(String name, NiftyEvent e) {
+	public void unitImageBoxClicked(String name, ButtonClickedEvent e) {
 		for (Model l : ModelList.getInstance().getAllModels()) {
 			if ((l.getName() + "ImageBox").equals(name)) {
 				HUDModelClicked(l);
@@ -83,9 +89,9 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 
 	public void unitBoxClick() {
 		for (int i = modelImageBoxes.size() - 1; i >= 0; i--) {
-			modelImageBoxes.get(i).markForRemoval();
-			modelImageBoxes.remove(modelImageBoxes.get(i));
+			modelImageBoxes.remove(i);
 		}
+		modelImageBoxes.clear();
 	}
 
 	@Override
@@ -102,6 +108,11 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 		c.addTurnChangedListener(this);
 		c.addPlayerStatsListener(this);
 		gr.addModelClickedEventListener(this);
+
+		Player p = c.getState().getCurrentPlayer();
+		moneyChanged(p.getMoney());
+		energyChanged(p.getEnergy());
+		populationChanged(p.getPopulation());
 	}
 
 	@Override
@@ -131,19 +142,19 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 	@Override
 	public void moneyChanged(int money) {
 		moneyBar.setProgress(money / c.getState().getCurrentPlayer().getStorage());
-		System.out.println(money);
+		moneyBarText.getRenderer(TextRenderer.class).setText(money + "/" + c.getState().getCurrentPlayer().getStorage());
 	}
 
 	@Override
 	public void energyChanged(int energy) {
 		energyBar.setProgress(energy / c.getState().getCurrentPlayer().getStorage());
-		System.out.println(energy);
+		energyBarText.getRenderer(TextRenderer.class).setText(energy + "/" + c.getState().getCurrentPlayer().getStorage());
 	}
 
 	@Override
 	public void populationChanged(int population) {
 		populationBar.setProgress(population / c.getState().getCurrentPlayer().getPopulationStorage());
-		System.out.println(population);
+		populationBarText.getRenderer(TextRenderer.class).setText(population + "/" + c.getState().getCurrentPlayer().getPopulationStorage());
 	}
 
 	@Override
@@ -186,4 +197,3 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 		}
 	}
 }
-

@@ -26,7 +26,7 @@ public class LoadingbarController extends AbstractController implements Loadingb
 	public void bind(Nifty nifty, Screen screen, Element element, Parameters parameter) {
 		this.nifty = nifty;
 		this.screen = screen;
-		this.element = element;
+		this.element = element.findElementById("progressbar");
 		this.parameter = parameter;
 	}
 

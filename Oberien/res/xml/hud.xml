@@ -10,18 +10,37 @@ and open the template in the editor.
 		<layer id="layer" childLayout="vertical">
 			<panel id="topCenterPanel" childLayout="center">
 				<panel id="paddingPanel" childLayout="center" padding="0%,30%,0%,30%">
-					<panel id="topPanel" childLayout="horizontal" backgroundColor="#f0f0f0">
+					<panel id="topPanel" childLayout="horizontal" backgroundColor="#903020">
 						<panel id="topLeftPanel" childLayout="horizontal">
 							<panel id="verticalAlignTopLeftPanel" childLayout="vertical">
-								<control name="loadingbar" id="moneyBar" width="100%"/>
-								<control name="loadingbar" id="energyBar" width="100%"/>
-								<control name="loadingbar" id="populationBar" width="100%"/>
+								<panel id="moneyBarAndTextLayoutPanel" childLayout="horizontal">
+									<control name="loadingbar" id="moneyBar"  width="75%"/>	
+									<panel id="centerMoneyBarTextPanel" childLayout="center">
+										<text id="moneyBarText" font="res/fonts/16/raven.fnt" text = "00000/00000" valign="center"/>
+									</panel>
+								</panel>
+								<panel id="energyBarAndTextLayoutPanel" childLayout="horizontal">
+									<control name="loadingbar" id="energyBar" width="75%"/>
+									<panel id="centerEnergyBarTextPanel" childLayout="center">
+										<text id="energyBarText" font="res/fonts/16/raven.fnt" text = "00000/00000" valign="center"/>
+									</panel>
+								</panel>
+								<panel id="populationBarAndTextLayoutPanel" childLayout="horizontal">
+									<control name="loadingbar" id="populationBar" width="75%"/>
+									<panel id="centerPopulationBarTextPanel" childLayout="center">
+										<text id="populationBarText" font="res/fonts/16/raven.fnt" text = "00000/00000" valign="center"/>
+									</panel>
+								</panel>
 							</panel>
 						</panel>
 						<panel id="topRightPanel" childLayout="center">
 							<panel id="horizontalAlignTopRightPanel" childLayout="vertical">
-								<text id="turnText" font="res/fonts/32/raven.fnt" text="Turn 1     "/>
-								<text id="playerName" font="res/fonts/32/raven.fnt" wrap="true" text="Playername"/> 
+								<panel id="topRightTurnTextCenterPanel" childLayout="center">
+									<text id="turnText" font="res/fonts/32/raven.fnt" wrap="true" text="Turn 1     " valign="vertical"/>
+								</panel>
+								<panel id="topRightPlayerNameCenterPanel" childLayout="center">
+									<text id="playerName" font="res/fonts/32/raven.fnt" wrap="true" text="Playername" valign="vertical"/> 
+								</panel>
 							</panel>
 						</panel>
 					</panel>
