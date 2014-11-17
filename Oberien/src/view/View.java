@@ -16,6 +16,7 @@ import view.data.StartData;
 import view.gamesstates.*;
 import view.gui.event.KeyboardEvent;
 import view.gui.event.MouseEvent;
+import view.gui.event.NiftyEventBuffer;
 import view.gui.event.Type;
 
 public class View extends StateBasedGame {
@@ -35,8 +36,6 @@ public class View extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		sd = new StartData();
-		sd.setMouseEvents(new ArrayList<MouseEvent>());
-		sd.setKeyEvents(new ArrayList<KeyboardEvent>());
 		
 		this.addState(new GameStarting(sd));
 		this.addState(new NiftyMenu(sd));
@@ -53,11 +52,9 @@ public class View extends StateBasedGame {
 	 * @param mouseButton
 	 * @param mouseDown
 	 */
-	private void forwardMouseEvent(final int fromX, final int fromY, final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final int clickCount, final boolean mouseDown, Type type) {
-		MouseEvent e = new MouseEvent(fromX, fromY, mouseX, mouseY, mouseWheel, mouseButton, clickCount, mouseDown, type);
-		if (type != Type.mouseDragged && type != Type.mouseClicked) {
-			sd.getMouseEvents().add(e);
-		}
+	private void forwardMouseEvent(final int fromX, final int fromY, final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final boolean mouseDown, Type type) {
+		MouseEvent e = new MouseEvent(fromX, fromY, mouseX, mouseY, mouseWheel, mouseButton, mouseDown, type);
+		NiftyEventBuffer.addMouseEvent(e);
 		if (getCurrentState() instanceof EventHandlingGameState) {
 			((EventHandlingGameState)getCurrentState()).mouseEventFired(e);
 		}
@@ -65,7 +62,7 @@ public class View extends StateBasedGame {
 
 	private void forwardKeyboardEvent(final int key, final char c, final boolean pressed) {
 		KeyboardEvent e = new KeyboardEvent(key, c, pressed);
-		sd.getKeyEvents().add(e);
+		NiftyEventBuffer.addKeyboardEvent(e);
 		if (getCurrentState() instanceof EventHandlingGameState) {
 			((EventHandlingGameState)getCurrentState()).keyboardEventFired(e);
 		}
@@ -73,11 +70,7 @@ public class View extends StateBasedGame {
 
 	@Override
 	public void mouseClicked(final int button, final int x, final int y, final int clickCount) {
-		EventLogger.logger.finest("mouseClicked " + button + " " + clickCount + " " + x + ":" + y);
-		mouseX = x;
-		mouseY = y;
-		mouseButton = button;
-		forwardMouseEvent(0, 0, mouseX, mouseY, 0, mouseButton, clickCount, mouseDown, Type.mouseClicked);
+
 	}
 
 	@Override
@@ -85,7 +78,7 @@ public class View extends StateBasedGame {
 		EventLogger.logger.finest("mouseDragged " + oldx + ":" + oldy + " to " + newx + ":" + newy);
 		mouseX = newx;
 		mouseY = newy;
-		forwardMouseEvent(oldx, oldy, mouseX, mouseY, 0, mouseButton, 0, mouseDown, Type.mouseDragged);
+		forwardMouseEvent(oldx, oldy, mouseX, mouseY, 0, mouseButton, mouseDown, Type.mouseMoved);
 	}
 
 	@Override
@@ -93,7 +86,7 @@ public class View extends StateBasedGame {
 		EventLogger.logger.finest("mouseMoved " + oldx + ":" + oldy + " to " + newx + ":" + newy);
 		mouseX = newx;
 		mouseY = newy;
-		forwardMouseEvent(oldx, oldy, mouseX, mouseY, 0, mouseButton, 0, mouseDown, Type.mouseMoved);
+		forwardMouseEvent(oldx, oldy, mouseX, mouseY, 0, mouseButton, mouseDown, Type.mouseMoved);
 	}
 
 	@Override
@@ -103,7 +96,7 @@ public class View extends StateBasedGame {
 		mouseY = y;
 		mouseButton = button;
 		mouseDown = true;
-		forwardMouseEvent(0, 0, mouseX, mouseY, 0, mouseButton, 0, mouseDown, Type.mousePressed);
+		forwardMouseEvent(0, 0, mouseX, mouseY, 0, mouseButton, mouseDown, Type.mousePressed);
 	}
 
 	@Override
@@ -113,13 +106,13 @@ public class View extends StateBasedGame {
 		mouseY = y;
 		mouseButton = button;
 		mouseDown = false;
-		forwardMouseEvent(0, 0, mouseX, mouseY, 0, button, 0, mouseDown, Type.mouseReleased);
+		forwardMouseEvent(0, 0, mouseX, mouseY, 0, button, mouseDown, Type.mouseReleased);
 	}
 
 	@Override
 	public void mouseWheelMoved(int newValue) {
 		EventLogger.logger.finest("mouseWheelMoved " + newValue);
-		forwardMouseEvent(0, 0, mouseX, mouseY, newValue, 0, 0, mouseDown, Type.mouseWheelMoved);
+		forwardMouseEvent(0, 0, mouseX, mouseY, newValue, 0, mouseDown, Type.mouseWheelMoved);
 	}
 
 	@Override

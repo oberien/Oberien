@@ -170,38 +170,32 @@ public class GameLoading extends BasicGameState {
 				currentPart++;
 				break;
 			case 5:
-				HUDRenderer hudr = new HUDRenderer(sd.getFont(), gc.getWidth(), sd.getUnits(), gc);
-				sd.setHudr(hudr);
-				loading[4] = "Created HUDRenderer.";
-				currentPart++;
-				break;
-			case 6:
 				UnitRenderer ur = new UnitRenderer(sd.getUnits(), sd.getFont());
 				sd.setUr(ur);
 				loading[5] = "Created UnitRenderer.";
 				currentPart++;
 				break;
-			case 7:
+			case 6:
 				ActionUnitRenderer aur = new ActionUnitRenderer(sd.getUnits());
 				sd.setAur(aur);
 				loading[5] = "Created ActionUnitRenderer.";
 				currentPart++;
 				break;
-			case 8:
+			case 7:
 				GridRenderer gr = new GridRenderer();
 				gr.init(sd.getMap().getWidth(), sd.getMap().getHeight(), gc.getWidth(), gc.getHeight());
 				sd.setGr(gr);
 				loading[6] = "Created GridRenderer.";
 				currentPart++;
 				break;
-			case 9:
+			case 8:
 				DamageRenderer dr = new DamageRenderer(sd.getFont());
 				sd.setDr(dr);
 				loading[7] = "Created DamageRenderer.";
 				loading[8] = "Loading finished.";
 				currentPart++;
 				break;
-			case 10:
+			case 9:
 				sbg.getState(getID() + 1).init(gc, sbg);
 				try {
 					Thread.sleep(1000);

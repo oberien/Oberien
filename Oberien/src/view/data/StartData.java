@@ -1,20 +1,18 @@
 package view.data;
 
 import java.awt.Font;
-import java.util.List;
 
 import model.map.Map;
 
 import org.newdawn.slick.Image;
 
-import view.gui.event.KeyboardEvent;
-import view.gui.event.MouseEvent;
 import view.renderer.*;
 import controller.Controller;
 import controller.State;
 import de.lessvoid.nifty.Nifty;
 
 public class StartData {
+
 	private Controller controller;
 	private State state;
 	private Map map;
@@ -23,17 +21,13 @@ public class StartData {
 	private MapRenderer mr;
 	private FoWRenderer fowr;
 	private ActionGroundRenderer agr;
-	private HUDRenderer hudr;
 	private UnitRenderer ur;
 	private ActionUnitRenderer aur;
 	private DamageRenderer dr;
 	private Font font;
 	private GridRenderer gr;
-	
+
 	private Nifty nifty;
-	//nifty eventhandling
-	private List<MouseEvent> mouseEvents;
-	private List<KeyboardEvent> keyEvents;
 
 	public Nifty getNifty() {
 		return nifty;
@@ -49,14 +43,6 @@ public class StartData {
 
 	public void setGr(GridRenderer gr) {
 		this.gr = gr;
-	}
-
-	public HUDRenderer getHudr() {
-		return hudr;
-	}
-
-	public void setHudr(HUDRenderer hudr) {
-		this.hudr = hudr;
 	}
 
 	public UnitRenderer getUr() {
@@ -90,7 +76,6 @@ public class StartData {
 	public void setUnits(Image[][] units) {
 		this.units = units;
 	}
-	
 
 	public Map getMap() {
 		return map;
@@ -99,10 +84,11 @@ public class StartData {
 	public void setMap(Map map) {
 		this.map = map;
 	}
-	
+
 	public MapRenderer getMr() {
 		return mr;
 	}
+
 	public void setMr(MapRenderer mr) {
 		this.mr = mr;
 	}
@@ -130,11 +116,11 @@ public class StartData {
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}
-	
+
 	public State getState() {
 		return state;
 	}
-	
+
 	public void setState(State state) {
 		this.state = state;
 	}
@@ -153,21 +139,5 @@ public class StartData {
 
 	public void setAgr(ActionGroundRenderer agr) {
 		this.agr = agr;
-	}
-
-	public List<MouseEvent> getMouseEvents() {
-		return mouseEvents;
-	}
-
-	public void setMouseEvents(List<MouseEvent> mouseEvents) {
-		this.mouseEvents = mouseEvents;
-	}
-
-	public List<KeyboardEvent> getKeyEvents() {
-		return keyEvents;
-	}
-
-	public void setKeyEvents(List<KeyboardEvent> keyEvents) {
-		this.keyEvents = keyEvents;
 	}
 }

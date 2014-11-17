@@ -30,6 +30,8 @@ import view.renderer.*;
 import controller.Controller;
 import controller.State;
 import de.lessvoid.nifty.Nifty;
+import org.newdawn.slick.opengl.SlickCallable;
+import view.data.Globals;
 
 public class GameRunning extends MapState implements HUDModelClickedListener {
 	private GameContainer gc;
@@ -38,7 +40,6 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 	private Controller controller;
 	private State state;
 
-	private HUDRenderer hudr;
 	private UnitRenderer ur;
 	private ActionUnitRenderer aur;
 	private FoWRenderer fowr;
@@ -91,7 +92,6 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		if (MapList.getInstance().getCurrentMap() != null) {
 			this.gc = gc;
 
-			hudr = sd.getHudr();
 			ur = sd.getUr();
 			aur = sd.getAur();
 			fowr = sd.getFowr();
@@ -99,9 +99,12 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 			dr = sd.getDr();
 			controller = sd.getController();
 			state = sd.getState();
-
-//			Globals.getHUDController().registerControllerListeners(sd);
+			
 			nifty = sd.getNifty();
+			nifty.gotoScreen("HUD");
+			nifty.update();
+			Globals.getHUDController().registerListeners(sd, this);
+			Globals.getHUDController().addHUDModelClickedEventListener(this);
 			mm = new MusicManager();
 			mm.init();
 		}
@@ -114,8 +117,8 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		fowr.draw(g, state.getSight());
 		agr.draw(g, state, selectedModelCoordinate, modelToBuild != null);
 		Model model;
-		if (hudr.getSelectedModel() != null) {
-			model = hudr.getSelectedModel();
+		if (modelToBuild != null) {
+			model = modelToBuild;
 		} else {
 			model = state.getModel(selectedModelCoordinate);
 		}
@@ -123,15 +126,14 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		aur.draw(g, model, unitActionCoordinate, controller.getDirectionOf(selectedModelCoordinate, unitActionCoordinate), state.getCurrentPlayer().getColor());
 		dr.draw(g, dmgCoord1, dmg1, dmgCoord2, dmg2, attackMillis);
 		g.resetTransform();
-		hudr.draw(g, state, sbg, state.getModel(selectedModelCoordinate));
-//		SlickCallable.enterSafeBlock();
-//		nifty.render(false);
-//		SlickCallable.leaveSafeBlock();
+		SlickCallable.enterSafeBlock();
+		nifty.render(false);
+		SlickCallable.leaveSafeBlock();
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-//		nifty.update();
+		nifty.update();
 		super.update(gc, sbg, delta);
 
 		//set damage coords to null when time > 2000ms
@@ -153,7 +155,10 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		super.mouseClicked(button, x, y, clickCount);
+		if (button == 1) {
+			resetSelectedModels();
+			return;
+		}
 
 		boolean retur;
 
@@ -172,32 +177,37 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		}
 
 		// BuildingModel selected and modelToBuild is chosen in HUD
-		if (selectedModelCoordinate instanceof BuildingModel && modelToBuild != null) {
+		if (selectedModel instanceof BuildingModel && modelToBuild != null) {
 			retur = buildModel(selectedModelCoordinate, currentCoordinate, modelToBuild);
 			if (retur) return;
 		}
 
 		// BuildingModel selected and will be added to to build the model on currentPos
-		if (selectedModelCoordinate instanceof BuildingModel && !currentModel.isBuilt()) {
+		if (selectedModel instanceof BuildingModel && currentModel != null && !currentModel.isBuilt()) {
 			retur = addModelToBuild(selectedModelCoordinate, currentCoordinate);
 			if (retur) return;
 		}
 
 		// AttackingModel is chosen and clicked coordinate is an enemy model
-		if (selectedModelCoordinate instanceof AttackingModel && currentModel.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
+		if (selectedModel instanceof AttackingModel && currentModel != null && currentModel.getPlayer().getTeam() != state.getCurrentPlayer().getTeam()) {
 			retur = attack(selectedModelCoordinate, currentCoordinate);
 			if (retur) return;
 		}
 
-		// Clicked on itself -> set action done
+		// Clicked on itself -> ignore
 		if (currentCoordinate.equals(selectedModelCoordinate)) {
-			retur = setActionDone(currentCoordinate);
-			if (retur) return;
+			return;
 		}
 
 		// Unit is chosen and wants to move
 		if (selectedModel instanceof Unit) {
 			retur = move(selectedModelCoordinate, currentCoordinate);
+			if (retur) return;
+		}
+
+		// Clicked on a different unit of same player
+		if (currentModel != null && currentModel.getPlayer().equals(state.getCurrentPlayer())) {
+			retur = selectModel(currentModel, currentCoordinate);
 			if (retur) return;
 		}
 
@@ -284,7 +294,8 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 		int result = controller.move(from, to);
 		boolean moved = result > 0;
 		if (moved) {
-			resetSelectedModels();
+			selectedModelCoordinate = to;
+			unitActionCoordinate = null;
 		}
 		return moved;
 	}
@@ -329,6 +340,7 @@ public class GameRunning extends MapState implements HUDModelClickedListener {
 			mm.stopMusic();
 		} else if (key == Input.KEY_RETURN) {
 			endTurn = true;
+			resetSelectedModels();
 		} else if (key == Keyboard.KEY_ESCAPE) {
 			gc.exit();
 		}

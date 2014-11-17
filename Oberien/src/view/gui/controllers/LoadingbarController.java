@@ -26,7 +26,7 @@ public class LoadingbarController extends AbstractController implements Loadingb
 	public void bind(Nifty nifty, Screen screen, Element element, Parameters parameter) {
 		this.nifty = nifty;
 		this.screen = screen;
-		this.element = element;
+		this.element = element.findElementById("progressbar");
 		this.parameter = parameter;
 	}
 
@@ -51,7 +51,7 @@ public class LoadingbarController extends AbstractController implements Loadingb
 	public void setProgress(float progress) {
 		this.progress = progress;
 		final int MIN_WIDTH = 32;
-		int pixelWidth = (int) (MIN_WIDTH + (element.getParent().getWidth() - MIN_WIDTH) * progress);
+		float pixelWidth = (float) (MIN_WIDTH + (element.getParent().getWidth() - MIN_WIDTH) * progress);
 		element.setConstraintWidth(new SizeValue(pixelWidth + "px"));
 		element.getParent().layoutElements();
 	}

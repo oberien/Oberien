@@ -24,11 +24,11 @@ public class ActionUnitRenderer {
 	}
 	
 	public void draw(Graphics g, Model modelToDraw, Coordinate coordToDrawOn, int direction, Color col) throws SlickException {
-		Image img;
-
 		if (modelToDraw == null || coordToDrawOn == null) {
 			return;
 		}
+
+		Image img;
 
 		img = units[modelToDraw.getId()][direction].copy();
 		img.setImageColor(col.r, col.g, col.b, 0.5f);

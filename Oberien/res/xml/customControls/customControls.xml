@@ -3,5 +3,6 @@
 	<useControls filename="res/xml/customControls/buttons/buttonRed.xml" />
 	<useControls filename="res/xml/customControls/buttons/buttonRedThinBorder.xml" />
 	<useControls filename="res/xml/customControls/buttons/buttonGreen.xml" />
+	<useControls filename="res/xml/customControls/buttons/buttonImage.xml" />
 	<useControls filename="res/xml/customControls/loadingbar/loadingbar.xml" />
 </nifty-controls>

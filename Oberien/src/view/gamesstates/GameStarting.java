@@ -28,6 +28,7 @@ import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.TimeProvider;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
+import view.gui.event.NiftyEventBuffer;
 
 public class GameStarting extends BasicGameState {
 
@@ -79,15 +80,15 @@ public class GameStarting extends BasicGameState {
 			Nifty nifty = new Nifty(new BatchRenderDevice(LwjglBatchRenderBackendFactory.create()), new NullSoundDevice(), new InputSystem() {
 				@Override
 				public void forwardEvents(final NiftyInputConsumer inputEventConsumer) {
-					for (MouseEvent event : sd.getMouseEvents()) {
+					MouseEvent[] me = NiftyEventBuffer.getMouseEvents();
+					for (MouseEvent event : me) {
 						event.processMouseEvents(inputEventConsumer);
 					}
-					sd.getMouseEvents().clear();
-					
-					for (KeyboardEvent event : sd.getKeyEvents()) {
+
+					KeyboardEvent[] ke = NiftyEventBuffer.getKeyEvents();
+					for (KeyboardEvent event : ke) {
 						event.processKeyboardEvent(inputEventConsumer);
 					}
-					sd.getKeyEvents().clear();
 				}
 
 				@Override
@@ -112,6 +113,7 @@ public class GameStarting extends BasicGameState {
 			nifty.addXml("res/xml/multiplayer/chat.xml");
 			nifty.addXml("res/xml/settings.xml");
 			nifty.addXml("res/xml/tutorial.xml");
+			nifty.addXml("res/xml/hud.xml");
             //nifty.setDebugOptionPanelColors(true);
 			sd.setNifty(nifty);
 		} else {

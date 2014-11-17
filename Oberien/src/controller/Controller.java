@@ -155,9 +155,9 @@ public class Controller implements WinEventListener {
 		if (state.getModel(neu) != null) {
 			return -4;
 		}
-		Coordinate[] c = state.getMoverange(old);
-		for (int i = 0; i < c.length; i++) {
-			if (c[i].equals(neu)) {
+		Coordinate[] coords = state.getMoverange(old);
+		for (Coordinate c : coords) {
+			if (c.equals(neu)) {
 				updateModel(old, neu);
 				u.setDirection(getDirectionOf(old, neu));
 				u.setMoved(true);
@@ -386,6 +386,7 @@ public class Controller implements WinEventListener {
 					state.getCurrentPlayer().usePopulation(b.getCostPopulation());
 					addModel(build, b);
 					((BuildingModel)m).setCurrentBuilding(b);
+					m.setActionDone(true);
 					return 1;
 				}
 			}
@@ -762,22 +763,17 @@ public class Controller implements WinEventListener {
 				state.updateModel(from, to);
 				Field actField = FieldList.getInstance().get(state.getMap().get(to.getX(), to.getY()));
 				
-//				new ViewRangeThread(null, state, to, model.getViewRange() + actField.getViewPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
 				state.updateViewrange(model, getRange(to, model.getViewRange() + actField.getViewPlus(), VIEWRANGE));
 				if (model instanceof Unit) {
-//					new MoveRangeThread(null, state, to, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), false).start();
 					state.updateMoverange(model, getRange(to, ((Unit) model).getMovespeed(), MOVERANGE));
 				}
 				if (model instanceof AttackingModel) {
-//					new DirectAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
 					state.updateDirectAttackrange(model, getRange(to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), DIRECT_ATTACKRANGE));
 					if (model instanceof Unit) {
-//						new FullAttackRangeThread(null, state, to, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
 						state.updateFullAttackrange(model, getRange(to, ((AttackingModel) model).getAttackRange() + actField.getActionPlus(), FULL_ATTACKRANGE));
 					}
 				} 
 				if (model instanceof BuildingModel) {
-//					new BuildRangeThread(null, state, to, ((BuildingModel)model).getBuildRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), false).start();
 					state.updateBuildrange(model, getRange(to, ((BuildingModel) model).getBuildRange() + actField.getActionPlus(), BUILDRANGE));
 				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
@@ -786,15 +782,9 @@ public class Controller implements WinEventListener {
 				if (model.getPlayer().getTeam() == state.getCurrentPlayer().getTeam()) {
 					state.updateAllyModelPosition(from, to);
 				}
+				state.updateModelPositionInSight(from, to);
 				state.setSight(getSight());
 //				new FowToPolygonThread(null, state, null, null).start();
-				Coordinate[] sight = state.getSight();
-				for (int i = 0; i < sight.length; i++) {
-					if (sight[i].equals(to)) {
-						state.updateModelPositionInSight(from, to);
-						break;
-					}
-				}
 			}
 		}.start();
 		return true;
@@ -816,22 +806,17 @@ public class Controller implements WinEventListener {
 				state.addModel(c, model);
 				Field actField = FieldList.getInstance().get(state.getMap().get(c.getX(), c.getY()));
 				
-//				new ViewRangeThread(null, state, c, model.getViewRange() + actField.getViewPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
 				state.addViewrange(model, getRange(c, model.getViewRange() + actField.getViewPlus(), VIEWRANGE));
 				if (model instanceof Unit) {
-//					new MoveRangeThread(null, state, c, model, ((Unit)model).getMovespeed(), new MyHashMap<Coordinate, Integer>(), true).start();
 					state.addMoverange(model, getRange(c, ((Unit) model).getMovespeed(), MOVERANGE));
 				}
 				if (model instanceof AttackingModel) {
-//					new DirectAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
 					state.addDirectAttackrange(model, getRange(c, ((AttackingModel) model).getAttackRange() + actField.getActionPlus(), DIRECT_ATTACKRANGE));
 					if (model instanceof Unit) {
-//						new FullAttackRangeThread(null, state, c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
 						state.addFullAttackrange(model, getRange(c, ((AttackingModel)model).getAttackRange() + actField.getActionPlus(), FULL_ATTACKRANGE));
 					}
 				} 
 				if (model instanceof BuildingModel) {
-//					new BuildRangeThread(null, state, c, ((BuildingModel)model).getBuildRange() + actField.getActionPlus(), new MyHashMap<Coordinate, Integer>(), true).start();
 					state.addBuildrange(model, getRange(c, ((BuildingModel) model).getBuildRange() + actField.getActionPlus(), BUILDRANGE));
 				}
 				if (model.getPlayer().equals(state.getCurrentPlayer())) {
@@ -841,13 +826,7 @@ public class Controller implements WinEventListener {
 				if (model.getPlayer().getTeam() == state.getCurrentPlayer().getTeam()) {
 					state.addAllyModelPosition(c);
 				}
-				Coordinate[] sight = state.getSight();
-				for (int i = 0; i < sight.length; i++) {
-					if (sight[i].equals(c)) {
-						state.addModelPositionInSight(c);
-						break;
-					}
-				}
+				state.addModelPositionInSight(c);
 				state.setSight(getSight());
 //				new FowToPolygonThread(null, state, null, null).start();
 			}

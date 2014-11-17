@@ -10,7 +10,7 @@ package event;
  * @author Bobthepeanut
  */
 public interface PlayerStatsListener {
-	public void moneyChanged(int metal);
-	public void energyChanged(int energy);
-	public void populationChanged(int population);
+	public void moneyChanged(float metal);
+	public void energyChanged(float energy);
+	public void populationChanged(float population);
 }

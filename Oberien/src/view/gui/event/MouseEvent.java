@@ -9,19 +9,17 @@ public class MouseEvent {
 	private int mouseY;
 	private int mouseWheel;
 	private int button;
-	private int clickCount;
 	private boolean buttonDown;
 	private Type type;
 
 	private boolean handled;
 	
-	public MouseEvent(final int fromX, final int fromY, final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final int clickCount, final boolean mouseDown, Type type) {
+	public MouseEvent(final int fromX, final int fromY, final int mouseX, final int mouseY, final int mouseWheel, final int mouseButton, final boolean mouseDown, Type type) {
 		this.fromX = fromX;
 		this.fromY = fromY;
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 		this.buttonDown = mouseDown;
-		this.clickCount = clickCount;
 		this.button = mouseButton;
 		this.mouseWheel = mouseWheel;
 		this.type = type;
@@ -55,10 +53,6 @@ public class MouseEvent {
 		return button;
 	}
 
-	public int getClickCount() {
-		return clickCount;
-	}
-
 	public boolean isButtonDown() {
 		return buttonDown;
 	}
@@ -80,7 +74,6 @@ public class MouseEvent {
 				", mouseY=" + mouseY +
 				", mouseWheel=" + mouseWheel +
 				", button=" + button +
-				", clickCount=" + clickCount +
 				", buttonDown=" + buttonDown +
 				", type=" + type +
 				", handled=" + handled +

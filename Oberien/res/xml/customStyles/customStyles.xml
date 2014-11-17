@@ -4,6 +4,7 @@
 	<useStyles filename="res/xml/customStyles/buttons/customButtonRedStyle.xml" />
 	<useStyles filename="res/xml/customStyles/buttons/customButtonRedThinBorderStyle.xml" />
 	<useStyles filename="res/xml/customStyles/buttons/customButtonGreenStyle.xml" />
+	<useStyles filename="res/xml/customStyles/buttons/customButtonImageStyle.xml" />
 	<useStyles filename="res/xml/customStyles/scrollbar/customScrollBarStyle.xml" />
 	<useStyles filename="res/xml/customStyles/scrollpanel/customScrollPanelStyle.xml" />
 	<useStyles filename="res/xml/customStyles/textfield/customTextFieldStyle.xml" />

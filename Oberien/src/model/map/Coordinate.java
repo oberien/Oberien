@@ -89,4 +89,12 @@ public class Coordinate implements Comparable<Coordinate>, Serializable {
 		}
 		return 1;
 	}
+
+	@Override
+	public int hashCode() {
+		int result = x;
+		result = 31 * result + y;
+		result = 31 * result + (layer != null ? layer.hashCode() : 0);
+		return result;
+	}
 }
