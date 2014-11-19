@@ -17,20 +17,18 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import event.HUDModelClickedAdapter;
 import event.ModelClickedListener;
-import event.ModelEventListener;
 import event.PlayerStatsListener;
 import event.TurnChangedListener;
 import java.util.ArrayList;
 import model.BuildingModel;
 import model.Model;
 import model.ModelList;
-import model.map.Coordinate;
 import model.player.Player;
 import view.data.Globals;
 import view.data.StartData;
 import view.gamesstates.GameRunning;
 
-public class HUDScreenController extends HUDModelClickedAdapter implements ModelClickedListener, ScreenController, ModelEventListener, PlayerStatsListener, TurnChangedListener {
+public class HUDScreenController extends HUDModelClickedAdapter implements ModelClickedListener, ScreenController, PlayerStatsListener, TurnChangedListener {
 
 	private Nifty nifty;
 	private Element turnText, playerName;
@@ -87,6 +85,13 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 		}
 	}
 
+	@NiftyEventSubscriber(id = "endTurnButton")
+	public void endTurnButtonClicked(String id, ButtonClickedEvent e) {
+		if (c != null) {
+			c.endTurn();
+		}
+	}
+
 	public void unitBoxClick() {
 		for (int i = subBoxes.size() - 1; i >= 0; i--) {
 			Element el = subBoxes.get(i);
@@ -105,8 +110,8 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 	}
 
 	public void registerListeners(StartData sd, GameRunning gr) {
+		System.out.println("yes");
 		c = sd.getController();
-		c.addModelEventListener(this);
 		c.addTurnChangedListener(this);
 		c.addPlayerStatsListener(this);
 		gr.addModelClickedEventListener(this);
@@ -116,30 +121,6 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 		energyChanged(p.getEnergy());
 		populationChanged(p.getPopulation());
 		playernameChanged(p.getName());
-	}
-
-	@Override
-	public void modelMoved(Coordinate from, Coordinate to) {
-	}
-
-	@Override
-	public void modelAttacked(Coordinate attacker, Coordinate defender) {
-	}
-
-	@Override
-	public void modelIsBuild(Coordinate model, int x, int y, String name) {
-	}
-
-	@Override
-	public void modelAddedToBuild(Coordinate builder, Coordinate model) {
-	}
-
-	@Override
-	public void modelAdded(int x, int y, String name) {
-	}
-
-	@Override
-	public void modelRemoved(Coordinate c, Model m) {
 	}
 
 	@Override
@@ -163,6 +144,8 @@ public class HUDScreenController extends HUDModelClickedAdapter implements Model
 	@Override
 	public void roundChanged(int turn) {
 		turnText.getRenderer(TextRenderer.class).setText("Turn " + Integer.toString(turn));
+		//clear the current selection
+		unitBoxClick();
 	}
 
 	@Override

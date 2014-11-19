@@ -47,8 +47,15 @@ and open the template in the editor.
 				</panel>
 			</panel>
 			<panel id="fillpanel" height="60%"/>
-			<panel id="unitBox" height="20%"  width="20%" backgroundColor="#f0f0f0" childLayout="vertical" align="left" valign="bottom">
-				<interact onClick="unitBoxClick()"/>
+			<panel id="bottomHorizLayoutPanel" childLayout="horizontal" height="20%">
+				<panel id="unitBox" width="20%" backgroundColor="#f0f0f0" childLayout="vertical" align="left" valign="bottom">
+					<interact onClick="unitBoxClick()"/>
+				</panel>
+				<panel id="fillHoriPanel" width="70%"/>
+				<panel id="bottomAlignRightPanel" childLayout="vertical">
+					<panel id="fillVertPanel" height="75%"/>
+					<control id="endTurnButton" name="buttonRed" width="100%" font="res/fonts/32/raven.fnt" label="End Turn"/>
+				</panel>
 			</panel>
 		</layer>
 	</screen>
