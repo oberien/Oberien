@@ -22,4 +22,40 @@
 			
 		</effect>
 	</style>
+	
+	
+	
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<!-- NORMAL BUTTOn -->
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<style id="normal-button#panel">
+		<attributes padding="-2px,3px,3px,8px" inset="10px" width="100px" height="78px" childLayout="center" visibleToMouse="true"/>
+		<effect>
+			<onActive name="border" color="#43af" post="true" inset="4px"/>
+			<onActive name="border" color="#43af" post="true" inset="5px"/>
+			<onActive name="border" color="#43af" post="true" inset="6px"/>
+			<onActive name="colorBar" color="#00f6" post="true" inset="3px"/>
+			<onHover name="border" color="#228f" post="true" inset="3px"/>
+			<onClick name="colorBar" color="#00f7" post="true" inset="3px"/>
+			<onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150"/>
+			<onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150"/>
+		</effect>
+	</style>
+	<style id="normal-button#text" >
+		<attributes font="res/fonts/64/raven.fnt" color="#fff" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="false"/>
+		<effect>
+			<onEnabled name="textColorAnimated" startColor="#8886" endColor="#eeef" post="false" length="150"/>
+			<onDisabled name="textColorAnimated" startColor="#eeef" endColor="#8886" post="false" length="150"/>
+		</effect>
+	</style>
+	
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<!-- NORMAL BUTTON DICOURAGED -->
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<style id="normal-button-discouraged#panel">
+		<attributes padding="-2px,3px,3px,8px" inset="10px" width="100px" height="78px" childLayout="center" visibleToMouse="true" backgroundColor="#0000" color="#0000"/>
+	</style>
+	<style id="normal-button-discouraged#text" >
+		<attributes font="res/fonts/64/raven.fnt" color="#aaaf" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="false"/>
+	</style>
 </nifty-styles>

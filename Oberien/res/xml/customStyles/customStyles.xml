@@ -9,6 +9,7 @@
 	<useStyles filename="res/xml/customStyles/scrollbar/customScrollBarStyle.xml" />
 	<useStyles filename="res/xml/customStyles/scrollpanel/customScrollPanelStyle.xml" />
 	<useStyles filename="res/xml/customStyles/textfield/customTextFieldStyle.xml" />
+	<useStyles filename="res/xml/customStyles/textfield/primaryTextfield.xml" />
 	<useStyles filename="res/xml/customStyles/slider/customSliderStyle.xml" />
 	<useStyles filename="res/xml/customStyles/dropdown/customDropDownStyle.xml" />
 	<useStyles filename="res/xml/customStyles/checkbox/customCheckBoxStyle.xml" />

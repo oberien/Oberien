@@ -106,7 +106,6 @@ public class GameStarting extends BasicGameState {
 			}, new TimeProvider());
 			nifty.fromXml("res/xml/main.xml", "start");
 			nifty.addXml("res/xml/gamesetup.xml");
-			nifty.addXml("res/xml/multiplayer/login.xml");
 			nifty.addXml("res/xml/multiplayer/validateMail.xml");
 			nifty.addXml("res/xml/multiplayer/register.xml");
 			nifty.addXml("res/xml/multiplayer/menu.xml");
