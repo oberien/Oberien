@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
 	<useStyles filename="res/xml/customStyles/buttons/customButtonStyle.xml" />
+	<useStyles filename="res/xml/customStyles/buttons/customMinimalButtonStyle.xml" />
 	<useStyles filename="res/xml/customStyles/buttons/customButtonRedStyle.xml" />
 	<useStyles filename="res/xml/customStyles/buttons/customButtonRedThinBorderStyle.xml" />
 	<useStyles filename="res/xml/customStyles/buttons/customButtonGreenStyle.xml" />

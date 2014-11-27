@@ -7,33 +7,45 @@
 	<useControls filename="res/xml/customControls/customControls.xml" />
 	
 	<screen id="start" controller="view.gui.controllers.StartScreenController">
-		<layer id="background" childLayout="vertical">
-			<image filename="res/imgs/ui/bg02.png"/>
+		<layer id="background" childLayout="absolute" >
+			<image filename="res/imgs/ui/bg03.png" x="0px" y="0px" width="100%" height="100%"/>
+			<image filename="res/imgs/ui/gui_fg_1.png" x="0px" y="0px" width="733px" height="100%" 
+					imageMode="repeat" /><!-- Resoulutions > 1920x1080? !-->
+					
 		</layer>
+				
 		<layer id="foreground" childLayout="vertical">
-			<panel id="oberienPanel" align="center" valign="center" childLayout="center" height="25%">
-				<text id="oberien" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#ffff" text="Oberien" width="100%" height="20%"/>
+			<panel id="oberienPanel" align="left" valign="center" childLayout="center" height="20%" width="733px">
+				<text id="oberien" wrap="false" font="res/fonts/128/airstrikecond.fnt" color="#ffffff" text="OBERIEN" width="80%" height="80%"/>
 			</panel>
-            <panel id="gameSetupPanel" align="center" valign="center" childLayout="center" height="25%">
-                <control id="gameSetupButton" name="button" label="Game Setup" align="center" valign="center" width="10%" height="16%">
+			<panel id="gameSetupPanel" style="nifty-button-minimal" align="left" valign="center" childLayout="center" height="20%" width="733px">
+              <control id="gameSetupButton" name="button" style="nifty-button-minimal" label="Game Setup" align="center" valign="left" width="80%" height="80%">
                     <interact onClick="gameSetup()"/>
-                </control>
+               </control>
             </panel>
-            <panel id="multiplayerPanel" align="center" valign="center" childLayout="center" height="25%">
-                <control id="gameSetupButton" name="button" label="Multiplayer" align="center" valign="center" width="10%" height="16%">
+            <panel id="multiplayerPanel" style="nifty-button-minimal" align="left" valign="center" childLayout="center" width="733px" height="20%">
+               <control id="multiplayerButton" name="button" style="nifty-button-minimal" label="Multiplayer" align="center" valign="center" width="80%" height="80%">
                     <interact onClick="multiplayer()"/>
-                </control>
+               </control>
             </panel>
-			<panel id="settingsPanel" align="center" valign="center" childLayout="center" height="25%">
-				<control id="settingsButton" name="button" label="Settings" align="center" valign="center" width="10%" height="16%">
-					<interact onClick="settings()"/>
-				</control>
+			
+			<panel align="left" valign="center" childLayout="center" width="733px" height="20%">
+				<!-- layout helper !-->
+			</panel>
+			<panel id="lowerPanel" align="left" valign="center" childLayout="center" width="733px" height="20%">
+				<panel align="center" valign="center" childLayout="horizontal" width="90%" height="80%">
+					<control id="settingsButton" style="nifty-button-minimal" name="button" label="Settings" align="center" valign="center" 
+						width="40%" height="50%">
+						<interact onClick="settings()"/>
+					</control>
+					<panel align="left" valign="center" width="20%" height="50%" />
+					
+					<control id="exitButton" style="nifty-button-minimal" name="buttonRed" label="Exit" align="center" valign="center" width="40%" height="50%">
+						<interact onClick="exit()"/>
+					</control>
+				</panel>
 			</panel>
 		</layer>
-		<layer id="exitLayer" childLayout="center">
-			<control id="exitButton" name="buttonRed" label="Exit" align="right" valign="top">
-				<interact onClick="exit()"/>
-			</control>
-		</layer>
+		
 	</screen>
 </nifty>

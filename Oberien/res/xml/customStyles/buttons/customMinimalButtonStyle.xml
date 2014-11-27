@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<!-- style for the button background panel -->
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<style id="nifty-button-minimal#panel">
+		<attributes childLayout="center" visibleToMouse="true" backgroundColor="#0000"/>
+
+	</style>
+	
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<!-- style for the button text -->
+	<!-- +++++++++++++++++++++++++++++++++++++ -->
+	<style id="nifty-button-minimal#text" >
+		<attributes font="res/fonts/64/raven.fnt" height="90%" width="90%" color="#fff" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="false"/>
+		<effect>
+			<onFocus name="colorPulsate" startColor="#f00f" endColor="#faaf" pulsateType="sin" period="3000" cycle="true"/>
+			<onHover name="colorPulsate" startColor="#f00f" endColor="#faaf" pulsateType="sin" period="3000" cycle="true" hoverWidth="200%" hoverHeight="200%"/>
+			
+			
+			
+		</effect>
+	</style>
+</nifty-styles>
