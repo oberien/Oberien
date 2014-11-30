@@ -50,7 +50,7 @@
 	</style>
 	
 	<!-- +++++++++++++++++++++++++++++++++++++ -->
-	<!-- NORMAL BUTTON DICOURAGED -->
+	<!-- NORMAL BUTTON DISCOURAGED -->
 	<!-- +++++++++++++++++++++++++++++++++++++ -->
 	<style id="normal-button-discouraged#panel">
 		<attributes padding="-2px,3px,3px,8px" inset="10px" width="100px" height="78px" childLayout="center" visibleToMouse="true" backgroundColor="#0000" color="#0000"/>
@@ -58,4 +58,5 @@
 	<style id="normal-button-discouraged#text" >
 		<attributes font="res/fonts/64/raven.fnt" color="#aaaf" align="center" valign="center" textHAlign="center" textVAlign="center" visibleToMouse="false"/>
 	</style>
+	
 </nifty-styles>

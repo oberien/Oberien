@@ -51,114 +51,6 @@ public class GameSetupScreenController implements ScreenController {
 		this.screen = screen;
 		playerScrollPanelPanel = screen.findElementById("playerScrollPanelPanel");
 		
-		new PopupBuilder("popupMapChooser") {{
-			childLayoutCenter();
-			
-			panel(new PanelBuilder() {{
-			childLayoutHorizontal();
-			backgroundColor("#ffff");
-			valignTop();
-			height("70%");
-			
-				panel(new PanelBuilder("mapPanel") {{
-					alignLeft();
-					valignTop();
-					childLayoutVertical();
-					width("70%");
-					height("50%");
-					panel(new PanelBuilder("popupMapLabelPanel"){{
-						childLayoutCenter();
-						width("100%");
-						height("12%");
-						text(new TextBuilder("popupMapLabel"){{
-							wrap(false);
-							font("res/fonts/64/raven.fnt");
-							color("#f00f");
-							text("Maps");
-						}});
-					}});
-					control(new ScrollPanelBuilder("mapNames") {{
-						alignLeft();
-						valignTop();
-						padding("5px");
-						
-						panel(new PanelBuilder("mapNamesScrollLabelPanel") {{
-							alignLeft();
-							valignTop();
-							childLayoutVertical();
-							padding("5px");
-							width("100%");
-							
-							final String[] mapNames = MapList.getInstance().getMapNames();
-							for (String s : mapNames) {
-								final String currentMap = s;
-								panel(new PanelBuilder("mapNames" + currentMap + "LabelPanel") {{
-									alignLeft();
-									valignTop();
-									childLayoutCenter();
-									interactOnClick("selectMap(" + getId() + ", " + currentMap + ")");
-									width("100%");
-									height("32px");
-									
-									text(new TextBuilder("mapNames" + currentMap + "Label") {{
-										wrap(false);
-										font("res/fonts/32/raven.fnt");
-										color("#000f");
-										text(currentMap);
-										alignLeft();
-										valignCenter();
-									}});
-								}});
-							}
-						}});
-					}});
-				}});
-				panel(new PanelBuilder("mapPreview") {{
-					childLayoutVertical();
-					width("30%");
-					height("100%");
-					
-					control(new ButtonBuilder("back") {{
-						name("buttonRedThinBorder");
-						label("Back");
-						interactOnClick("closePopup()");
-						alignRight();
-						valignTop();
-						width("15%");
-					}});
-					panel(new PanelBuilder("popupMapNameLabelPanel"){{
-						childLayoutCenter();
-						width("100%");
-						height("12%");
-						text(new TextBuilder("popupMapNameLabel"){{
-							wrap(false);
-							font("res/fonts/64/raven.fnt");
-							color("#000f");
-							text("Tera Rising");
-						}});
-					}});
-					panel(new PanelBuilder("popupMapImagePanel"){{
-						childLayoutCenter();
-						width("100%");
-						height("76%");
-						image(new ImageBuilder("popupMapImage"){{
-							width("90%");
-							height("90%");
-							filename("res/imgs/maps/Tera Rising.png");
-//							alignCenter();
-//							valignCenter();
-						}});
-					}});
-					control(new ButtonBuilder("useMap") {{
-						label("Use this Map");
-						interactOnClick("useMap()");
-						alignRight();
-						valignBottom();
-						width("40%");
-					}});
-				}});
-			}});
-		}}.registerPopup(nifty);
 	}
 
 	@Override
@@ -317,6 +209,99 @@ public class GameSetupScreenController implements ScreenController {
 	public void chooseMap() {
 		String currentMap = screen.findElementById("mapNameLabel").getRenderer(TextRenderer.class).getOriginalText();
 		popup = nifty.createPopup("popupMapChooser");
+		
+		Element element = popup.findElementById("insertMapChooser");
+		element.addChild(
+			new PanelBuilder("popupMapChooser") {{
+			childLayoutCenter();
+			
+			panel(new PanelBuilder() {{
+			childLayoutHorizontal();
+			backgroundColor("#0000");
+			valignTop();
+			height("100%");
+			
+				panel(new PanelBuilder("mapPanel") {{
+					alignLeft();
+					valignTop();
+					childLayoutVertical();
+					width("65%");
+					height("100%");
+					padding("10px");
+					control(new ScrollPanelBuilder("mapNames") {{
+						alignLeft();
+						valignTop();
+						padding("5px");
+						parameter("horizontal", "false");
+						backgroundColor("#fff9");
+						
+						panel(new PanelBuilder("mapNamesScrollLabelPanel") {{
+							alignLeft();
+							valignTop();
+							childLayoutVertical();
+							padding("5px");
+							width("100%");
+													
+							
+							final String[] mapNames = MapList.getInstance().getMapNames();
+							for (String s : mapNames) {
+								final String currentMap = s;
+								panel(new PanelBuilder("mapNames" + currentMap + "LabelPanel") {{
+									alignLeft();
+									valignTop();
+									childLayoutCenter();
+									interactOnClick("selectMap(" + getId() + ", " + currentMap + ")");
+									width("100%");
+									height("32px");
+									
+									text(new TextBuilder("mapNames" + currentMap + "Label") {{
+										wrap(false);
+										font("res/fonts/32/raven.fnt");
+										color("#f00f");
+										backgroundColor("#0000");
+										text(currentMap);
+										alignLeft();
+										valignCenter();
+									}});
+								}});
+							}
+						}});
+					}});
+				}});
+
+				panel(new PanelBuilder("mapPreview") {{
+					childLayoutVertical();
+					width("35%");
+					height("70%");
+					
+					panel(new PanelBuilder("popupMapNameLabelPanel"){{
+						childLayoutCenter();
+						width("100%");
+						text(new TextBuilder("popupMapNameLabel"){{
+							wrap(true);
+							font("res/fonts/32/raven.fnt");
+							color("#ffff");
+							text("Tera Rising");
+						}});
+					}});
+					panel(new PanelBuilder("popupMapImagePanel"){{
+						childLayoutCenter();
+						width("100%");
+						image(new ImageBuilder("popupMapImage"){{
+							width("90%");
+							height("90%");
+							filename("res/imgs/maps/Tera Rising.png");
+//							alignCenter();
+//							valignCenter();
+						}});
+					}});
+					
+				}});
+				
+			}});
+			
+		}}.build(nifty, nifty.getCurrentScreen(), element));
+		
 		nifty.showPopup(screen, popup.getId(), null);
 		selectMap("mapNames" + currentMap + "LabelPanel", currentMap);
 	}
@@ -333,6 +318,7 @@ public class GameSetupScreenController implements ScreenController {
 		popupLastMap = e;
 		e.getRenderer(PanelRenderer.class).setBackgroundColor(new Color("#bbbf"));
 		popup.findElementById("popupMapNameLabel").getRenderer(TextRenderer.class).setText(mapName);
+		popup.findElementById("mapNamesScrollLabelPanel").layoutElements();
 		setScaledPopupImage("popupMapImage", "res/imgs/maps/" + mapName + ".png");
 	}
 	

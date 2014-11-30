@@ -92,4 +92,29 @@
 			</panel>
 		</panel>
 	</popup>
+	
+	
+	<popup name="settingsmenu"  id="settingsmenu" childLayout="horizontal" backgroundColor="#0006">
+		<panel childLayout="vertical" width="733px" backgroundColor="#0000">
+			<panel width="100%" height="65%"/>
+			<control name="button" backgroundColor="#0000" style="normal-button-discouraged" label="BACK" align="center" width="80%">
+				<interact onClick="backToMainMenu()"/>
+			</control>
+		</panel>
+		<panel childLayout="center">
+			<image filename="res/imgs/ui/popup_background.png" width="100%" height="100%" 
+				imageMode="resize:6,162,6,6,6,162,6,196,6,162,6,6" />
+				
+			<panel childLayout="vertical">
+				<panel width="100%" height="15%" childLayout="center">
+					<!-- layout helper !-->
+				</panel>
+				<text align="center" valign="top" wrap="true" font="res/fonts/64/raven.fnt" color="#ffffff" text="Choose Settings" width="80%" height="16px" />
+				<panel width="100%" height="15%" childLayout="center">
+					<!-- layout helper !-->
+				</panel>
+	
+			</panel>
+		</panel>
+	</popup>
 </nifty>

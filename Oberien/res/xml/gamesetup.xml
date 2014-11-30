@@ -9,13 +9,20 @@
 	
 	<screen id="gameSetup" controller="view.gui.controllers.GameSetupScreenController">
 		<layer id="background" childLayout="vertical">
-			<image filename="res/imgs/ui/bg02.png"/>
+			<image filename="res/imgs/ui/popup_background.png" width="100%" height="100%" 
+				imageMode="resize:6,162,6,6,6,162,6,196,6,162,6,6" />	
+		</layer>
+		<layer childLayout="horizontal">
+			<panel width="70%" height="100%" backgroundColor="#0000"/>
+			<image filename="res/imgs/ui/popup_background.png" width="30%" height="100%" 
+					imageMode="resize:6,162,6,6,6,162,6,196,6,162,6,6" />
 		</layer>
 		<layer id="foreground" childLayout="horizontal">
 			<panel id="players" childLayout="vertical" padding="3px" width="70%" height="100%">
 				<panel id="playerLabelPanel" width="100%" height="12%" childLayout="center">
-					<text id="playerLabel" wrap="false" font="res/fonts/128/raven.fnt" color="#f00f" text="Players"/>
+					<text id="playerLabel" wrap="false" font="res/fonts/128/raven.fnt" color="#ffff" text="Players"/>
 				</panel>
+				<image filename="res/imgs/ui/sep_hor.png" width="100%" height="6px" imageMode="repeat" />	
 				<control id="playerScrollPanel" name="scrollPanel" horizontal="false" align="left" valign="top" padding="5px" style="">
 					<panel id="playerScrollPanelPanel" align="left" valign="top" childLayout="vertical" padding="5px" width="100%">
 						<panel id="player0Panel" align="left" valign="top" childLayout="horizontal" width="100%">
@@ -44,51 +51,93 @@
 						</panel>
 					</panel>
 				</control>
-				<panel id="addButtons" align="left" valign="top" childLayout="horizontal" width="100%" height="5%">
-					<panel id="fillPanelButtons" valign="bottom" width="10%" />
-					<control id="addPlayer" name="button" label="Add new Player" valign="bottom" width="45%">
-						<interact onClick="addPlayer()"/>
-					</control>
-					<control id="addAI" name="button" label="Add AI  (Computer)" valign="bottom" width="45%">
-						<interact onClick="addAI()"/>
-					</control>
-				</panel>
-				<panel id="resetButton" align="left" valign="top" childLayout="center" width="100%" height="20%">
-					<control id="resetPlayers" name="buttonRedThinBorder" label="Reset Players" align="center" valign="center" width="20%">
+				<panel id="addButtons" align="center" valign="center" childLayout="horizontal" width="100%" height="5%">
+					
+					<control id="resetPlayers" name="button" label="Reset" valign="bottom" width="15%">
 						<interact onClick="resetPlayers()"/>
 					</control>
-				</panel>
+					<control id="addPlayer" name="button" label="Add new Player" valign="bottom" width="42%">
+						<interact onClick="addPlayer()"/>
+					</control>
+					<control id="addAI" name="button" label="Add AI (Computer)" valign="bottom" width="42%">
+						<interact onClick="addAI()"/>
+					</control>
+					
+				</panel>				
+				<image filename="res/imgs/ui/sep_hor.png" width="100%" height="6px" imageMode="repeat"/>
+				<panel width="100%" height="17%"/>
+
 			</panel>
+			
+			
 			<panel id="maps" childLayout="vertical" padding="3px" width="30%" height="100%">
+
 				<panel id="mapsLabelPanel" childLayout="center" width="100%" height="12%">
-					<text id="mapsLabel" wrap="false" font="res/fonts/128/raven.fnt" color="#f00f" text="Map" />
+					<text id="mapsLabel" wrap="false" font="res/fonts/128/raven.fnt" color="#ffff" text="Map" />
 				</panel>
-				<panel id="mapNameLabelPanel" childLayout="center" width="100%" height="6%">
-					<text id="mapNameLabel" wrap="false" font="res/fonts/64/raven.fnt" color="#000f" text="Tera Rising" />
+				<image filename="res/imgs/ui/sep_hor.png" width="100%" height="6px" imageMode="repeat" />	
+				<panel id="mapNameLabelPanel" childLayout="center" width="100%" height="6%" padding="10px">
+					<text id="mapNameLabel" wrap="true" font="res/fonts/32/raven.fnt" color="#ffff" text="Tera Rising" />
 				</panel>
 				<panel id="map" childLayout="center" width="100%" height="53%">
 					<image id="mapImage" filename="res/imgs/maps/Tera Rising.png" width="90%" height="90%">
 						<interact onClick="chooseMap()"/>
 					</image>
 				</panel>
-				<control id="chooseMap" name="button" label="Choose Map" align="center" width="90%">
+				<control id="chooseMap" name="button" label="Choose Map" align="center" width="90%" height="10%">
 					<interact onClick="chooseMap()"/>
+				</control>
+				<panel childLayout="center"  padding="10px,0px">
+					<image filename="res/imgs/ui/sep_hor.png" width="100%" height="6px" imageMode="repeat"/>	
+				</panel>
+				<control id="startGameButton" valign="bottom" align="center" name="buttonRed" style="nifty-button-red" label="Start Game" width="90%" height="15%">
+						<interact onClick="startGame()"/>
 				</control>
 			</panel>
 		</layer>
 		<layer id="returnLayer" childLayout="horizontal">
 			<panel id="returnPanel" childLayout="center" width="100%" height="100%">
-				<control id="returnButton" name="buttonRed" label="Main Menu" align="right" valign="top" width="10%" height="5%">
-					<interact onClick="mainMenu()"/>
-				</control>
+				<panel childLayout="center" width="375px" height="125px" align="left" valign="bottom" padding="20px">
+					<control id="returnButton" name="button"  label="Main Menu" align="center" valign="center" height="100%" 
+						width="100%">
+						<interact onClick="mainMenu()"/>
+					</control>
+				</panel>
 			</panel>
 		</layer>
-		<layer id="startGameLayer" childLayout="horizontal">
-			<panel id="startGamePanel" childLayout="center" width="100%" height="100%" padding="20px">
-				<control id="startGameButton" name="buttonGreen" label="Start Game" align="right" valign="bottom" width="20%" height="10%">
-					<interact onClick="startGame()"/>
-				</control>
-			</panel>
-		</layer>
+		
 	</screen>
+	
+	
+	<popup id="popupMapChooser" childLayout="center" backgroundColor="#000f">
+		<panel childLayout="center" width="80%" height="90%">
+			<image filename="res/imgs/ui/popup_background.png" width="100%" height="100%" 
+					imageMode="resize:6,162,6,6,6,162,6,196,6,162,6,6" />
+					
+			<panel childLayout="vertical">
+				<panel width="100%" height="5%" childLayout="center">
+					<!-- layout helper !-->
+				</panel>
+				<text align="center" valign="top" wrap="true" font="res/fonts/64/raven.fnt" color="#ffffff" text="Choose Map" width="80%" height="16px" />
+				
+				<panel width="100%" height="5%" childLayout="center">
+					<!-- layout helper !-->
+				</panel>
+				
+				<panel id="insertMapChooser" width="100%" height ="70%" padding="0px,20px,0px,20px" childLayout="center">
+					<!-- layout helper !-->
+				</panel>
+				
+				<panel width="100%" height="125px" align="center" valign="bottom" padding="0px,20px,20px,20px" childLayout="center">
+					<control id="useMap" name="button"  label="Use this Map" align="center" valign="center" width="100%" height="100%" 
+							style="normal-button" >
+							<interact onClick="useMap()"/>
+					</control>
+				</panel>
+	
+			</panel>
+		</panel>
+	</popup>
+	
+	
 </nifty>

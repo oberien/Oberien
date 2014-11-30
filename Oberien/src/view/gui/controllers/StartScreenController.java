@@ -56,6 +56,10 @@ public class StartScreenController implements ScreenController {
 
 		public void settings() {
 			nifty.setDebugOptionPanelColors(true);
+			loginPopup = nifty.createPopup("settingsmenu");
+			nifty.showPopup(nifty.getCurrentScreen(), loginPopup.getId(), null);
+			
+			
 			//nifty.gotoScreen("settings");
 		}
 
