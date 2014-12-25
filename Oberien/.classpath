@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="libs/lwjgl-2.9.0/jar/jinput.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/lwjgl-2.9.0/jar/lwjgl_util.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/lwjgl-2.9.0/jar/lwjgl.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://lwjgl.org/javadoc/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Oberien/libs/lwjgl-2.9.0/native/windows"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="libs/slick/lib/slick.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://slick.ninjacave.com/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/slick/lib/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="libs/slick/lib/jorbis-0.0.15.jar"/>
+	<classpathentry kind="lib" path="libs/nifty-1.4.0-complete/jglfont-core-1.4.jar"/>
+	<classpathentry kind="lib" path="libs/nifty-1.4.0-complete/xmlpull-xpp3-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="libs/nifty-1.4.0-complete/eventbus-1.4.jar"/>
+	<classpathentry kind="lib" path="libs/nifty-1.4.0-complete/nifty-1.4.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/nifty-1.4.0-complete/nifty-default-controls-1.4.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/nifty-1.4.0-complete/nifty-lwjgl-renderer-1.4.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="libs/nifty-1.4.0-complete/nifty-style-black-1.4.1-SNAPSHOT.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

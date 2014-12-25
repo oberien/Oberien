@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+	<useControls filename="res/xml/customControls/buttons/buttonRed.xml" />
+	<useControls filename="res/xml/customControls/buttons/buttonRedThinBorder.xml" />
+	<useControls filename="res/xml/customControls/buttons/buttonGreen.xml" />
+	<useControls filename="res/xml/customControls/loadingbar/loadingbar.xml" />
+</nifty-controls>

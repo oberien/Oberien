@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+	<useStyles filename="res/xml/customStyles/buttons/customButtonStyle.xml" />
+	<useStyles filename="res/xml/customStyles/buttons/customButtonRedStyle.xml" />
+	<useStyles filename="res/xml/customStyles/buttons/customButtonRedThinBorderStyle.xml" />
+	<useStyles filename="res/xml/customStyles/buttons/customButtonGreenStyle.xml" />
+	<useStyles filename="res/xml/customStyles/scrollbar/customScrollBarStyle.xml" />
+	<useStyles filename="res/xml/customStyles/scrollpanel/customScrollPanelStyle.xml" />
+	<useStyles filename="res/xml/customStyles/textfield/customTextFieldStyle.xml" />
+	<useStyles filename="res/xml/customStyles/slider/customSliderStyle.xml" />
+	<useStyles filename="res/xml/customStyles/dropdown/customDropDownStyle.xml" />
+	<useStyles filename="res/xml/customStyles/checkbox/customCheckBoxStyle.xml" />
+</nifty-styles>
