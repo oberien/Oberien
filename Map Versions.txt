@@ -1,0 +1,25 @@
+Version 0:
+	dos.writeInt(0); 				//Version
+	dos.writeUTF(map.getName());	//Name
+	dos.writeInt(width);			//Width of Map
+	dos.writeInt(height);			//Height of Map
+	dos.writeByte(b);				//for for: writes all fields line by line
+
+Version 1:
+	filename = namname				//Name 
+	dos.writeInt(1); 				//Version
+	dos.writeInt(width);			//Width of Map
+	dos.writeInt(height);			//Height of Map
+	dos.writeByte(b);				//for for: writes all fields line by line
+	
+Version 2:
+	filename = namname				//Name 
+	dos.writeInt(2); 				//Version
+	dos.writeInt(teamNumber);		//Number of teams that can play on this map
+	dos.writeInt(startPosX1Team1-n);	//x1 of Startposition of team 1/2/.../n
+	dos.writeInt(startPosY1Team1-n);	//y1 of Startposition of team 1/2/.../n
+	dos.writeInt(startPosX2Team1-n);	//x2 of Startposition of team 1/2/.../n
+	dos.writeInt(startPosY2Team1-n);	//y2 of Startposition of team 1/2/.../n
+	dos.writeInt(width);			//Width of Map
+	dos.writeInt(height);			//Height of Map
+	dos.writeByte(b);				//for for: writes all fields line by line, but fields over 1 (road) are increased by 10 coz now there are 11 different roads
